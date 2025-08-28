@@ -1,0 +1,51 @@
+import { IReview } from "./Review";
+
+export interface ICategory {
+   path: string;
+   title: string;
+}
+
+export interface IProduct {
+   id: string;
+   image: string;
+   producerId: string;
+   producerName: string;
+   basePrice: number;
+   price: number;
+   discount: number;
+   overprice: number;
+   feedback: IReview[];
+   feedbackAv: number;
+   isInCart: boolean;
+   isInFavourites: boolean;
+   title: string;
+   unit: string;
+   productType: string;
+   description: string;
+   composition: string;
+   storageConditions: string;
+   package: string;
+   expirationDate: number;
+   volume: number;
+   saleVolume: number;
+   delivery: number;
+   datetimeInserted: string;
+   datetimeUpdated: string;
+}
+
+export interface IProductCard {
+   id: string;
+   image: string;
+   producerName: string;
+   basePrice: number;
+   price: number;
+   discount: number;
+   overprice: number;
+   feedbackAv: number;
+   isInCart: boolean;
+   isInFavourites: boolean;
+   unit: string;
+   title: string;
+   volume: number;
+   saleVolume: number;
+}

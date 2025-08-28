@@ -1,26 +1,25 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+   --color-main-green: #91bc46;
+   --color-dark-green: #048737;
+   --color-main-gray: #646464;
+   --color-dark-gray: #1E1E1E;
+   --color-light-gray: #CECECE;
+   --font-geist: "Geist", sans-serif;
+   --font-roboto: "Roboto", sans-serif;
+   --text-xxs: 10px;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+.hide-scrollbar {
+  -ms-overflow-style: none; 
+  scrollbar-width: none;  
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+.admin-list-item {
+  @apply flex justify-between items-center p-4 border-2 rounded-full border-main-gray hover:border-main-green 
 }

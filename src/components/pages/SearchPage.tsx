@@ -1,0 +1,31 @@
+"use client";
+import { FC } from "react";
+import LogoColor from "@/assets/logos/LogoColor.svg";
+import Search from "@/components/features/Search";
+import Hr from "@/components/ui/Hr";
+import ProductList from "@/components/mainComponents/lists/ProductList";
+import { IProductCard } from "@/types/entities/Product";
+
+interface SearchPageProps {
+   products: IProductCard[];
+}
+
+const SearchPage: FC<SearchPageProps> = ({ products }) => {
+   return (
+      <div className="min-h-screen font-geist">
+     
+         <div className="flex items-center justify-center gap-x-12 py-10 w-full ">
+            <div className="max-w-[70px] md:w-full w-[35px]">
+               <LogoColor />
+            </div>
+            <div className="w-3/5">
+               <Search/>
+            </div>
+         </div>
+         <Hr />
+         <ProductList products={products} />
+      </div>
+   );
+};
+
+export default SearchPage;

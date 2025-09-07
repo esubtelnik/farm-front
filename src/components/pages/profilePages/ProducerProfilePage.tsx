@@ -41,6 +41,7 @@ const ProducerProfilePage: FC = observer(() => {
       };
    
       fetchData();
+   // eslint-disable-next-line react-hooks/exhaustive-deps
    }, []);
 
    useEffect(() => {
@@ -71,7 +72,7 @@ const ProducerProfilePage: FC = observer(() => {
       {
          label: "Каталог",
          render: () => (
-            <div className="py-5 flex flex-col gap-y-10">
+            <div className="md:py-5 py-0 flex flex-col md:gap-y-10 gap-y-5">
                <ProductList products={products} isEditable={true} isLoading={isLoading} />
                <AddProduct />
             </div>
@@ -80,7 +81,7 @@ const ProducerProfilePage: FC = observer(() => {
       {
          label: "Галерея",
          render: () => (
-            <div className="py-5">
+            <div className="md:py-5 p-3">
                <GalleryList isEditable={true} isLoading={isLoading} images={gallery} onAddPhoto={handleAddGallery} onDeletePhoto={handleDeleteGallery}  />
             </div>
          ),
@@ -88,7 +89,7 @@ const ProducerProfilePage: FC = observer(() => {
       {
          label: "Сертификаты",
          render: () => (
-            <div className="py-5">
+            <div className="md:py-5 p-3">
                <GalleryList isEditable={true} isLoading={isLoading} images={certificates} onAddPhoto={handleAddCertificate} onDeletePhoto={handleDeleteCertificate} />
             </div>
          ),
@@ -96,7 +97,7 @@ const ProducerProfilePage: FC = observer(() => {
       {
          label: "Отзывы",
          render: () => (
-            <div className="py-5">
+            <div className="md:py-5 py-3">
                <ReviewList isAddReview={false} reviews={reviews} isLoading={isLoading} />
             </div>
          ),
@@ -105,7 +106,7 @@ const ProducerProfilePage: FC = observer(() => {
          label: "Финансы",
          isGray: true,
          render: () => (
-            <div className="py-5">
+            <div className="md:py-5 py-3">
                <div>В разработке</div>
             </div>
          ),
@@ -114,7 +115,7 @@ const ProducerProfilePage: FC = observer(() => {
          label: "Аналитика",
          isGray: true,
          render: () => (
-            <div className="py-5">
+            <div className="md:py-5 p-3">
                <div>В разработке</div>
             </div>
          ),

@@ -1,8 +1,10 @@
 import { IReview } from "./Review";
 
 export interface ICategory {
+   id: string;
    path: string;
    title: string;
+   description: string;
 }
 
 export interface IProduct {

@@ -1,5 +1,5 @@
 "use client";
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import LogoWhite from "@/assets/logos/LogoWhite.svg";
 import Cart from "@/assets/icons/Basket.svg";
 import UserCircleIcon from "@/assets/icons/UserCircleIcon.svg";
@@ -46,6 +46,19 @@ const Navbar: FC<{
    // const isUserDataReady = !isUserTypeLoading && userType !== null;
    const isGuest = userType === UserType.GUEST;
 
+   useEffect(() => {
+      if (isMenuOpen) {
+         // Блокируем скролл только для body, но не для самого меню
+         document.body.style.overflow = "hidden";
+      } else {
+         document.body.style.overflow = "";
+      }
+
+      return () => {
+         document.body.style.overflow = "";
+      };
+   }, [isMenuOpen]);
+
    const handleAccount = () => {
       switch (userType.type) {
          case UserType.GUEST.type:
@@ -67,11 +80,13 @@ const Navbar: FC<{
          default:
             break;
       }
+      setIsMenuOpen(false);
    };
 
    const handleCart = () => {
       if (userType.type === UserType.CUSTOMER.type) {
          router.push(routes.users.customer.cart);
+         setIsMenuOpen(false);
       }
       if (userType.type === UserType.GUEST.type) {
          router.push(routes.auth.login);
@@ -81,7 +96,7 @@ const Navbar: FC<{
    return (
       <>
          <nav className="sticky top-0 z-20 flex w-full items-center justify-between bg-main-green dark:bg-dark h-18 py-3 px-4 md:px-20 font-geist">
-            <div className="h-full order-2 md:order-0 flex items-center gap-x-3">
+            <div className="h-full order-2 lg:order-0 flex items-center gap-x-3">
                {userType.type === UserType.ADMIN.type && (
                   <button onClick={() => router.back()}>
                      <svg
@@ -105,7 +120,7 @@ const Navbar: FC<{
 
             {/* {isUserDataReady && ( */}
             <>
-               <div className="hidden md:flex gap-x-10 items-center">
+               <div className="hidden lg:flex gap-x-10 items-center">
                   {userType.type !== UserType.PRODUCER.type &&
                   userType.type !== UserType.COURIER.type &&
                   userType.type !== UserType.ADMIN.type ? (
@@ -128,7 +143,7 @@ const Navbar: FC<{
                userType.type !== UserType.COURIER.type &&
                userType.type !== UserType.ADMIN.type ? (
                   <button
-                     className="md:hidden flex items-center"
+                     className="lg:hidden flex items-center"
                      onClick={() => setIsMenuOpen(true)}
                      aria-label="Open menu"
                   >
@@ -161,10 +176,13 @@ const Navbar: FC<{
          {isMenuOpen && (
             <>
                <div
-                  className="fixed inset-0 bg-black/50 z-40"
+                  className="fixed inset-0 z-40 bg-black/50 overflow-hidden min-h-dvh h-dvh max-h-dvh"
+                 
                   onClick={() => setIsMenuOpen(false)}
                />
-               <div className="fixed top-0 left-0 w-3/4 max-w-xs h-full bg-main-green dark:bg-dark z-50 px-4 py-8 flex flex-col">
+
+               <div className="fixed top-0 left-0 h-dvh max-h-dvh w-3/4 max-w-xs bg-main-green z-50 px-4 py-8 flex flex-col overflow-y-auto">
+                 
                   <div className="flex items-center justify-between mb-4">
                      <h1 className="text-white text-2xl font-bold font-geist">
                         Farm-Basket
@@ -189,7 +207,6 @@ const Navbar: FC<{
                         </svg>
                      </button>
                   </div>
-
                   <nav className="flex flex-col gap-y-6">
                      {NavLinks.map((link, index) => (
                         <NavItem

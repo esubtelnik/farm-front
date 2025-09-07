@@ -20,7 +20,7 @@ const Tabs: FC<TabsProps> = observer(({ tabs }) => {
 
   return (
     <div className="w-full">
-      <div className="flex justify-between border-b-4 border-main-green px-7 w-full">
+      <div className="flex overflow-x-auto hide-scrollbar justify-between border-b-4 border-main-green md:px-7 w-full">
         <div className="flex">
           {greenTabs.map((tab) => {
             const originalIndex = tabs.indexOf(tab);
@@ -29,7 +29,7 @@ const Tabs: FC<TabsProps> = observer(({ tabs }) => {
               <button
                 key={originalIndex}
                 onClick={() => setActiveTab(originalIndex)}
-                className={`cursor-pointer py-2 px-6 font-semibold transition-colors border-t-2 border-r-2 border-l-2 border-main-green rounded-t-2xl ${
+                className={`cursor-pointer text-sm md:text-base py-2 px-6 font-semibold transition-colors border-t-2 border-r-2 border-l-2 border-main-green rounded-t-2xl ${
                   isActive ? "bg-main-green text-white" : "text-main-green"
                 }`}
               >
@@ -47,7 +47,7 @@ const Tabs: FC<TabsProps> = observer(({ tabs }) => {
               <button
                 key={originalIndex}
                 onClick={() => setActiveTab(originalIndex)}
-                className={`py-2 px-6 font-semibold transition-colors border-t-2 border-r-2 border-l-2 border-main-gray rounded-t-2xl ${
+                className={`cursor-pointer py-2 px-6 text-sm md:text-base font-semibold transition-colors border-t-2 border-r-2 border-l-2 border-main-gray rounded-t-2xl ${
                   isActive ? "bg-main-gray text-white" : "text-main-gray"
                 }`}
               >

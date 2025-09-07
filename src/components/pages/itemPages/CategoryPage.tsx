@@ -5,49 +5,47 @@ import ProductList from "@/components/mainComponents/lists/ProductList";
 import Title from "@/components/ui/Title";
 import Hr from "@/components/ui/Hr";
 //import Search from "@/components/ui/Search";
-import { IProductCard } from "@/types/entities/Product";
+import { ICategory, IProductCard } from "@/types/entities/Product";
 import { useParams, useSearchParams } from "next/navigation";
 import Image from "next/image";
 import Search from "@/components/features/Search";
-
 interface CategoryPageProps {
+   category: ICategory;
    products: IProductCard[];
    isLoading: boolean;
 }
 
-const CategoryPage: FC<CategoryPageProps> = ({ products, isLoading = false }) => {
+const CategoryPage: FC<CategoryPageProps> = ({
+   category,
+   products,
+   isLoading = false,
+}) => {
    // const [products, setProducts] = useState<IProductCard[]>([]);
    // const [isLoading, setIsLoading] = useState(false);
+   console.log(products);
 
    const params = useParams();
    const searchParams = useSearchParams();
    const imageUrl = searchParams.get("image");
-   const categoryTitle = decodeURIComponent(params.slug as string);  
-   
+   const categoryTitle = decodeURIComponent(params.slug as string);
+
    return (
       <div className="font-geist">
-        
-         <Image
-            className="w-full h-96 object-cover"
-            src={`${process.env.NEXT_PUBLIC_CDN_URL}${imageUrl}`}
-            alt="Баннер"
-            width={1000}
-            height={1000}
-         />
-         <div className="font-roboto p-16 text-main-gray gap-y-10 flex flex-col">
-            <p>
-               Фермерские продукты прямиком с поля — свежие овощи, экологичное
-               мясо, домашние сыры и многое другое. Поддержите малый бизнес и
-               отведайте вкус, который не сравнится с магазинными аналогами!
-            </p>
-            <p>
-               Используйте удобные фильтры и сортировку, чтобы быстро найти то,
-               что ищете. Все позиции сопровождаются описаниями, фото и
-               отзывами, что поможет сделать выбор легко и осознанно.
-            </p>
+         <div className="relative w-full aspect-[3/1] md:aspect-[4/1]">
+            <Image
+               className="object-cover"
+               src={`${process.env.NEXT_PUBLIC_API_URL}${imageUrl}`}
+               alt="Баннер"
+               fill
+            />
          </div>
+
+         <div
+            dangerouslySetInnerHTML={{ __html: category.description }}
+            className="font-roboto p-4 md:p-8 lg:p-16 text-main-gray text-justify text-sm md:text-base md:gap-y-10 gap-y-4 flex flex-col"
+         ></div>
          <Hr />
-         <div className="flex pr-12">
+         <div className="flex flex-col md:flex-row p-3 md:p-0 md:pr-12">
             <Title title={categoryTitle ?? ""} />
             <Search
                isCategoryPage={true}

@@ -1,8 +1,8 @@
 import { FC, useState } from "react";
-import { IProduct } from "../../types/entities/Product";
-import { Modal } from "../helpers/Modal";
-import EditProductModal from "../modals/EditProductModal";
-import { useProductContext } from "../../context/ProductContext";
+import { IProduct } from "@/types/entities/Product";
+import { Modal } from "@/components/ui/modals/Modal";
+import EditProductModal from "@/components/ui/modals/modalContents/EditProductModal";
+import { useProductContext } from "@/context/ProductContext";
 
 interface EditProductProps {
    productId: string;
@@ -32,11 +32,11 @@ const EditProduct: FC<EditProductProps> = ({ productId }) => {
                showCloseButton={true}
                size="w-[90%] h-fit"
             >
-               {product && <EditProductModal product={product} />}
+               {product && <EditProductModal productId={productId} />}
             </Modal>
          )}
          <button
-            className={`${"bg-main-green text-white"} rounded-full p-2 cursor-pointer`}
+            className={`${"hidden bg-main-green text-white"} rounded-full p-2 cursor-pointer`}
             onClick={handleEditProduct}
          >
             <svg

@@ -113,13 +113,13 @@ const CustomerProfileEditPage: FC = () => {
    };
 
    return (
-      <div className="h-fit font-geist px-20 py-8">
-         <div className="flex h-fit mt-10 mb-20 justify-start items-center gap-x-8">
+      <div className="h-fit font-geist md:px-20 px-6 md:py-8 py-2">
+         <div className="flex h-fit md:mt-10 md:mb-20 mt-5 mb-10 justify-start items-center md:gap-x-8 gap-x-4">
             <button
                onClick={() => {
                   router.push(routes.users.profile);
                }}
-               className="flex items-center justify-center cursor-pointer text-main-green border-3 border-main-green rounded-full p-1 hover:scale-110 transition-all duration-100"
+               className="flex items-center justify-center cursor-pointer text-main-green md:border-3 border-2 border-main-green rounded-full p-1 hover:scale-110 transition-all duration-100"
             >
                <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -127,7 +127,7 @@ const CustomerProfileEditPage: FC = () => {
                   viewBox="0 0 24 24"
                   strokeWidth={2.5}
                   stroke="currentColor"
-                  className="size-8"
+                  className="md:size-8 size-6"
                >
                   <path
                      strokeLinecap="round"
@@ -136,12 +136,12 @@ const CustomerProfileEditPage: FC = () => {
                   />
                </svg>
             </button>
-            <h1 className="text-3xl text-main-green font-bold ">
+            <h1 className="md:text-3xl text-xl text-main-green font-bold ">
                ЛИЧНЫЙ КАБИНЕТ
             </h1>
          </div>
 
-         <div className="flex flex-col gap-y-4 w-1/2">
+         <div className="flex flex-col gap-y-4 md:w-1/2 w-full">
             <Input
                placeholder="Фамилия"
                value={form.values.surname}
@@ -173,7 +173,7 @@ const CustomerProfileEditPage: FC = () => {
                }
             />
          </div>
-         <p className="text-main-green mt-16">
+         <p className="text-main-green md:mt-16 mt-5">
             Контактная информация упрощает доставку Вашего заказа. Вы можете
             поменять ее в любой момент
          </p>

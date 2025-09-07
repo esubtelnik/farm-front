@@ -7,10 +7,10 @@ import { IProducerCard } from "@/types/entities/User";
 
 interface ProducerCarouselProps {
    producers: IProducerCard[];
-   isLoading?: boolean;
+   // isLoading?: boolean;
 }
 
-const ProducerCarousel: FC<ProducerCarouselProps> = ({ producers, isLoading = false }) => {
+const ProducerCarousel: FC<ProducerCarouselProps> = ({ producers }) => {
    const scrollRef = useRef<HTMLDivElement>(null);
    const cardRef = useRef<HTMLDivElement>(null);
 
@@ -23,6 +23,11 @@ const ProducerCarousel: FC<ProducerCarouselProps> = ({ producers, isLoading = fa
          scrollRef.current.scrollBy({ left: scrollAmount, behavior: "smooth" });
       }
    };
+   if (producers.length === 0) {
+      return <div className="flex justify-center items-center my-5 h-full">
+         <span className="text-main-gray">Поставщики не найдены</span>
+      </div>;
+   }
 
    return (
       <div className="relative w-full h-min mb-24 flex md:px-5 px-2">

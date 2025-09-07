@@ -14,5 +14,5 @@ export default async function Producers() {
       console.error("Ошибка:", res.message);
    }
 
-   return <ProducerListPage producers={res.data} />;
+   return <ProducerListPage producers={res.data || []} />;
 }

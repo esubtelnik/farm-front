@@ -1,17 +1,16 @@
 // lib/apiClient.ts
-import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
-//
-const BASE_URL ="https://tim1423-farm-bascket.hf.space";
+import axios, { AxiosInstance } from "axios";
+
 
 export function createApiClient(token?: string): AxiosInstance {
   const instance = axios.create({
-    baseURL: BASE_URL,
+    baseURL:  process.env.NEXT_PUBLIC_API_URL,
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
       ...(token ? { Authorization: `Bearer ${token}` } : {}),
     },
-    withCredentials: true,
+    withCredentials: !!token,
   });
 
   // instance.interceptors.request.use((config) => {

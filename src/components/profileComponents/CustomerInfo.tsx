@@ -34,8 +34,7 @@ const CustomerInfo: FC<CustomerInfoProps> = observer(({ isCart = false }) => {
    };
 
    return (
-      <div className="flex gap-x-8 p-8 justify-between">
-         {/* <img src={img} className="object-cover size-60" /> */}
+      <div className="flex flex-col md:flex-row md:gap-x-8 gap-y-4 md:p-8 p-4 mb-8 md:mb-0 justify-between">
          <div className="flex flex-col gap-y-3">
             {isLoading ? (
                <>
@@ -45,13 +44,13 @@ const CustomerInfo: FC<CustomerInfoProps> = observer(({ isCart = false }) => {
                </>
             ) : (
                <>
-                  <span className="text-main-green font-bold text-2xl">
+                  <span className="title-text">
                      {profile.name ?? "Имя не указано"}
                   </span>
-                  <span className="text-main-gray">
+                  <span className="info-text">
                      Номер телефона: {profile.phoneNumber ?? "Не указан"}
                   </span>
-                  <span className="text-main-gray">
+                  <span className="info-text">
                      Адрес: {profile.address ?? "Не указан"}
                   </span>
                </>
@@ -60,12 +59,12 @@ const CustomerInfo: FC<CustomerInfoProps> = observer(({ isCart = false }) => {
          <div className="flex flex-col gap-y-2">
             {isCart ? (
                <>
-                  <button onClick={handleCreateOrder} className="flex justify-center items-center gap-x-2 bg-main-green text-white px-4 rounded-full py-2 h-fit hover:scale-105 transition-all duration-100 cursor-pointer">
+                  <button onClick={handleCreateOrder} className="flex items-center justify-between text-sm md:text-base gap-x-2 border-2 border-main-green text-main-green px-4 rounded-full py-2 h-fit hover:scale-105 transition-all duration-100 cursor-pointer">
                      Оформить заказ
                   </button>
                   <button
                      onClick={handleClearCart}
-                     className="flex justify-center items-center gap-x-2 border-2 border-main-green text-main-green px-4 rounded-full py-2 h-fit hover:scale-105 transition-all duration-100 cursor-pointer"
+                     className="flex justify-center items-center text-sm md:text-base gap-x-2 border-2 border-main-green text-main-green px-4 rounded-full py-2 h-fit hover:scale-105 transition-all duration-100 cursor-pointer"
                   >
                      Очистить корзину
                   </button>
@@ -86,7 +85,7 @@ const CustomerInfo: FC<CustomerInfoProps> = observer(({ isCart = false }) => {
                      onClick={() => {  
                         router.push(routes.users.profile + "?edit=true");
                      }}
-                     className="flex items-center justify-between gap-x-2 border-2 border-main-green text-main-green px-4 rounded-full py-2 h-fit hover:scale-105 transition-all duration-100 cursor-pointer"
+                     className="flex items-center justify-between text-sm md:text-base gap-x-2 border-2 border-main-green text-main-green px-4 rounded-full py-2 h-fit hover:scale-105 transition-all duration-100 cursor-pointer"
                   >
                      Редактировать профиль
                      <svg
@@ -95,7 +94,7 @@ const CustomerInfo: FC<CustomerInfoProps> = observer(({ isCart = false }) => {
                         viewBox="0 0 24 24"
                         strokeWidth={1.5}
                         stroke="currentColor"
-                        className="size-5"
+                        className="md:size-6 size-5"
                      >
                         <path
                            strokeLinecap="round"
@@ -106,7 +105,7 @@ const CustomerInfo: FC<CustomerInfoProps> = observer(({ isCart = false }) => {
                   </button>
                   <button
                      onClick={handleLogout}
-                     className="flex items-center justify-between gap-x-2 border-2 border-main-green text-white bg-main-green px-4 rounded-full py-2 h-fit hover:scale-105 transition-all duration-100 cursor-pointer"
+                     className="flex items-center justify-between text-sm md:text-base gap-x-2 border-2 border-main-green text-white bg-main-green px-4 rounded-full py-2 h-fit hover:scale-105 transition-all duration-100 cursor-pointer"
                   >
                      Выйти из аккаунта
                      <svg
@@ -115,7 +114,7 @@ const CustomerInfo: FC<CustomerInfoProps> = observer(({ isCart = false }) => {
                         viewBox="0 0 24 24"
                         strokeWidth={1.5}
                         stroke="currentColor"
-                        className="size-6"
+                        className="md:size-6 size-5"
                      >
                         <path
                            strokeLinecap="round"

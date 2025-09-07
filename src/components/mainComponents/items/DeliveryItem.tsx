@@ -1,8 +1,9 @@
+"use client";
 import { useState } from "react";
-import Basket from "../../../assets/icons/Basket.svg";
+import Basket from "@/assets/icons/Basket.svg";
 
 const DeliveryItem = () => {
-   const [isConfirmed, setIsConfirmed] = useState<boolean>(true);
+   const [isConfirmed] = useState<boolean>(true);
    return (
       <div className="w-full max-w-96">
          <span className={`text-dark-green w-full flex justify-end pr-4 text-sm ${isConfirmed ? "opacity-0" : "opacity-100" }`}>Подтвердите заказ!</span>

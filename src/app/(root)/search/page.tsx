@@ -20,8 +20,8 @@ export default async function Search({ searchParams }: SearchPageProps) {
 
    const params: SearchProductsRequest = {
     title: (await searchParams).title || "",
-    priceTo: Number((await searchParams).priceTo) || 0,
-    deliveryTo: Number((await searchParams).deliveryTo) || 0,
+    priceTo: Number((await searchParams).priceTo),
+    deliveryTo: Number((await searchParams).deliveryTo),
     
     category: (await searchParams).category?.trim() ? (await searchParams).category?.split(";") : [],
   };

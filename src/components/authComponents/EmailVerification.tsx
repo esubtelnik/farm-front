@@ -72,12 +72,12 @@ const EmailVerification: FC<EmailVerificationProps> = ({
 
    return (
       <div className="w-full flex flex-col items-start justify-center font-geist p-2 ">
-         <h1 className="text-3xl text-main-green font-bold">РЕГИСТРАЦИЯ</h1>
-         <p className="text-base font-normal text-main-gray my-4 ">
+         <h1 className="md:text-3xl text-xl text-main-green font-bold">РЕГИСТРАЦИЯ</h1>
+         <p className="md:text-base text-sm/5 font-normal text-main-gray my-4 ">
             На Ваш E-mail придет код-подтверждение в течение 3 минут. Введите
             код-подтверждение в поле для ввода
          </p>
-         <div className="w-full flex flex-col space-y-6 mb-6 ">
+         <div className="w-full flex flex-col md:space-y-6 space-y-4 md:mb-6 mb-4 ">
             <Input
                placeholder="Код"
                value={form.values.code}
@@ -86,11 +86,11 @@ const EmailVerification: FC<EmailVerificationProps> = ({
                onResetError={() => handleChange("code", form.values.code)}
             />
          </div>
-         <div className="flex gap-x-8 items-center mt-7">
+         <div className="flex gap-x-8 items-center md:mt-7 mt-4">
 
          <button
             onClick={handleSubmitVerifyCode}
-            className="bg-main-green text-white font-semibold py-3 px-8 rounded-full"
+            className="bg-main-green text-white font-semibold py-3 px-8 w-full md:w-fit rounded-full"
          >
             ПРОДОЛЖИТЬ
          </button>

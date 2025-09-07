@@ -1,7 +1,7 @@
 import { FC, useState } from "react";
 import Input from "@/components/ui/Input";
 import Switcher from "@/components/ui/Switcher";
-import { validateEmail } from "../../utils/ValidateUtils";
+import { validateEmail, validatePassword } from "../../utils/ValidateUtils";
 import { UserTypeValue } from "../../types/entities/User";
 import { UserType } from "../../constants/UserTypeEnum";
 
@@ -82,9 +82,8 @@ const RegistrationForm: FC<RegistrationFormProps> = ({
       };
       newErrors.email = validateEmail(form.values.email);
 
-      if (form.values.password.length < 6) {
-         newErrors.password = "Пароль должен быть минимум 6 символов";
-      }
+      newErrors.password = validatePassword(form.values.password);
+
       if (
          (userType.type === UserType.PRODUCER.type || userType.type === UserType.COURIER.type) &&
          (!form.values.workCode || form.values.workCode.length < 3)
@@ -111,7 +110,6 @@ const RegistrationForm: FC<RegistrationFormProps> = ({
       const hasErrors = validateForm();
 
       if (!hasErrors) {
-         console.log(userType);
          switch (userType.type) {
             case UserType.PRODUCER.type:
                {
@@ -144,14 +142,14 @@ const RegistrationForm: FC<RegistrationFormProps> = ({
 
    return (
       <div className="w-full flex flex-col items-start justify-center font-geist p-2">
-         <h1 className="text-3xl text-main-green font-bold">РЕГИСТРАЦИЯ</h1>
-         <p className="text-base font-normal text-main-gray my-4 ">
+         <h1 className="md:text-3xl text-xl text-main-green font-bold">РЕГИСТРАЦИЯ</h1>
+         <p className="md:text-base text-sm/5 text-justify font-normal text-main-gray md:my-4 my-3">
             Зарегистрируйтесь, чтобы иметь доступ к настройкам личного кабинета,
             истории заказов, чату с производителями, подписке на продукты и
             корзину. <span className="font-bold">FARM-BASKET</span> знает все
             про удобство покупок!
          </p>
-         <div className="w-full flex flex-col space-y-6 mb-6 ">
+         <div className="w-full flex flex-col md:space-y-6 space-y-4 md:mb-6 mb-4 ">
             {(userType?.type === UserType.PRODUCER.type ||
                userType?.type === UserType.COURIER.type) && (
                <Input
@@ -162,7 +160,6 @@ const RegistrationForm: FC<RegistrationFormProps> = ({
                   onResetError={() => handleChange("fio", form.values.fio)}
                />
             )}
-
             <Input
                placeholder="E-mail"
                value={form.values.email}
@@ -180,9 +177,9 @@ const RegistrationForm: FC<RegistrationFormProps> = ({
                   handleChange("password", form.values.password)
                }
             />
-            {userType?.type === UserType.PRODUCER.type ||
-               (userType?.type === UserType.COURIER.type && (
-                  <div className="flex flex-col mb-5">
+              {(userType?.type === UserType.PRODUCER.type ||
+               userType?.type === UserType.COURIER.type) && (
+                  <div className="flex flex-col md:mb-5 mb-3">
                      <Input
                         placeholder="Код"
                         value={form.values.workCode || ""}
@@ -196,12 +193,12 @@ const RegistrationForm: FC<RegistrationFormProps> = ({
                      <div className="text-main-gray ml-2 text-sm cursor-pointer">
                         Введите Ваш индентификационный код, который присвоен при
                         оформлении{" "}
-                        <span className="text-main-green cursor-pointer hover:underline">
+                        <span className="text-main-green cursor-pointer underline">
                            Соглашения о сотрудничестве
                         </span>
                      </div>
                   </div>
-               ))}
+               )}
 
             {/* {userType?.type === UserType.COURIER.type  && (
                <div className="flex flex-col mb-5">
@@ -227,22 +224,22 @@ const RegistrationForm: FC<RegistrationFormProps> = ({
                </div>
             )} */}
          </div>
-         <div className="flex items-center gap-x-6">
+         <div className="flex items-center md:gap-x-6 gap-x-3">
             <Switcher
                isChecked={form.values.agreement}
                setIsChecked={(value) => handleChange("agreement", value)}
             />
-            <div className="flex flex-col ">
+            <div className="flex flex-col md:text-base text-sm">
                {form.errors.agreement ? (
-                  <span className="text-red-600">{form.errors.agreement}</span>
+                  <span className="text-red-600 line-clamp-2">{form.errors.agreement}</span>
                ) : (
-                  <span className="text-main-green">
+                  <span className="text-main-green md:text-base text-sm/4 text-start">
                      Я согласен на обработку персональных данных
                   </span>
                )}
             </div>
          </div>
-         <div className="flex gap-x-8 items-center mt-7">
+         <div className="flex gap-x-8 items-center md:mt-7 mt-4">
             <button
                onClick={handleSubmitRegistration}
                className="bg-main-green text-white font-semibold py-3 px-8 rounded-full"

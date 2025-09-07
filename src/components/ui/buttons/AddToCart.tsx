@@ -5,7 +5,7 @@ import { UserType } from "@/constants/UserTypeEnum";
 import { useStores } from "@/hooks/useStores";
 import { IProductCard } from "@/types/entities/Product";
 import { Modal } from "@/components/ui/modals/Modal";
-// import LoginModal from "../modals/LoginModal";
+import LoginModal from "../modals/modalContents/LoginModal";
 
 interface AddToCartProps {
    isInCart: boolean;
@@ -43,15 +43,15 @@ const AddToCart: FC<AddToCartProps> = ({ isInCart, product, onToggle }) => {
                showCloseButton={true}
                size="w-fit h-fit"
             >
-               {/* <LoginModal /> */}
-               <div>LoginModal</div>
+               <LoginModal />
+              
             </Modal>
          )}
          <button
             data-ignore-click
             className={`${
                isInCart ? "bg-main-gray text-white" : "bg-main-green text-white"
-            } rounded-full p-2 size-12 cursor-pointer`}
+            } rounded-full flex items-center justify-center  md:p-2 p-1 lg:size-12 md:size-10 size-8 cursor-pointer`}
             onClick={handleAddToCart}
          >
             <Basket />

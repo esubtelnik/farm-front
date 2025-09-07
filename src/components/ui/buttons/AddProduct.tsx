@@ -2,20 +2,44 @@
 import { FC, useState } from "react";
 import { Modal } from "@/components/ui/modals/Modal";
 import AddProductModal from "@/components/ui/modals/modalContents/AddProductModal";
+import { useStores } from "@/hooks/useStores";
+import { CreateProductRequest } from "@/types/requests/ProductRequests";
+import Toast from "@/components/ui/Toast";
 
 const AddProduct: FC = () => {
    const [isModalOpen, setIsModalOpen] = useState(false);
+   const { producerStore } = useStores();
+   const [toast, setToast] = useState<{ message: string; type: "success" | "error" | "warning" } | null>(null);
+
+
+   const handleAddProduct = async (payload: CreateProductRequest) => {
+      
+      const result = await producerStore.createProduct(payload);
+      if (result.success) {
+         
+         setToast({ message: "Продукт успешно создан", type: "success" });
+         setIsModalOpen(false);
+      } else {
+         setToast({ message: result.message || "Произошла ошибка при создании продукта", type: "error" });
+      }
+
+   };
+
+
    return (
       <>
          {isModalOpen && (
             <Modal
                isOpen={isModalOpen}
                onClose={() => setIsModalOpen(false)}
-               showCloseButton={false}
+               showCloseButton={true}
                size="w-[90%] h-fit"
             >
-               <AddProductModal />
+               <AddProductModal handleAddProduct={(payload) => handleAddProduct(payload)} />
             </Modal>
+         )}
+         {toast && (
+            <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />
          )}
 
          <button

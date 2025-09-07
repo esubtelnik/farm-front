@@ -1,5 +1,7 @@
+"use client";
 import { FC } from "react";
 import Skeleton from "@/components/ui/Skeleton";
+import Image from "next/image";
 
 interface GalleryItemProps {
    image: string;
@@ -19,11 +21,18 @@ const GalleryItem: FC<GalleryItemProps> = ({
          <Skeleton className="size-64 rounded-md" />
       </div>
    ) : (
-      <div className="relative">
+      <div className="relative md:size-64 size-36">
          {/* <img
             src={import.meta.env.VITE_API_URL + image}
             className="object-cover size-64 rounded-md"
          /> */}
+         <Image
+            // src={image}
+            src="/image.png"
+            fill
+            alt="Gallery Item"
+            className="object-cover rounded-md"
+         />
        {isEditable &&  <button
             className="absolute top-2 right-2 text-red-600 cursor-pointer"
             onClick={() => onDeletePhoto?.(image)}
@@ -34,7 +43,7 @@ const GalleryItem: FC<GalleryItemProps> = ({
                viewBox="0 0 24 24"
                strokeWidth={2}
                stroke="currentColor"
-               className="size-7"
+               className="md:size-7 size-6"
             >
                <path
                   strokeLinecap="round"

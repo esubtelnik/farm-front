@@ -127,12 +127,14 @@ class ProducerStore {
       }
    }
 
-   async createProduct(payload: CreateProductRequest) {
+   async createProduct(payload: CreateProductRequest): Promise<{ success: boolean; message?: string }> {
       const token = getCookie("token")?.toString();
       const res = await fetchApi(createProductApi(payload, token));
       if (res.success) {
-         this.getProductsByProducerId();
-         console.log("res.data", res.data);
+         await this.getProductsByProducerId();
+         return { success: true };
+      } else {
+         return { success: false, message: res.message };
       }
    }
 

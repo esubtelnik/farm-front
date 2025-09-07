@@ -1,3 +1,7 @@
+export interface GetCategoryByTitleRequest {
+    title: string;
+}
+
 export interface GetProductsByCategoryRequest {
     category: string;
 }
@@ -30,6 +34,7 @@ export interface CreateProductRequest {
     package: string;
     expirationDate: number;
     volume: number;
+    saleVolume: number;
     unit: string;
     delivery: number;
 }

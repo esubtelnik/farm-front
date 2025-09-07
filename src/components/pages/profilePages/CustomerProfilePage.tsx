@@ -1,6 +1,6 @@
 "use client";
 import { FC, useEffect } from "react";
-import DeliveryList from "@/components/mainComponents/lists/DeliveryList";
+// import DeliveryList from "@/components/mainComponents/lists/DeliveryList";
 import ProductList from "@/components/mainComponents/lists/ProductList";
 // import ExamplePage from "@/components/modals/ProductModal";
 import CustomerInfo from "@/components/profileComponents/CustomerInfo";
@@ -19,6 +19,7 @@ const CustomerProfilePage: FC = observer(() => {
 
    useEffect(() => {
       const fetchData = async () => {
+         
          await customerStore.fetchCustomerFavourites();
          await customerStore.fetchCustomerCart();
       };
@@ -31,7 +32,8 @@ const CustomerProfilePage: FC = observer(() => {
          label: "Ближайшие доставки",
          render: () => (
             <div className="py-5">
-               <DeliveryList />
+               {/* <DeliveryList /> */}
+               В разработке
             </div>
          ),
       },

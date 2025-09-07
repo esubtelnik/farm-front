@@ -356,7 +356,7 @@ const FilterModal = ({
    const positionClass =
       isCategoryPage || isCatalogPage
          ? "right-0 translate-x-0"
-         : "left-1/2 -translate-x-1/2";
+         : "md:left-1/2 md:-translate-x-1/2 right-0 translate-x-0";
    const searchParams = useSearchParams();
    const categoryTitle = searchParams.get("category") || "";
    const { getCategories } = useProductContext();

@@ -21,8 +21,11 @@ interface ProductPageProps {
    isLoading?: boolean;
 }
 
-
-const ProductPage: FC<ProductPageProps> = ({ product, productProducer, isLoading = false }) => {
+const ProductPage: FC<ProductPageProps> = ({
+   product,
+   productProducer,
+   isLoading = false,
+}) => {
    const [isReviewLoading, setIsReviewLoading] = useState(false);
 
    const [isReviewsOpen, setIsReviewsOpen] = useState(false);
@@ -98,16 +101,16 @@ const ProductPage: FC<ProductPageProps> = ({ product, productProducer, isLoading
 
    return (
       <div className="h-fit">
-         <div className="flex gap-x-10  p-6 ">
-            <div className="relative size-96">
+         <div className="flex flex-col md:flex-row gap-x-10 md:p-6 ">
+            <div className="relative w-full aspect-square md:w-96 md:h-96">
                <Image
-                  src='/image.png'
+                  src="/image.png"
                   alt={product.title}
-                  width={1000}
-                  height={1000}
-                  className="object-cover w-full h-full rounded-2xl"
+                  fill
+                  className="object-cover md:rounded-2xl"
                />
-               <div className="absolute z-10 top-0 right-0 p-5">
+
+               <div className="hidden md:block absolute z-10 top-0 right-0 p-5">
                   <AddToFavourite
                      isInFavourites={isInFavourites}
                      product={product}
@@ -117,23 +120,52 @@ const ProductPage: FC<ProductPageProps> = ({ product, productProducer, isLoading
                   />
                </div>
             </div>
-            <div className="flex flex-col gap-y-2 relative">
-               <span className="text-main-green font-bold text-xl">
+            <div className="flex flex-col p-3 md:p-0 md:gap-y-4 relative">
+               <span className="text-main-green font-bold lg:text-3xl text-2xl">
                   {product.title}
+                  <div className="md:hidden absolute z-10 top-0 right-0 m-5 flex gap-x-2">
+                     <div className="border-2 border-main-green rounded-full">
+                        <AddToFavourite
+                           isInFavourites={isInFavourites}
+                           product={product}
+                           onToggle={(newState: boolean) => {
+                              setIsInFavourites(newState);
+                           }}
+                        />
+                     </div>
+                     <div className="border-2 border-main-green rounded-full">
+                        <AddToCart
+                        isInCart={isInCart}
+                        product={product}
+                        onToggle={(newState: boolean) => {
+                           setIsInCart(newState);
+                        }}
+                     />
+                     </div>
+                  </div>
                </span>
-               <span className="text-main-gray text-base">
+               <span className="block text-main-gray lg:text-base text-sm">
                   От фермера: {product.producerName}
                </span>
-               <div className="flex gap-x-4">
-                  <ReviewStars rating={product.feedbackAv} size={18} />
-                  <button
-                     className="text-main-gray text-sm flex items-center justify-center cursor-pointer"
-                     onClick={() => setIsReviewsOpen(!isReviewsOpen)}
-                  >
-                     Отзывы
-                  </button>
+               <div className="flex items-center justify-between my-7 md:my-0">
+                  <div className="md:hidden ">
+                     <span className="font-bold text-main-green text-lg">
+                        {product.price} руб.
+                     </span>{" "}
+                     <span className="text-main-gray text-base ">
+                        /{product.saleVolume} {product.unit}
+                     </span>
+                  </div>
+                  <div className="flex items-center gap-x-4">
+                     <ReviewStars rating={product.feedbackAv} size="large" />
+                     <button
+                        className="text-main-gray text-sm flex items-center justify-center cursor-pointer"
+                        onClick={() => setIsReviewsOpen(!isReviewsOpen)}
+                     >
+                        Отзывы
+                     </button>
+                  </div>
                </div>
-
                <div className="text-main-gray space-y-5">
                   <p>
                      <span className="font-bold">Состав: </span>
@@ -143,10 +175,10 @@ const ProductPage: FC<ProductPageProps> = ({ product, productProducer, isLoading
                      <span className="font-bold">Описание: </span>
                      {product.description}
                   </p>
-                  <p>
+                  {/* <p>
                      <span className="font-bold">Время доставки: </span>
                      {product.delivery}
-                  </p>
+                  </p> */}
                </div>
             </div>
          </div>
@@ -182,7 +214,7 @@ const ProductPage: FC<ProductPageProps> = ({ product, productProducer, isLoading
                />
             </div>
          ) : (
-            <div className="flex bg-main-green/30 items-center justify-between p-6">
+            <div className="flex flex-col md:flex-row bg-main-green/30 md:items-center gap-y-5 justify-between md:p-6 p-3">
                <div className="text-main-gray space-y-5">
                   {/* <p>
                   <span className="font-bold">Пищевая ценность: </span>
@@ -205,12 +237,20 @@ const ProductPage: FC<ProductPageProps> = ({ product, productProducer, isLoading
                      {product.package}
                   </p>
                </div>
-              <ProducerItem isSmall={true} producer={productProducer as IProducer} />
+               <ProducerItem
+                  isSmall={true}
+                  producer={productProducer as IProducer}
+               />
             </div>
          )}
-         <div className="flex items-center justify-between p-6">
+         <div className="md:flex hidden items-center justify-between p-6">
             <div className="mb-3">
-               <span className="font-bold text-main-green text-lg">{product.price} руб.</span> <span className="text-main-gray text-base ">/1 {product.unit}</span>
+               <span className="font-bold text-main-green text-lg">
+                  {product.price} руб.
+               </span>{" "}
+               <span className="text-main-gray text-base ">
+                  /{product.saleVolume} {product.unit}
+               </span>
             </div>
 
             <AddToCart

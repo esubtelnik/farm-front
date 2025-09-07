@@ -7,11 +7,11 @@ import LogoColor from "@/assets/logos/LogoColor.svg";
 const LoginModal: FC = () => {
    const router = useRouter();
    return (
-      <div className="flex flex-col items-center justify-center gap-10 p-10 ">
+      <div className="flex flex-col items-center justify-center md:gap-10 gap-5 md:p-10 p-5">
          <h1 className="text-xl font-bold text-main-gray text-center">
             Войдите в аккаунт или зарегистрируйтесь
          </h1>
-         <div className="w-20">
+         <div className="w-16 md:w-20">
             <LogoColor />
          </div>
          <div className="flex gap-5 w-full">

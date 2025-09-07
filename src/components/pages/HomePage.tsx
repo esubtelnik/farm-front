@@ -55,14 +55,13 @@ const HomePage: FC<HomePageProps> = ({ categories, producers }) => {
 
    return (
       <div className="min-h-screen font-geist">
-         <div className="relative w-full font-geist">
+         <div className="relative w-full aspect-[3/1] md:aspect-[4/1]">
             <Image
-               className="w-full object-cover"
+               className="object-cover"
                src="/MainImage.jpg"
                alt="Баннер"
                loading="eager"
-               width={1000}
-               height={1000}
+               fill
                priority={true}
             />
             <div className="md:hidden absolute w-full h-full z-10 top-0 left-0 bg-main-green/45 flex justify-center items-center" />
@@ -84,7 +83,7 @@ const HomePage: FC<HomePageProps> = ({ categories, producers }) => {
             Питание с FARM-BASKET - залог крепкого здоровья !
          </p>
          <div className="flex items-center justify-center md:gap-x-12 gap-x-4 md:py-10 py-5 md:px-0 px-4 w-full ">
-            <div className="max-w-[70px] md:w-full w-[35px]">
+            <div className="md:w-[70px] w-[35px]">
                <Image
                   src="/LogoColor.svg"
                   alt="Logo"
@@ -105,7 +104,7 @@ const HomePage: FC<HomePageProps> = ({ categories, producers }) => {
             <Title title="Наши поставщики" className="" />
             {/* <NextArrow route={routes.home.producers} /> */}
          </div>
-         <ProducerCarousel producers={producers} isLoading={false} />
+         <ProducerCarousel producers={producers} />
          <Hr />
          <Title title="Часто задаваемые вопросы" />
          <QuestionList />

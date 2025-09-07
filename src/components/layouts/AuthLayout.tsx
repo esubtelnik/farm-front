@@ -13,20 +13,20 @@ const AuthLayout: FC<LayoutProps> = ({ children }) => {
    const { isLogoShow } = useAuthContext();
    return (
       <div
-         className={`bg-main-green w-full min-h-screen flex ${
-            isLogoShow ? "justify-between" : "justify-center"
-         }  items-center px-30 gap-20`}
+         className={`bg-main-green w-full min-h-[100dvh] h-full flex ${
+            isLogoShow ? "lg:justify-between justify-center" : "justify-center"
+         }  items-center lg:px-30 md:px-20 px-5 gap-20 py-8`}
       >
          <motion.div
-            className={`bg-white p-12 drop-shadow-xl shadow-2xl rounded-3xl ${
-               isLogoShow ? "w-full" : "md:w-2/3 w-md"
+            className={`bg-white overflow-y-auto md:p-12 p-5 drop-shadow-xl shadow-2xl rounded-3xl ${
+               isLogoShow ? "w-full" : "md:w-2/3 w-full"
             }`}
-            style={{ overflow: "hidden" }}
+            
          >
             <AnimateHeightWrapper>{children}</AnimateHeightWrapper>
          </motion.div>
          {isLogoShow && (
-            <div className="flex justify-center items-center w-2/5">
+            <div className="hidden lg:flex justify-center items-center w-2/5">
                <Image
                   src="/LogoWhite.svg"
                   alt="Logo"

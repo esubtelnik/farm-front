@@ -6,6 +6,7 @@ import { useStores } from "@/hooks/useStores";
 import NextArrow from "../ui/NextArrow";
 import TooltipItem from "../ui/TooltipItem";
 import routes from "@/constants/routes";
+import Switcher from "../ui/Switcher";
 
 const markupOptions = [
    { label: "15%", value: 15 },
@@ -153,9 +154,13 @@ const ProducerListItem: FC<ProducerListItemProps> = ({ producer }) => {
                </button>
             </div>
          </div>
-         <div className="pr-2 flex items-center justify-center">
+         <div className="pr-2 flex gap-5 items-center justify-center">
+            <Switcher isChecked={true} setIsChecked={() => {}} />
+
             <TooltipItem tooltipsText="Посмотреть продукты" position="top">
-               <NextArrow route={routes.admin.lists.products(producer.producerId)} />
+               <NextArrow
+                  route={routes.admin.lists.products(producer.producerId)}
+               />
             </TooltipItem>
          </div>
       </div>

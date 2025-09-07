@@ -1,10 +1,11 @@
+"use client";
 import { useState } from "react";
-import Basket from "../../../assets/icons/Basket.svg";
-import { Modal } from "../../helpers/Modal";
-import CourierDeliveryModal from "../../modals/CourierDeliveryModal";
+import Basket from "@/assets/icons/Basket.svg";
+import { Modal } from "@/components/ui/modals/Modal";
+import CourierDeliveryModal from "@/components/ui/modals/modalContents/CourierDeliveryModal";
 
 const CourierDeliveryItem = () => {
-   const [isConfirmed, setIsConfirmed] = useState<boolean>(true);
+   const [isConfirmed] = useState<boolean>(true);
    const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
    const [isDeliveryAccepted, setIsDeliveryAccepted] = useState(false);

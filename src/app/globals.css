@@ -23,3 +23,49 @@
 .admin-list-item {
   @apply flex justify-between items-center p-4 border-2 rounded-full border-main-gray hover:border-main-green 
 }
+
+.info-text {
+  @apply text-main-gray md:text-base text-sm;
+}
+
+.title-text {
+  @apply text-main-green md:text-2xl text-xl font-bold;
+  
+}
+
+.footer-section {
+  @apply flex flex-col gap-2 items-center;
+}
+
+.footer-section h4 {
+  @apply text-xl font-bold;
+}
+.footer-section ul {
+  @apply flex flex-col;
+}
+
+.privacy-policy {
+  @apply md:px-10 py-3 md:text-xl text-xs/4 text-main-gray;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #91bc46;
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #048737;
+}
+
+* {
+  scrollbar-width: thin;             
+  scrollbar-color: #91bc46 transparent;
+}

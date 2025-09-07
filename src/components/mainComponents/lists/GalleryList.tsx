@@ -49,7 +49,7 @@ const GalleryList: FC<GalleryListProps> = ({
       return (
          <>
             {isEditable ? (
-               <AddPhoto size={'size-64'} onClick={handleAddPhoto} />
+               <AddPhoto size={'md:size-64 size-36'} onClick={handleAddPhoto} />
             ) : (
                <div className="flex flex-col items-center justify-center h-full">
                   <p className="text-gray-500">Нет изображений</p>
@@ -60,16 +60,16 @@ const GalleryList: FC<GalleryListProps> = ({
    }
 
    return (
-      <div className="grid grid-cols-5 justify-items-center gap-5">
+      <div className="grid md:grid-cols-5 grid-cols-2 justify-items-center md:gap-5 gap-4">
          {loading ?
             Array.from({ length: photoAmount }).map((_, index) => (
-               <Skeleton key={index} className="size-64 rounded-md" />
+               <Skeleton key={index} className="md:size-64 size-36 rounded-md" />
             ))
          :
             images.map((image) => (
                <GalleryItem key={image} isEditable={isEditable} image={image} isLoading={loading} onDeletePhoto={handleDeletePhoto} />
             ))}
-         {isEditable && <AddPhoto size={'size-64'} onClick={handleAddPhoto} />}
+         {isEditable && <AddPhoto size={'md:size-64 size-36'} onClick={handleAddPhoto} />}
       </div>
    );
 };

@@ -1,10 +1,13 @@
+"use client";
 import { FC, useState } from "react";
 import { useAuthContext } from "@/context/AuthContext";
 import { UserType } from "@/constants/UserTypeEnum";
 import { useStores } from "@/hooks/useStores";
 import { IProductCard } from "@/types/entities/Product";
 import { Modal } from "@/components/ui/modals/Modal";
-// import LoginModal from "../modals/LoginModal";
+import LoginModal from "../modals/modalContents/LoginModal";
+import { mutate } from "swr";
+
 
 interface AddToFavouriteProps {
    isInFavourites: boolean;
@@ -12,32 +15,26 @@ interface AddToFavouriteProps {
    onToggle: (newState: boolean) => void;
 }
 
-const AddToFavourite: FC<AddToFavouriteProps> = ({
-   isInFavourites,
-   product,
-   onToggle,
-}) => {
-   const { userType } = useAuthContext();
-   const { customerStore } = useStores();
+const AddToFavourite: FC<AddToFavouriteProps> = ({ isInFavourites, product }) => {
+  const { userType } = useAuthContext();
+  const { customerStore } = useStores();
 
-   const [openModal, setOpenModal] = useState(false);
+  const [openModal, setOpenModal] = useState(false);
 
-   const handleAddToFavourites = async (
-      e: React.MouseEvent<HTMLButtonElement>
-   ) => {
-      e.stopPropagation();
-      if (userType === UserType.CUSTOMER) {
-         if (isInFavourites) {
-            await customerStore.removeFromFavourites({ productId: product.id });
-            onToggle(false);
-         } else {
-            await customerStore.addToFavourites(product);
-            onToggle(true);
-         }
+  const handleAddToFavourites = async (e: React.MouseEvent<HTMLButtonElement>) => {
+    e.stopPropagation();
+    if (userType === UserType.CUSTOMER) {
+      if (isInFavourites) {
+        await customerStore.removeFromFavourites({ productId: product.id });
       } else {
-         setOpenModal(true);
+        await customerStore.addToFavourites(product);
       }
-   };
+
+      mutate((key: string) => key.startsWith("/api/products"));
+    } else {
+      setOpenModal(true);
+    }
+  };  
 
    return (
       <>
@@ -48,25 +45,26 @@ const AddToFavourite: FC<AddToFavouriteProps> = ({
                showCloseButton={true}
                size="w-fit h-fit"
             >
-               {/* <LoginModal /> */}
-               <div>LoginModal</div>
+               <LoginModal />
+         
             </Modal>
          )}
          <button
+            data-ignore-click
             className={`${
                isInFavourites
                   ? "bg-main-green text-white"
                   : "bg-white text-main-green"
-            } rounded-full p-2 cursor-pointer`}
+            } rounded-full flex items-center justify-center md:p-2 p-1 lg:size-12 md:size-10 size-8 cursor-pointer`}
             onClick={handleAddToFavourites}
          >
             <svg
                xmlns="http://www.w3.org/2000/svg"
                fill="none"
                viewBox="0 0 24 24"
-               strokeWidth={3}
+               
                stroke="currentColor"
-               className="size-6"
+               className="w-full h-full md:stroke-3 stroke-2"
             >
                <path
                   strokeLinecap="round"

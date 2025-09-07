@@ -168,30 +168,31 @@ const ProducerInfo: FC = observer(() => {
    //    console.log(import.meta.env.VITE_API_URL + profile?.image);
 
    return (
-      <div className="flex flex-col gap-y-8 p-8">
-         <div className="flex gap-x-8 h-fit">
+      <div className="flex flex-col gap-y-8 md:p-8 p-4">
+         <div className="flex flex-col md:flex-row gap-y-6 md:gap-x-8 gap-x-0 h-fit">
             {isLoading ? (
                <div className="relative">
-                  <Skeleton className="w-[400px] h-[300px] rounded-md" />
+                  <Skeleton className="md:w-[400px] w-full h-[300px] rounded-md" />
                </div>
             ) : (
                <div className="relative">
                   {!imageLoaded && isAvatarLoading ? (
-                     <Skeleton className="w-[400px] h-[300px] rounded-md" />
+                     <Skeleton className="md:w-[400px] w-full h-[300px] rounded-md" />
                   ) : profile?.image ? (
                      // <img
                      //    src={import.meta.env.VITE_API_URL + profile?.image}
                      //    className="object-cover w-[400px] h-[300px] rounded-md"
                      //    onLoad={() => setImageLoaded(true)}
                      // />
-                     <Image
-                        alt="avatar"
-                        width={400}
-                        height={300}
-                        src={profile?.image}
-                        className="object-cover w-[400px] h-[300px] rounded-md"
-                        onLoad={() => setImageLoaded(true)}
-                     />
+                     <div className="md:w-[400px] w-full h-[300px]">
+                        <Image
+                           alt={profile?.title ?? "avatar"}
+                           fill
+                           src="/image.png"
+                           className="object-cover rounded-md"
+                           onLoad={() => setImageLoaded(true)}
+                        />
+                     </div>
                   ) : (
                      <Skeleton className="w-[400px] h-[300px] rounded-md" />
                   )}
@@ -232,11 +233,11 @@ const ProducerInfo: FC = observer(() => {
             <div className="flex flex-col gap-y-3 flex-1 min-h-0">
                {isLoading ? (
                   <>
-                     <Skeleton className="h-12 w-48" />
-                     <Skeleton className="h-10 w-40" />
-                     <Skeleton className="h-12 w-64" />
-                     <Skeleton className="h-10 w-64" />
-                     <Skeleton className="h-full w-full" />
+                     <Skeleton className="h-12 md:w-48 w-full" />
+                     <Skeleton className="h-10 md:w-40 w-full" />
+                     <Skeleton className="h-12 md:w-64 w-full" />
+                     <Skeleton className="h-10 md:w-64 w-full" />
+                     <Skeleton className="md:h-full h-[100px] w-full" />
                   </>
                ) : (
                   <>
@@ -296,7 +297,7 @@ const ProducerInfo: FC = observer(() => {
                               </button>
                            </div>
                         ) : isTitleLoading ? (
-                           <Skeleton className="h-8 w-48" />
+                           <Skeleton className="h-8 md:w-48 w-full" />
                         ) : (
                            <>
                               <span>{profile?.title ?? "Не указано"}</span>
@@ -323,7 +324,7 @@ const ProducerInfo: FC = observer(() => {
                         )}
                      </span>
                      <span
-                        className={`text-main-gray flex items-center gap-x-2 border-2 border-box rounded-md transition-all duration-100 w-fit ${
+                        className={`text-main-gray w-full flex items-center gap-x-2 border-2 border-box rounded-md transition-all duration-100 md:w-fit ${
                            isCategoryEditable
                               ? "border-main-gray"
                               : isCategoryLoading
@@ -333,7 +334,7 @@ const ProducerInfo: FC = observer(() => {
                      >
                         {isCategoryEditable ? (
                            <div
-                              className="flex items-center gap-x-2 relative p-1"
+                              className="flex w-full items-center gap-x-2 relative p-1"
                               ref={categoryDropdownRef}
                               onBlur={(e) => {
                                  if (
@@ -380,7 +381,7 @@ const ProducerInfo: FC = observer(() => {
                                  </svg>
                               </button>
                               {isCategoryDropdownOpen && (
-                                 <div className="absolute top-full left-0 mt-1 p-1 w-[400px] max-h-[200px] overflow-y-auto border-2 border-main-gray bg-white flex flex-col gap-y-1 shadow-lg/30 z-10 rounded-md">
+                                 <div className="absolute  top-full left-0 mt-1 p-1 w-full md:w-[400px] max-h-[200px] overflow-y-auto border-2 border-main-gray bg-white flex flex-col gap-y-1 shadow-lg/30 z-10 rounded-md">
                                     {categories.map((category) => {
                                        const isChecked =
                                           selectedCategories.includes(
@@ -442,7 +443,7 @@ const ProducerInfo: FC = observer(() => {
                         )}
                      </span>
                      <span className="flex items-center gap-x-2">
-                        <ReviewStars rating={profile.feedbackAv ?? 0} />
+                        <ReviewStars size="large" rating={profile.feedbackAv ?? 0} />
                         <span className="text-main-gray text-sm">Отзывы</span>
                      </span>
                      <div className="text-main-gray flex flex-col flex-grow min-h-0">
@@ -499,7 +500,7 @@ const ProducerInfo: FC = observer(() => {
                               </button>
                            </div>
                         ) : isDescriptionLoading ? (
-                           <Skeleton className="h-full w-full" />
+                           <Skeleton className="md:h-full h-[100px] w-full" />
                         ) : (
                            <div className="flex items-start gap-x-2 h-full border-2 border-main-gray rounded-md p-1">
                               <textarea
@@ -541,16 +542,16 @@ const ProducerInfo: FC = observer(() => {
                )}
             </div>
          </div>
-         <div className="flex gap-x-8">
+         <div className="flex flex-col md:flex-row gap-y-6 md:gap-x-8 gap-x-0">
             {isLoading ? (
                <>
-                  <Skeleton className="h-12 w-96" />
-                  <Skeleton className="h-12 w-96" />
+                  <Skeleton className="md:h-12 md:w-96 w-full" />
+                  <Skeleton className="md:h-12 md:w-96 w-full" />
                </>
             ) : (
                <>
                   <span
-                     className={`text-main-gray w-96 text-xl flex items-center justify-between gap-x-2 border-2 border-box py-2 px-4 rounded-full transition-all duration-100 ${
+                     className={`text-main-gray md:w-96 w-full md:text-xl text-sm flex items-center justify-between gap-x-2 border-2 border-box py-2 px-4 rounded-full transition-all duration-100 ${
                         isAddressEditable
                            ? "border-main-gray"
                            : isAddressLoading
@@ -570,7 +571,7 @@ const ProducerInfo: FC = observer(() => {
                            tabIndex={-1}
                         >
                            <input
-                              className="bg-transparent focus:outline-none min-w-[200px]"
+                              className="bg-transparent focus:outline-none md:min-w-[200px] w-full"
                               value={address}
                               autoFocus
                               onChange={(e) => setAddress(e.target.value)}
@@ -603,10 +604,10 @@ const ProducerInfo: FC = observer(() => {
                            </button>
                         </div>
                      ) : isAddressLoading ? (
-                        <Skeleton className="h-7 w-96" />
+                        <Skeleton className="h-7 md:w-96 w-full" />
                      ) : (
-                        <div className="flex items-center gap-x-8 justify-between w-full">
-                           <span className="min-w-[200px]">
+                        <div className="flex items-center gap-x-8 justify-between w-full ">
+                           <span>
                               <span className="font-bold">Адрес:</span>{" "}
                               {profile?.address ?? "Не указано"}
                            </span>
@@ -633,7 +634,7 @@ const ProducerInfo: FC = observer(() => {
                      )}
                   </span>
                   <span
-                     className={`text-main-gray min-w-[400px] justify-between text-xl flex items-center gap-x-2 border-2 border-box py-2 rounded-full transition-all duration-100 w-fit ${
+                     className={`text-main-gray md:text-xl text-sm md:min-w-[400px] w-full justify-between flex items-center gap-x-2 border-2 border-box py-2 rounded-full transition-all duration-100 md:w-fit ${
                         isActivityTypeEditable
                            ? "border-main-gray"
                            : isActivityTypeLoading
@@ -705,7 +706,7 @@ const ProducerInfo: FC = observer(() => {
                            )}
                         </div>
                      ) : isActivityTypeLoading ? (
-                        <Skeleton className="h-7 w-96" />
+                        <Skeleton className="h-7 md:w-96 w-full" />
                      ) : (
                         <div className="px-4 flex items-center justify-between w-full">
                            <span>

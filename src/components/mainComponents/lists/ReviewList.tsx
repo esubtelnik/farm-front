@@ -28,7 +28,7 @@ const ReviewList: FC<ReviewListProps> = ({
    }, [reviews.length]);
 
    return (
-      <div className="grid grid-cols-6 gap-10   ">
+      <div className="flex flex-col md:grid lg:grid-cols-6 md:gap-10 gap-y-5 ">
          {isLoading ? (
             <>
                {Array.from({ length: reviewAmount + 1 }).map((_, index) => (

@@ -1,4 +1,5 @@
-import CourierDeliveryItem from "../items/CourierDeliveryItem";
+"use client";
+import CourierDeliveryItem from "@/components/mainComponents/items/CourierDeliveryItem";
 
 const CourierDeliveryList = () => {
    return (

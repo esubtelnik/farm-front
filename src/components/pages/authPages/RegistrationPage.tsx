@@ -119,13 +119,13 @@ const RegistrationPage: FC = () => {
             break;
          case UserType.CUSTOMER.type:
             {
-               console.log("customer");
                const updatedData: CustomerRegisterRequest = {
                   ...registerCustomerData,
                   email,
                   password,
                };
                setRegisterCustomerData(updatedData);
+
                const result = await initCustomer({ email });
                if (result.success) {
                   setIsEmailVerification(true);

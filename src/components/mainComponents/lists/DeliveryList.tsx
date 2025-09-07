@@ -1,4 +1,5 @@
-import DeliveryItem from "../items/DeliveryItem";
+"use client";
+import DeliveryItem from "@/components/mainComponents/items/DeliveryItem";
 
 const DeliveryList = () => {
    return (

@@ -89,7 +89,7 @@ const RegistrationCodeForm: FC = () => {
       if (!hasErrors) {
          const { email, code, overprice } = form.values;
          if (selectedUserType === "producer") {
-            const response = await adminStore.createRegistrationProducerCode({ email, code, overprice: overprice || markupOptions[0].value });
+            const response = await adminStore.saveProducerCode({ email, code, overprice: overprice || markupOptions[0].value });
             if (response) {
                console.log(response);
             }

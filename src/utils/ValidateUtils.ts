@@ -35,3 +35,23 @@ export const validatePhoneNumber = (phone: string) => {
   
     return null;
   };
+
+  export const validatePassword = (password: string) => {
+    if (!password || password.trim().length === 0) {
+      return "Пароль не может быть пустым";
+    }
+  
+    if (password.length < 8) {
+      return "Минимальная длина — 8 символов";
+    }
+  
+    if (!/[a-z]/.test(password)) {
+      return "Добавьте хотя бы одну букву";
+    }
+  
+    if (!/[0-9]/.test(password)) {
+      return "Добавьте хотя бы одну цифру";
+    }
+  
+    return null;
+  };

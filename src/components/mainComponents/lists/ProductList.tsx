@@ -13,22 +13,37 @@ interface ProductListProps {
    errorMessage?: string;
 }
 
-const ProductList: FC<ProductListProps> = ({ products, isEditable = false, isLoading = false, isError = false, errorMessage = "" }) => {
-   
+const ProductList: FC<ProductListProps> = ({
+   products,
+   isEditable = false,
+   isLoading = false,
+   isError = false,
+   errorMessage = "",
+}) => {
    if (isLoading) {
-      return <div className="flex items-center justify-center h-[50vh]">
-         {/* <Loader /> */}
-      </div>;
+      return (
+         <div className="flex items-center justify-center h-[50vh]">
+            {/* <Loader /> */}
+         </div>
+      );
    }
    if (isError) {
       return <div className="text-center text-main-gray ">{errorMessage}</div>;
    }
-       
+   if (products.length === 0) {
+      return <div className="flex justify-center items-center my-5 h-full">
+         <span className="text-main-gray">Продукты не найдены</span>
+      </div>;
+   }
+
    return (
-      <div className="grid grid-cols-3 gap-10 py-10 px-8 place-items-center">
+      <div className="grid lg:grid-cols-3 grid-cols-2 lg:gap-10 md:gap-5 gap-4 md:py-10 py-5 md:px-8 px-4 place-items-center">
          {products.map((product) => (
-            <ProductItem key={product.id} product={product} isEditable={isEditable} />
-            //<div key={product.id}>{product.title}</div>
+            <ProductItem
+               key={product.id}
+               product={product}
+               isEditable={isEditable}
+            />
          ))}
          {products.length === 0 && (
             <div className="col-span-3 text-center text-main-gray">

@@ -1,8 +1,5 @@
 "use client";
-import {
-   useState,
-   useEffect,
-} from "react";
+import { useState } from "react";
 import {
    initCustomerApi,
    initProducerApi,
@@ -33,8 +30,9 @@ import { UserType } from "@/constants/UserTypeEnum";
 import { UserTypeValue } from "@/types/entities/User";
 import { AdminLoginRequest } from "@/types/requests/AdminRequests";
 import { AuthContext } from "./AuthContext";
-import { useStores } from "@/hooks/useStores";
+// import { useStores } from "@/hooks/useStores";
 import { loginAdminApi } from "@/api/adminApi";
+import { fetchApi } from "@/lib/fetchApi";
 
 export interface AuthContextType {
    isLogoShow: boolean;
@@ -51,9 +49,9 @@ export interface AuthContextType {
    loginCourier: (
       loginData: CourierLoginRequest
    ) => Promise<{ success: boolean; message?: string }>;
-         loginAdmin: (
-            loginData: AdminLoginRequest
-         ) => Promise<{ success: boolean; message?: string }>;
+   loginAdmin: (
+      loginData: AdminLoginRequest
+   ) => Promise<{ success: boolean; message?: string }>;
    registerCustomer: (
       registerData: CustomerRegisterRequest
    ) => Promise<{ success: boolean; message?: string }>;
@@ -89,7 +87,7 @@ export const AuthContextProvider = ({
    children,
    initialUserType,
 }: AuthContextProviderProps) => {
-   const { customerStore } = useStores();
+   // const { customerStore } = useStores();
    const [isLogoShow, setIsLogoShow] = useState<boolean>(true);
    const [userType, setUserType] = useState<UserTypeValue>(() => {
       const type = initialUserType?.toLowerCase();
@@ -97,22 +95,22 @@ export const AuthContextProvider = ({
       return found || UserType.GUEST;
    });
 
-   useEffect(() => {
-      switch (userType.type) {
-         case UserType.CUSTOMER.type:
-            customerStore.fetchCustomerData();
-            break;
-         case UserType.PRODUCER.type:
-            setIsLogoShow(false);
-            break;
-         case UserType.COURIER.type:
-            setIsLogoShow(false);
-            break;
-         default:
-            setIsLogoShow(true);
-            break;
-      }
-   }, []);
+   // useEffect(() => {
+   //    switch (userType.type) {
+   //       case UserType.CUSTOMER.type:
+   //          customerStore.fetchCustomerData();
+   //          break;
+   //       case UserType.PRODUCER.type:
+   //          setIsLogoShow(false);
+   //          break;
+   //       case UserType.COURIER.type:
+   //          setIsLogoShow(false);
+   //          break;
+   //       default:
+   //          setIsLogoShow(true);
+   //          break;
+   //    }
+   // }, []);
 
    //    useEffect(() => {
    //       if (!initialUserType) {
@@ -187,170 +185,136 @@ export const AuthContextProvider = ({
    const loginCustomer = async (
       loginData: CustomerLoginRequest
    ): Promise<{ success: boolean; message?: string }> => {
-      try {
-         const response = await loginCustomerApi(loginData);
-         if (response.successful) {
-            console.log("Успешный вход!", response.data);
-            setCookie("token", response.data.token, {
-               expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
-               secure: true,
-               httpOnly: false,
-               sameSite: "strict",
-            });
-            setUserType(UserType.CUSTOMER);
+      const response = await fetchApi(loginCustomerApi(loginData));
+      if (response.success) {
+         console.log("Успешный вход!", response.data);
+         setCookie("token", response.data.token, {
+            expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+            secure: true,
+            httpOnly: false,
+            sameSite: "strict",
+         });
+         setUserType(UserType.CUSTOMER);
 
-            return { success: true };
-         } else {
-            console.log("Ошибка входа:", response.error.message);
-            return { success: false, message: response.error.message };
-         }
-      } catch (error) {
-         console.error("Ошибка при выполнении запроса:", error);
-         return { success: false, message: "Ошибка сети или сервера" };
+         return { success: true };
+      } else {
+         console.log("Ошибка входа:", response.message);
+         return { success: false, message: response.message };
       }
    };
 
    const loginProducer = async (
       loginData: ProducerLoginRequest
    ): Promise<{ success: boolean; message?: string }> => {
-      try {
-         const response = await loginProducerApi(loginData);
-         if (response.successful) {
-            console.log("Успешный вход!", response.data);
-            setCookie("token", response.data.token, {
-               expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
-               secure: true,
-               sameSite: "strict",
-            });
-            setUserType(UserType.PRODUCER);
-            return { success: true };
-         } else {
-            console.log("Ошибка входа:", response.error.message);
-            return { success: false, message: response.error.message };
-         }
-      } catch (error) {
-         console.error("Ошибка при выполнении запроса:", error);
-         return { success: false, message: "Ошибка сети или сервера" };
+      const response = await fetchApi(loginProducerApi(loginData));
+
+      if (response.success) {
+         console.log("Успешный вход!", response.data);
+         setCookie("token", response.data.token, {
+            expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+            secure: true,
+            sameSite: "strict",
+         });
+         setUserType(UserType.PRODUCER);
+         return { success: true };
+      } else {
+         console.log("Ошибка входа:", response.message);
+         return { success: false, message: response.message };
       }
    };
 
    const loginCourier = async (
       loginData: CourierLoginRequest
    ): Promise<{ success: boolean; message?: string }> => {
-      try {
-         const response = await loginCourierApi(loginData);
-         if (response.successful) {
-            console.log("Успешный вход!", response.data);
-            setCookie("token", response.data.token, {
-               expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
-               secure: true,
-               sameSite: "strict",
-            });
-            setUserType(UserType.COURIER);
-            return { success: true };
-         } else {
-            console.log("Ошибка входа:", response.error.message);
-            return { success: false, message: response.error.message };
-         }
-      } catch (error) {
-         console.error("Ошибка при выполнении запроса:", error);
-         return { success: false, message: "Ошибка сети или сервера" };
+      const response = await fetchApi(loginCourierApi(loginData));
+      if (response.success) {
+         console.log("Успешный вход!", response.data);
+         setCookie("token", response.data.token, {
+            expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+            secure: true,
+            sameSite: "strict",
+         });
+         setUserType(UserType.COURIER);
+         return { success: true };
+      } else {
+         console.log("Ошибка входа:", response.message);
+         return { success: false, message: response.message };
       }
    };
 
    const loginAdmin = async (
       loginData: AdminLoginRequest
    ): Promise<{ success: boolean; message?: string }> => {
-       try {
-            const response = await loginAdminApi(loginData);
-            if (response.successful) {
-               console.log("Успешный вход!", response.data);
-               setCookie("token", response.data.token, {
-                  expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
-                  secure: true,
-                  sameSite: "strict",
-               });
-               setUserType(UserType.ADMIN);
-               return { success: true };
-            } else {
-               console.log("Ошибка входа:", response.error.message);
-               return { success: false, message: response.error.message };
-            }
-         } catch (error) {
-            console.error("Ошибка при выполнении запроса:", error);
-            return { success: false, message: "Ошибка сети или сервера" };
-         }
-      };
+      const response = await fetchApi(loginAdminApi(loginData));
+      if (response.success) {
+         console.log("Успешный вход!", response.data);
+         setCookie("token", response.data.token, {
+            expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+            secure: true,
+            sameSite: "strict",
+         });
+         setUserType(UserType.ADMIN);
+         return { success: true };
+      } else {
+         console.log("Ошибка входа:", response.message);
+         return { success: false, message: response.message };
+      }
+   };
 
    const registerCustomer = async (
       registerData: CustomerRegisterRequest
    ): Promise<{ success: boolean; message?: string }> => {
-      try {
-         const response = await registerCustomerApi(registerData);
-         if (response.successful) {
-            console.log("Успешный вход!", response.data);
-            setCookie("token", response.data.token, {
-               expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
-               secure: true,
-               sameSite: "strict",
-            });
-            setUserType(UserType.CUSTOMER);
-            return { success: true };
-         } else {
-            console.log("Ошибка входа:", response.error.message);
-            return { success: false, message: response.error.message };
-         }
-      } catch (error) {
-         console.error("Ошибка при выполнении запроса:", error);
-         return { success: false, message: "Ошибка сети или сервера" };
+      const response = await fetchApi(registerCustomerApi(registerData));
+      if (response.success) {
+         console.log("Успешный вход!", response.data);
+         setCookie("token", response.data.token, {
+            expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+            secure: true,
+            sameSite: "strict",
+         });
+         setUserType(UserType.CUSTOMER);
+         return { success: true };
+      } else {
+         console.log("Ошибка входа:", response.message);
+         return { success: false, message: response.message };
       }
    };
 
    const registerProducer = async (
       registerData: ProducerRegisterRequest
    ): Promise<{ success: boolean; message?: string }> => {
-      try {
-         const response = await registerProducerApi(registerData);
-         if (response.successful) {
-            console.log("Успешный вход!", response.data);
-            setCookie("token", response.data.token, {
-               expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
-               secure: true,
-               sameSite: "strict",
-            });
-            setUserType(UserType.PRODUCER);
-            return { success: true };
-         } else {
-            console.log("Ошибка входа:", response.error.message);
-            return { success: false, message: response.error.message };
-         }
-      } catch (error) {
-         console.error("Ошибка при выполнении запроса:", error);
-         return { success: false, message: "Ошибка сети или сервера" };
+      const response = await fetchApi(registerProducerApi(registerData));
+      if (response.success) {
+         console.log("Успешный вход!", response.data);
+         setCookie("token", response.data.token, {
+            expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+            secure: true,
+            sameSite: "strict",
+         });
+         setUserType(UserType.PRODUCER);
+         return { success: true };
+      } else {
+         console.log("Ошибка входа:", response.message);
+         return { success: false, message: response.message };
       }
    };
 
    const registerCourier = async (
       registerData: CourierRegisterRequest
    ): Promise<{ success: boolean; message?: string }> => {
-      try {
-         const response = await registerCourierApi(registerData);
-         if (response.successful) {
-            console.log("Успешный вход!", response.data);
-            setCookie("token", response.data.token, {
-               expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
-               secure: true,
-               sameSite: "strict",
-            });
-            setUserType(UserType.COURIER);
-            return { success: true };
-         } else {
-            console.log("Ошибка входа:", response.error.message);
-            return { success: false, message: response.error.message };
-         }
-      } catch (error) {
-         console.error("Ошибка при выполнении запроса:", error);
-         return { success: false, message: "Ошибка сети или сервера" };
+      const response = await fetchApi(registerCourierApi(registerData));
+      if (response.success) {
+         console.log("Успешный вход!", response.data);
+         setCookie("token", response.data.token, {
+            expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+            secure: true,
+            sameSite: "strict",
+         });
+         setUserType(UserType.COURIER);
+         return { success: true };
+      } else {
+         console.log("Ошибка входа:", response.message);
+         return { success: false, message: response.message };
       }
    };
 
@@ -374,70 +338,50 @@ export const AuthContextProvider = ({
    const initCustomer = async (
       emailData: CustomerInitRequest
    ): Promise<{ success: boolean; message?: string }> => {
-      try {
-         const response = await initCustomerApi(emailData);
-         if (response.successful) {
-            return { success: true };
-         } else {
-            console.log("Ошибка входа:", response.error.message);
-            return { success: false, message: response.error.message };
-         }
-      } catch (error) {
-         console.error("Ошибка при выполнении запроса:", error);
-         return { success: false, message: "Ошибка сети или сервера" };
+      const response = await fetchApi(initCustomerApi(emailData));
+      if (response.success) {
+         return { success: true };
+      } else {
+         console.log("Ошибка входа:", response.message);
+         return { success: false, message: response.message };
       }
    };
 
    const initProducer = async (
       emailData: ProducerInitRequest
    ): Promise<{ success: boolean; message?: string }> => {
-      try {
-         const response = await initProducerApi(emailData);
-         if (response.successful) {
-            return { success: true };
-         } else {
-            console.log("Ошибка входа:", response.error.message);
-            return { success: false, message: response.error.message };
-         }
-      } catch (error) {
-         console.error("Ошибка при выполнении запроса:", error);
-         return { success: false, message: "Ошибка сети или сервера" };
+      const response = await fetchApi(initProducerApi(emailData));
+      if (response.success) {
+         return { success: true };
+      } else {
+         console.log("Ошибка входа:", response.message);
+         return { success: false, message: response.message };
       }
    };
 
    const initCourier = async (
       emailData: CourierInitRequest
    ): Promise<{ success: boolean; message?: string }> => {
-      try {
-         const response = await initCourierApi(emailData);
-         if (response.successful) {
-            return { success: true };
-         } else {
-            console.log("Ошибка входа:", response.error.message);
-            return { success: false, message: response.error.message };
-         }
-      } catch (error) {
-         console.error("Ошибка при выполнении запроса:", error);
-         return { success: false, message: "Ошибка сети или сервера" };
+      const response = await fetchApi(initCourierApi(emailData));
+      if (response.success) {
+         return { success: true };
+      } else {
+         console.log("Ошибка входа:", response.message);
+         return { success: false, message: response.message };
       }
    };
 
    const updateCustomer = async (
       data: CustomerUpdateRequest
    ): Promise<{ success: boolean; message?: string }> => {
-      try {
-         const response = await updateCustomerApi(data);
-         if (response.successful) {
-            console.log("Успешно!", response.data);
+      const response = await fetchApi(updateCustomerApi(data));
+      if (response.success) {
+         console.log("Успешно!", response.data);
 
-            return { success: true };
-         } else {
-            console.log("Ошибка:", response.error.message);
-            return { success: false, message: response.error.message };
-         }
-      } catch (error) {
-         console.error("Ошибка при выполнении запроса:", error);
-         return { success: false, message: "Ошибка сети или сервера" };
+         return { success: true };
+      } else {
+         console.log("Ошибка:", response.message);
+         return { success: false, message: response.message };
       }
    };
 

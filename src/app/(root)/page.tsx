@@ -11,5 +11,5 @@ export default async function Home() {
 
   const res2 = await fetchApi(getAllProducersApi(token));
 
-  return <HomePage categories={res.data} producers={res2.data} />;
+  return <HomePage categories={res.data || []} producers={res2.data || []} />;
 }

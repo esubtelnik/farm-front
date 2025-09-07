@@ -144,7 +144,7 @@ const CustomerCartPage = observer(() => {
    ];
    return (
       <div className="min-h-screen font-geist">
-         <CustomerInfo  isCart={true} />
+         <CustomerInfo isCart={true} />
          <Tabs tabs={tabItems} />
       </div>
    );

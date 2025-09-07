@@ -6,6 +6,7 @@ import { useAuthContext } from "@/context/AuthContext";
 // import Navbar from "@/components/layouts/Navbar";
 import { FC, ReactNode, useEffect } from "react";
 import Navbar from "@/components/features/Navbar";
+import Footer from "@/components/features/Footer";
    
 
 interface LayoutProps {
@@ -59,7 +60,7 @@ const MainLayout: FC<LayoutProps> = ({ children }) => {
       <div className="flex flex-col min-h-screen">
          <Navbar userType={userType} />
          <main className="grow">{children}</main>
-         <footer className="bg-main-green h-30"></footer>
+         <Footer />
       </div>
    );
 };

@@ -30,7 +30,8 @@ interface FormState {
 }
 
 const LoginPage: FC = () => {
-   const { loginCustomer, loginProducer, loginCourier, loginAdmin } = useAuthContext();
+   const { loginCustomer, loginProducer, loginCourier, loginAdmin } =
+      useAuthContext();
 
    const [loginUserType, setLoginUserType] = useState<UserTypeValue>(
       UserType.CUSTOMER
@@ -94,7 +95,8 @@ const LoginPage: FC = () => {
          newErrors.password = "Пароль должен быть минимум 6 символов";
       }
       if (
-         (loginUserType.type === UserType.PRODUCER.type || loginUserType.type === UserType.COURIER.type) &&
+         (loginUserType.type === UserType.PRODUCER.type ||
+            loginUserType.type === UserType.COURIER.type) &&
          (!form.values.workCode || form.values.workCode.length < 3)
       ) {
          newErrors.workCode = "Введите корректный код";
@@ -109,7 +111,6 @@ const LoginPage: FC = () => {
       return Object.values(newErrors).some((error) => error !== null);
    };
 
-
    const handleRegistrationNavigate = () => {
       navigate.push(routes.auth.root);
    };
@@ -122,7 +123,6 @@ const LoginPage: FC = () => {
 
       if (!hasErrors) {
          switch (loginUserType.type) {
-            
             case UserType.CUSTOMER.type:
                {
                   const loginCustomerData: CustomerLoginRequest = {
@@ -159,7 +159,6 @@ const LoginPage: FC = () => {
                }
                break;
             case UserType.COURIER.type:
-               
                {
                   const loginCourierData: CourierLoginRequest = {
                      email: form.values.email,
@@ -188,7 +187,9 @@ const LoginPage: FC = () => {
                   if (result.success) {
                      navigate.push(routes.admin.root);
                   } else {
-                     setLoginErrorMessage(result.message || "Неизвестная ошибка");
+                     setLoginErrorMessage(
+                        result.message || "Неизвестная ошибка"
+                     );
                   }
                }
                break;
@@ -197,11 +198,11 @@ const LoginPage: FC = () => {
    };
 
    return (
-      <div className="w-full flex flex-col items-center justify-center font-geist">
-         <h1 className="text-3xl text-main-green font-bold mb-16">
+      <div className="w-full flex flex-col px-2 md:px-0 items-center justify-center font-geist">
+         <h1 className="md:text-3xl text-xl text-main-green font-bold md:mb-16 mb-8">
             ВХОД В ЛИЧНЫЙ КАБИНЕТ
          </h1>
-         <div className="w-full flex flex-col space-y-9 ">
+         <div className="w-full flex flex-col space-y-5 md:space-y-8 ">
             <Input
                placeholder="E-mail"
                value={form.values.email}
@@ -220,14 +221,15 @@ const LoginPage: FC = () => {
                      handleChange("password", form.values.password)
                   }
                />
-               <span className="text-main-green ml-2 text-sm cursor-pointer">
+               <span className="text-main-green ml-2 md:text-sm text-xs cursor-pointer">
                   Забыли пароль?
                </span>
             </div>
             <AnimatePresence>
-               {(loginUserType.type === UserType.PRODUCER.type || loginUserType.type === UserType.COURIER.type) && (
+               {(loginUserType.type === UserType.PRODUCER.type ||
+                  loginUserType.type === UserType.COURIER.type) && (
                   <motion.div
-                     className="relative flex flex-col mb-5"
+                     className="flex flex-col mb-5"
                      initial={{ opacity: 0, y: -10 }}
                      animate={{ opacity: 1, y: 0 }}
                      exit={{ opacity: 0, y: -10 }}
@@ -242,10 +244,10 @@ const LoginPage: FC = () => {
                            handleChange("workCode", form.values.workCode || "")
                         }
                      />
-                     <div className="text-main-gray ml-2 text-sm cursor-pointer absolute -bottom-6">
+                     <div className="text-main-gray ml-2 text-sm cursor-pointer">
                         Введите Ваш индентификационный код, который присвоен при
-                        оформлении
-                        <span className="text-main-green cursor-pointer hover:underline">
+                        оформлении{" "}
+                        <span className="text-main-green cursor-pointer underline">
                            Соглашения о сотрудничестве
                         </span>
                      </div>
@@ -254,7 +256,7 @@ const LoginPage: FC = () => {
             </AnimatePresence>
          </div>
          <p
-            className={`align-middle text-red-600 min-h-4 my-5 transition-opacity duration-300 ${
+            className={`align-middle text-red-600 min-h-4 md:my-5 my-3 transition-opacity duration-300 ${
                loginErrorMessage ? "opacity-100" : "opacity-0"
             }`}
          >
@@ -263,30 +265,44 @@ const LoginPage: FC = () => {
 
          <button
             onClick={handleSubmitLogin}
-            className="bg-main-green text-white font-semibold mb-7 py-3 px-8 rounded-full cursor-pointer"
+            className="bg-main-green text-white font-semibold md:mb-7 mb-5 py-3 px-8 rounded-full cursor-pointer w-full md:w-auto"
          >
             ВОЙТИ
          </button>
-        {(loginUserType.type !== UserType.ADMIN.type && loginUserType.type !== UserType.COURIER.type) && <div className="text-main-gray font-medium text-center">
-            Ещё нет аккаунта?{" "}
-            <span
-               className="text-main-green cursor-pointer hover:underline"
-               onClick={handleRegistrationNavigate}
-            >
-               Зарегистрироваться
-            </span>
-            <div>
-               <div className="h-2" />
-               <div>или</div>
-               <div className="h-2" />
-               <span
-                  className="text-dark-green font-bold cursor-pointer hover:underline"
-                  onClick={() => setLoginUserType(UserType.PRODUCER)}
-               >
-                  Я - производитель
-               </span>
-            </div>
-         </div>}
+         {loginUserType.type !== UserType.ADMIN.type &&
+            loginUserType.type !== UserType.COURIER.type && (
+               <div className="text-main-gray text-sm md:text-base font-medium text-center">
+                  Ещё нет аккаунта?{" "}
+                  <span
+                     className="text-main-green cursor-pointer hover:underline"
+                     onClick={handleRegistrationNavigate}
+                  >
+                     Зарегистрироваться
+                  </span>
+                  <div>
+                     <div className="h-2" />
+                     <div>или</div>
+                     <div className="h-2" />
+                     <span
+                        className="text-dark-green font-bold cursor-pointer hover:underline"
+                        onClick={() =>
+                           setLoginUserType(
+                              UserType.PRODUCER.type === loginUserType.type
+                                 ? UserType.CUSTOMER
+                                 : UserType.PRODUCER
+                           )
+                        }
+                     >
+                        {(
+                           {
+                              [UserType.PRODUCER.type]: "Я - покупатель",
+                              [UserType.CUSTOMER.type]: "Я - производитель",
+                           } as Record<string, string>
+                        )[loginUserType.type] || "Я - производитель"}
+                     </span>
+                  </div>
+               </div>
+            )}
       </div>
    );
 };

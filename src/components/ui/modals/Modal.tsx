@@ -30,12 +30,34 @@ export const Modal: React.FC<ModalProps> = ({
 }) => {
    useEffect(() => {
       const onKeyDown = (e: KeyboardEvent) => {
-         if (e.key === "Escape") onClose();
+        if (e.key === "Escape") onClose();
       };
-      if (isOpen) document.addEventListener("keydown", onKeyDown);
-      return () => document.removeEventListener("keydown", onKeyDown);
-   }, [isOpen, onClose]);
-
+    
+      const handleOpen = () => {
+        
+        const scrollBarWidth = window.innerWidth - document.documentElement.clientWidth;
+        document.body.style.overflow = "hidden";
+        document.body.style.paddingRight = scrollBarWidth + "px";
+      };
+    
+      const handleClose = () => {
+        document.body.style.overflow = "";
+        document.body.style.paddingRight = "";
+      };
+    
+      if (isOpen) {
+        document.addEventListener("keydown", onKeyDown);
+        handleOpen();
+      } else {
+        handleClose();
+      }
+    
+      return () => {
+        document.removeEventListener("keydown", onKeyDown);
+        handleClose();
+      };
+    }, [isOpen, onClose]);
+    
    return (
       <AnimatePresence>
          {isOpen && (
@@ -51,7 +73,7 @@ export const Modal: React.FC<ModalProps> = ({
                   }}
                >
                   <motion.div
-                     className={`bg-white rounded-2xl p-2 relative ${size} ${className} pointer-events-auto`}
+                     className={`bg-white max-w-[90%] max-h-[90%] rounded-2xl relative ${size} ${className} pointer-events-auto flex flex-col`}
                      initial={{ scale: 0.95, opacity: 0 }}
                      animate={{ scale: 1, opacity: 1 }}
                      exit={{ scale: 0.95, opacity: 0 }}
@@ -80,9 +102,13 @@ export const Modal: React.FC<ModalProps> = ({
                         </button>
                      )}
                      {title && (
-                        <h2 className="text-xl font-semibold mb-4">{title}</h2>
+                        <h2 className="text-xl font-semibold mb-4 pr-8">
+                           {title}
+                        </h2>
                      )}
-                     <div>{children}</div>
+                     <div className="overflow-y-auto rounded-2xl">
+                        {children}
+                     </div>
                   </motion.div>
                </motion.div>
             </Portal>

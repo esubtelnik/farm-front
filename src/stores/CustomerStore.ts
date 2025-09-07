@@ -114,7 +114,7 @@ class CustomerStore {
          const res = await fetchApi(removeFromFavouritesApi(payload, token));
          if (res.success) {
             runInAction(() => {
-               runInAction(() => {
+           
                   this.favourites = this.favourites.filter(
                      (p) => p.id !== payload.productId
                   );
@@ -124,8 +124,26 @@ class CustomerStore {
                         ? { ...item, isInFavourites: false }
                         : item
                   );
-               });
+             
             });
+
+             // const productInFavourites = this.favourites.find(
+               //    (p) => p.id === payload.productId
+               // );
+               // if (productInFavourites) {
+               //    const index = this.favourites.indexOf(productInFavourites);
+               //    this.favourites.splice(index, 1);
+               // }
+               
+               
+               // const productInCart = this.cart.find((p) => p.id === payload.productId);
+               // if (productInCart) productInCart.isInFavourites = false;
+               
+               // const productInFavouritesList = this.favourites.find(
+               //    (p) => p.id === payload.productId
+               // );
+               // if (productInFavouritesList) productInFavouritesList.isInFavourites = false;
+             
             return { success: true };
          } else {
             return { success: false, message: res.message };

@@ -15,10 +15,10 @@ const WelcomeInfo: FC<WelcomeInfoProps> = ({ changeForm }) => {
 
    return (
       <div className=" h-full flex flex-col">
-         <h1 className="text-3xl font-bold text-main-green font-geist mb-16">
+         <h1 className="md:text-3xl text-xl text-center md:text-start font-bold text-main-green font-geist md:mb-16 mb-4">
             ДОБРО ПОЖАЛОВАТЬ В FARM-BASKET!
          </h1>
-         <p className="text-base font-normal font-roboto text-main-gray grow">
+         <p className="md:text-base text-sm text-justify font-normal font-roboto text-main-gray grow">
             Онлайн-магазин <span className="font-bold">FARM-BASKET</span> — это
             удобная платформа для покупки натуральных и экологически чистых
             продуктов напрямую от фермеров. Ассортимент включает свежие овощи,

@@ -6,7 +6,6 @@ import { useStores } from "@/hooks/useStores";
 import { IProductCard } from "@/types/entities/Product";
 import { Modal } from "@/components/ui/modals/Modal";
 import LoginModal from "../modals/modalContents/LoginModal";
-import { mutate } from "swr";
 
 
 interface AddToFavouriteProps {
@@ -29,8 +28,6 @@ const AddToFavourite: FC<AddToFavouriteProps> = ({ isInFavourites, product }) =>
       } else {
         await customerStore.addToFavourites(product);
       }
-
-      mutate((key: string) => key.startsWith("/api/products"));
     } else {
       setOpenModal(true);
     }

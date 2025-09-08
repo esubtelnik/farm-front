@@ -65,7 +65,7 @@ const RadioButtonGroup: FC<RadioGroupProps> = ({
                         <div className="w-2.5 h-2.5 bg-main-green rounded-full" />
                      )}
                   </div>
-                  <span className="text-gray-800">{option.label}</span>
+                  <span className="text-gray-800 md:text-base text-sm">{option.label}</span>
                </label>
             );
          })}

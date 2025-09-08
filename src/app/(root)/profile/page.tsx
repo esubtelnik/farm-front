@@ -4,6 +4,8 @@ import ProducerProfilePage from "@/components/pages/profilePages/ProducerProfile
 import { UserType } from "@/constants/UserTypeEnum";
 import { fetchApi } from "@/lib/fetchApi";
 import { cookies } from "next/headers";
+import routes from "@/constants/routes";
+import { redirect } from "next/navigation";
 
 export default async function Profile() {
 
@@ -35,7 +37,7 @@ export default async function Profile() {
 
     switch (userType) {
         case UserType.GUEST.type:
-            return <div>Profile Страница гостя</div>;
+            return redirect(routes.auth.login);
         case UserType.CUSTOMER.type:
             return <CustomerProfilePage />;
         case UserType.PRODUCER.type:

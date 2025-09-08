@@ -7,8 +7,9 @@ import {
    SearchProductsRequest,
    AddReviewRequest,
    GetCategoryByTitleRequest,
+   UpdateProductRequest,
 } from "@/types/requests/ProductRequests";
-import { CreateProductResponse } from "@/types/responses/ProductResponses";
+import { CreateProductResponse, UpdateProductResponse } from "@/types/responses/ProductResponses";
 import { ApiClient } from "@/lib/apiClient";
 import { ApiResponse } from "@/types/ApiResponse";
 
@@ -35,10 +36,65 @@ export const createProductApi = async (
    payload: CreateProductRequest,
    token?: string
 ): Promise<ApiResponse<CreateProductResponse>> => {
+   const formData = new FormData();
+   
+   formData.append("title", payload.title);
+   formData.append("price", String(payload.price));
+   formData.append("productType", payload.productType);
+   formData.append("description", payload.description);
+   formData.append("composition", payload.composition);
+   formData.append("storageConditions", payload.storageConditions);
+   formData.append("package", payload.package);
+   formData.append("expirationDate", String(payload.expirationDate));
+   formData.append("volume", String(payload.volume));
+   formData.append("saleVolume", String(payload.saleVolume));
+   formData.append("unit", payload.unit);
+   formData.append("delivery", String(payload.delivery));
+ 
+  
+   if (payload.images && payload.images.length > 0) {
+     payload.images.forEach((file) => {
+       formData.append("images", file); 
+     });
+   }
+   console.log(formData);
+ 
    return await ApiClient.post<
-      CreateProductRequest,
+      FormData,
       ApiResponse<CreateProductResponse>
-   >("/api/product/create", payload, token, {
+   >("/api/product/create", formData, token, {
+      headers: {
+         "Content-Type": "multipart/form-data",
+      },
+   });
+};
+
+
+export const   updateProductApi = async (
+   payload: UpdateProductRequest,
+   productId: string,
+   token?: string
+): Promise<ApiResponse<UpdateProductResponse>> => {
+   const formData = new FormData();
+
+   console.log(payload);
+   
+   Object.entries(payload).forEach(([key, value]) => {
+      if (value !== undefined && value !== null) {
+         if (key === "images" && Array.isArray(value)) {
+            value.forEach((file) => formData.append("images", file));
+         } else {
+            formData.append(key, String(value));
+         }
+      }
+   });
+  
+
+ 
+   return await ApiClient.patch<
+      FormData,
+      ApiResponse<UpdateProductResponse>
+   >("/api/product/update?productId=" + productId,  formData, token, {
       headers: {
          "Content-Type": "multipart/form-data",
       },

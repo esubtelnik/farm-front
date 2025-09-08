@@ -43,7 +43,7 @@ const ProductItem: FC<ProductItemProps> = observer(
                <div className="lg:w-96 lg:h-64 md:w-64 md:h-48 w-36 h-32">
                   <Image
                      fill
-                     src={`${process.env.NEXT_PUBLIC_IMAGE_URL}${product.image}`}
+                     src={`${process.env.NEXT_PUBLIC_IMAGE_URL}${product.images}`}
                      alt={product.title}
                      className="object-cover rounded-t-2xl border-2 border-main-green"
                      unoptimized

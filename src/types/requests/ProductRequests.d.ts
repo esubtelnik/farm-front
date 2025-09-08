@@ -30,7 +30,7 @@ export interface CreateProductRequest {
     description: string;
     composition: string;
     storageConditions: string;
-    image: File;
+    images: File[];
     package: string;
     expirationDate: number;
     volume: number;
@@ -46,10 +46,11 @@ export interface UpdateProductRequest {
     description?: string;
     composition?: string;
     storageConditions?: string;
-    image?: File;
+    images?: File[];
     package?: string;
     expirationDate?: number;
     volume?: number;
+    saleVolume?: number;
     unit?: string;
     delivery?: number;
 }

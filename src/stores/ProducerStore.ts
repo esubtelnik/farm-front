@@ -12,8 +12,8 @@ import {
 import { IProducer } from "@/types/entities/User";
 import { IProductCard } from "@/types/entities/Product";
 import { ProducerUpdateRequest } from "@/types/requests/UserRequests";
-import { CreateProductRequest } from "@/types/requests/ProductRequests";
-import { createProductApi, getProductsByProducerIdApi } from "@/api/productApi";
+import { CreateProductRequest, UpdateProductRequest } from "@/types/requests/ProductRequests";
+import { createProductApi, getProductsByProducerIdApi, updateProductApi } from "@/api/productApi";
 import { getCookie, deleteCookie } from "cookies-next";
 import { fetchApi } from "@/lib/fetchApi";
 
@@ -130,6 +130,17 @@ class ProducerStore {
    async createProduct(payload: CreateProductRequest): Promise<{ success: boolean; message?: string }> {
       const token = getCookie("token")?.toString();
       const res = await fetchApi(createProductApi(payload, token));
+      if (res.success) {
+         await this.getProductsByProducerId();
+         return { success: true };
+      } else {
+         return { success: false, message: res.message };
+      }
+   }
+
+   async updateProduct(payload: UpdateProductRequest, productId: string): Promise<{ success: boolean; message?: string }> {
+      const token = getCookie("token")?.toString();
+      const res = await fetchApi(updateProductApi(payload, productId, token));
       if (res.success) {
          await this.getProductsByProducerId();
          return { success: true };

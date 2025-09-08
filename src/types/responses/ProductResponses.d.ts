@@ -3,3 +3,4 @@
 // }
 
 export type CreateProductResponse = IProduct;
+export type UpdateProductResponse = IProduct;

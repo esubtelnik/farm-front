@@ -9,7 +9,7 @@ export interface ICategory {
 
 export interface IProduct {
    id: string;
-   image: string;
+   images:string[];
    producerId: string;
    producerName: string;
    basePrice: number;
@@ -37,7 +37,7 @@ export interface IProduct {
 
 export interface IProductCard {
    id: string;
-   image: string;
+   images: string;
    producerName: string;
    basePrice: number;
    price: number;

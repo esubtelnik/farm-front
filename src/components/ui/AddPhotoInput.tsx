@@ -1,108 +1,171 @@
 "use client";
-import React, { useRef } from "react";
+import React, { useRef, useState, useEffect } from "react";
+import Image from "next/image";
 
 interface AddPhotoInputProps {
-   onChange: (file: File) => void;
+   onChange: (files: File[]) => void;
    isEditable?: boolean;
-   imageUrl?: string;
+   imageUrls?: string[];
    error?: string | null;
-   image?: File | null;
+   images?: File[];
 }
 
 const AddPhotoInput: React.FC<AddPhotoInputProps> = ({
    onChange,
    error,
-   image,
+   images = [],
    isEditable,
-   imageUrl,
+   imageUrls = [],
 }) => {
    const fileInputRef = useRef<HTMLInputElement>(null);
+   const [currentIndex, setCurrentIndex] = useState(0);
+
+   // превьюшки
+   const previews = [
+      ...images.map((file) => URL.createObjectURL(file)),
+      ...imageUrls,
+   ];
+
+   const hasImages = previews.length > 0;
+   const currentImage = hasImages ? previews[currentIndex] : null;
+
+   // освобождаем URL-ы после размонтирования
+   useEffect(() => {
+      return () => {
+         images.forEach((file) => URL.revokeObjectURL(file.name));
+      };
+   }, [images]);
 
    const handleClick = () => {
       fileInputRef.current?.click();
    };
 
    const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-      const file = event.target.files?.[0];
-      if (file) {
-         onChange(file);
+      const files = event.target.files ? Array.from(event.target.files) : [];
+      if (files.length > 0) {
+         onChange([...images, ...files]);
       }
    };
 
+   const handleRemove = (idx: number) => {
+      const newFiles = [...images];
+      newFiles.splice(idx, 1);
+      onChange(newFiles);
+      setCurrentIndex((prev) =>
+         prev > 0 ? Math.min(prev - 1, newFiles.length - 1) : 0
+      );
+   };
+
+   const prevImage = () => {
+      setCurrentIndex((prev) => (prev === 0 ? previews.length - 1 : prev - 1));
+   };
+
+   const nextImage = () => {
+      setCurrentIndex((prev) => (prev === previews.length - 1 ? 0 : prev + 1));
+   };
+
    return (
-      <>
-         {image || imageUrl || isEditable ? (
-            <div className="relative size-52">
-               <img
-                  src={image ? URL.createObjectURL(image) : imageUrl || ""}
-                  alt="Изображение"
-                  className="w-full h-full object-cover rounded-lg border-2 border-main-gray shadow-md"
+      <div className="relative size-60 flex items-center justify-center bg-white border-2 border-main-gray rounded-lg shadow-md overflow-hidden">
+         {hasImages ? (
+            <>
+               <Image
+                  src={currentImage!}
+                  alt={`Фото ${currentIndex + 1}`}
+                  fill
+                  className="w-full h-full object-cover rounded-lg"
                />
+
                {isEditable && (
-                  <button
-                     type="button"
-                     className="text-main-gray absolute top-2 right-2"
-                     onClick={handleClick}
-                  >
-                     <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        strokeWidth={2}
-                        stroke="currentColor"
-                        className="size-6 text-main-gray cursor-pointer"
+                  <>
+                     <button
+                        type="button"
+                        onClick={() => handleRemove(currentIndex)}
+                        className="absolute top-2 right-2  bg-white rounded-full shadow-md p-2 text-red-500 hover:bg-red-100"
                      >
-                        <path
-                           strokeLinecap="round"
-                           strokeLinejoin="round"
-                           d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125"
-                        />
-                     </svg>
-                  </button>
+                        <svg
+                           xmlns="http://www.w3.org/2000/svg"
+                           fill="none"
+                           viewBox="0 0 24 24"
+                           strokeWidth={1.5}
+                           stroke="currentColor"
+                           className="size-6"
+                        >
+                           <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="M6 18 18 6M6 6l12 12"
+                           />
+                        </svg>
+                     </button>
+
+                     <button
+                        type="button"
+                        onClick={handleClick}
+                        className="absolute bottom-2 right-2 bg-white rounded-full shadow-md p-2 text-green-600 hover:bg-green-100"
+                     >
+                        <svg
+                           xmlns="http://www.w3.org/2000/svg"
+                           fill="none"
+                           viewBox="0 0 24 24"
+                           strokeWidth={1.5}
+                           stroke="currentColor"
+                           className="size-6"
+                        >
+                           <path
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              d="M12 4.5v15m7.5-7.5h-15"
+                           />
+                        </svg>
+                     </button>
+                  </>
                )}
-               <input
-                  ref={fileInputRef}
-                  type="file"
-                  accept="image/*"
-                  onChange={handleFileChange}
-                  className="hidden"
-               />
-            </div>
+
+               {previews.length > 1 && (
+                  <>
+                     <button
+                        type="button"
+                        onClick={prevImage}
+                        className="absolute left-2 top-1/2 -translate-y-1/2 bg-white rounded-full shadow-md p-2 hover:bg-gray-100"
+                     >
+                        ‹
+                     </button>
+                     <button
+                        type="button"
+                        onClick={nextImage}
+                        className="absolute right-2 top-1/2 -translate-y-1/2 bg-white rounded-full shadow-md p-2 hover:bg-gray-100"
+                     >
+                        ›
+                     </button>
+                  </>
+               )}
+            </>
          ) : (
             <div
                onClick={handleClick}
-               className={`size-52 bg-white border-2 rounded-lg shadow-md flex flex-col items-center justify-center cursor-pointer ${
-                  error ? "border-red-500" : "border-main-gray"
+               className={`size-full flex flex-col items-center justify-center cursor-pointer ${
+                  error
+                     ? "border-red-500 text-red-500"
+                     : "border-main-gray text-main-gray"
                }`}
             >
-               <div
-                  className={`text-3xl font-semibold mb-2 ${
-                     error ? "text-red-500" : "text-main-gray"
-                  }`}
-               >
-                  +
-               </div>
-               <div
-                  className={`font-bold ${
-                     error ? "text-red-500" : "text-main-gray"
-                  }`}
-               >
+               <div className="text-3xl font-semibold mb-2">+</div>
+               <div className="font-bold">
                   {error ? error : "Добавить фото"}
                </div>
-               <input
-                  ref={fileInputRef}
-                  type="file"
-                  accept="image/*"
-                  onChange={handleFileChange}
-                  className="hidden"
-               />
             </div>
          )}
-      </>
+
+         <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/*"
+            multiple
+            onChange={handleFileChange}
+            className="hidden"
+         />
+      </div>
    );
 };
 
 export default AddPhotoInput;
-//    const handlePhotoChange = (file: File) => {
-//       console.log("Файл выбран:", file.name);
-//    };

@@ -1,6 +1,5 @@
 "use client";
 import { FC, useState } from "react";
-import Image from "next/image";
 import AddToFavourite from "@/components/ui/buttons/AddToFavourite";
 import ReviewStars from "@/components/ui/ReviewStars";
 import AddToCart from "@/components/ui/buttons/AddToCart";
@@ -14,6 +13,8 @@ import { IProducer } from "@/types/entities/User";
 import { fetchApi } from "@/lib/fetchApi";
 import { addReviewApi } from "@/api/productApi";
 import { getCookie } from "cookies-next";
+import { mapProductToCard } from "@/utils/MappingTypes";
+import PhotoViewer from "@/components/ui/PhotoViewer";
 
 interface ProductPageProps {
    product: IProduct;
@@ -103,18 +104,19 @@ const ProductPage: FC<ProductPageProps> = ({
       <div className="h-fit">
          <div className="flex flex-col md:flex-row gap-x-10 md:p-6 ">
             <div className="relative w-full aspect-square md:w-96 md:h-96">
-               <Image
-                  src={`${process.env.NEXT_PUBLIC_IMAGE_URL}${product.image}`}
+               {/* <Image
+                  src={`${process.env.NEXT_PUBLIC_IMAGE_URL}${product.images}`}
                   alt={product.title}
                   fill
                   className="object-cover md:rounded-2xl"
                   unoptimized
-               />
+               /> */}
+               <PhotoViewer images={product.images} />
 
                <div className="hidden md:block absolute z-10 top-0 right-0 p-5">
                   <AddToFavourite
                      isInFavourites={isInFavourites}
-                     product={product}
+                     product={mapProductToCard(product)} 
                      onToggle={(newState: boolean) => {
                         setIsInFavourites(newState);
                      }}
@@ -128,7 +130,7 @@ const ProductPage: FC<ProductPageProps> = ({
                      <div className="border-2 border-main-green rounded-full">
                         <AddToFavourite
                            isInFavourites={isInFavourites}
-                           product={product}
+                           product={mapProductToCard(product)} 
                            onToggle={(newState: boolean) => {
                               setIsInFavourites(newState);
                            }}
@@ -137,7 +139,7 @@ const ProductPage: FC<ProductPageProps> = ({
                      <div className="border-2 border-main-green rounded-full">
                         <AddToCart
                         isInCart={isInCart}
-                        product={product}
+                        product={mapProductToCard(product)} 
                         onToggle={(newState: boolean) => {
                            setIsInCart(newState);
                         }}
@@ -256,7 +258,7 @@ const ProductPage: FC<ProductPageProps> = ({
 
             <AddToCart
                isInCart={isInCart}
-               product={product}
+               product={mapProductToCard(product)} 
                onToggle={(newState: boolean) => {
                   setIsInCart(newState);
                }}

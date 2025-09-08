@@ -1,10 +1,9 @@
 "use client";
 import { FC, useEffect, useRef, useState } from "react";
-import AddPhotoInput from "@/components/ui/AddPhotoInput";
-import { useStores } from "@/hooks/useStores";
+// import AddPhotoInput from "@/components/ui/AddPhotoInput";
 import { useProductContext } from "@/context/ProductContext";
 import Textarea from "@/components/ui/Textarea";
-import { CreateProductRequest } from "@/types/requests/ProductRequests";
+import { UpdateProductRequest } from "@/types/requests/ProductRequests";
 import { measures } from "@/constants/constants";
 import { IProduct } from "@/types/entities/Product";
 
@@ -87,19 +86,19 @@ const DeliveryTimeFilter = ({
 
 interface FormState {
    values: {
-      title: string;
-      price: number | null;
-      productType: string;
-      description: string;
-      composition: string;
-      storageConditions: string;
-      image: File | null;
-      package: string;
-      expirationDate: number | null;
-      volume: number | null;
-      saleVolume: number | null;
-      unit: string;
-      delivery: number;
+      title?: string;
+      price?: number | null;
+      productType?: string;
+      description?: string;
+      composition?: string;
+      storageConditions?: string;
+      images?: File[];
+      package?: string;
+      expirationDate?: number | null;
+      volume?: number | null;
+      saleVolume?: number | null;
+      unit?: string;
+      delivery?: number;
    };
    errors: {
       title: string | null;
@@ -108,7 +107,7 @@ interface FormState {
       description: string | null;
       composition: string | null;
       storageConditions: string | null;
-      image: string | null;
+      images: string | null;
       package: string | null;
       expirationDate: string | null;
       volume: string | null;
@@ -118,20 +117,23 @@ interface FormState {
    };
 }
 
+
+
 interface EditProductModalProps {
-   productId: string;
+   product: IProduct;
+   handleEditProduct: (payload: UpdateProductRequest) => void;
 }
 
-const EditProductModal: FC<EditProductModalProps> = ({ productId }) => {
+const EditProductModal: FC<EditProductModalProps> = ({ product, handleEditProduct }) => {
    const { categories } = useProductContext();
-   const { producerStore } = useStores();
+
    const categoryDropdownRef = useRef<HTMLDivElement>(null);
    const measureDropdownRef = useRef<HTMLDivElement>(null);
 
    const [isCategoryDropdownOpen, setIsCategoryDropdownOpen] = useState(false);
    const [isMeasureDropdownOpen, setIsMeasureDropdownOpen] = useState(false);
-   const [selectedCategories, setSelectedCategories] = useState<string>("");
-   const [selectedMeasure, setSelectedMeasure] = useState<string>("");
+   const [selectedCategories, setSelectedCategories] = useState<string>(product.productType ?? "");
+   const [selectedMeasure, setSelectedMeasure] = useState<string>(product.unit ?? "");
 
    const [isInStock, setIsInStock] = useState(false);
 
@@ -177,36 +179,36 @@ const EditProductModal: FC<EditProductModalProps> = ({ productId }) => {
 
    const [form, setForm] = useState<FormState>({
       values: {
-         title: "",
-         price: 0,
-         productType: "",
-         description: "",
-         composition: "",
-         storageConditions: "",
-         image: null,
-         package: "",
-         expirationDate: 0,
-         volume: 0,
-         saleVolume: 0,
-         unit: "",
-         delivery: 1,
+        title: product.title ?? "",
+        price: product.price ?? null,
+        productType: product.productType ?? "",
+        description: product.description ?? "",
+        composition: product.composition ?? "",
+        storageConditions: product.storageConditions ?? "",
+        images: [],
+        package: product.package ?? "",
+        expirationDate: product.expirationDate ?? null,
+        volume: product.volume ?? null,
+        saleVolume: product.saleVolume ?? null,
+        unit: product.unit ?? "",
+        delivery: product.delivery ?? 1,
       },
       errors: {
-         title: null,
-         price: null,
-         productType: null,
-         description: null,
-         composition: null,
-         storageConditions: null,
-         image: null,
-         package: null,
-         expirationDate: null,
-         volume: null,
-         saleVolume: null,
-         unit: null,
-         delivery: null,
+        title: null,
+        price: null,
+        productType: null,
+        description: null,
+        composition: null,
+        storageConditions: null,
+        images: null,
+        package: null,
+        expirationDate: null,
+        volume: null,
+        saleVolume: null,
+        unit: null,
+        delivery: null,
       },
-   });
+    });
 
    const handleChange = <K extends keyof FormState["values"]>(
       field: K,
@@ -233,7 +235,7 @@ const EditProductModal: FC<EditProductModalProps> = ({ productId }) => {
          description: null,
          composition: null,
          storageConditions: null,
-         image: null,
+         images: null,
          package: null,
          expirationDate: null,
          volume: null,
@@ -246,9 +248,9 @@ const EditProductModal: FC<EditProductModalProps> = ({ productId }) => {
          newErrors.title = "Введите название товара";
       }
 
-      if (!form.values.image) {
-         newErrors.image = "Выберите изображение";
-      }
+      // if (!form.values.images || form.values.images.length === 0) {
+      //    newErrors.images = "Выберите изображение";
+      // }
 
       if (!form.values.productType) {
          newErrors.productType = "Выберите категорию";
@@ -296,27 +298,100 @@ const EditProductModal: FC<EditProductModalProps> = ({ productId }) => {
          errors: newErrors,
       }));
 
+      console.log(newErrors);
+
       return Object.values(newErrors).some((error) => error !== null);
    };
 
-   const handleSubmit = (e: React.FormEvent) => {
+   const getChangedFields = (): Partial<UpdateProductRequest> => {
+      const changedFields: Partial<UpdateProductRequest> = {};
+      
+      if (form.values.title !== product.title) {
+        changedFields.title = form.values.title;
+      }
+      
+      if (form.values.price !== product.price) {
+        changedFields.price = form.values.price as number;
+      }
+      
+      if (form.values.productType !== product.productType) {
+        changedFields.productType = form.values.productType;
+      }
+      
+      if (form.values.description !== product.description) {
+        changedFields.description = form.values.description;
+      }
+      
+      if (form.values.composition !== product.composition) {
+        changedFields.composition = form.values.composition;
+      }
+      
+      if (form.values.storageConditions !== product.storageConditions) {
+        changedFields.storageConditions = form.values.storageConditions;
+      }
+      
+      if (form.values.package !== product.package) {
+        changedFields.package = form.values.package;
+      }
+      
+      if (form.values.expirationDate !== product.expirationDate) {
+        changedFields.expirationDate = form.values.expirationDate as number;
+      }
+      
+      if (form.values.volume !== product.volume) {
+        changedFields.volume = form.values.volume as number;
+      }
+      
+      if (form.values.saleVolume !== product.saleVolume) {
+        changedFields.saleVolume = form.values.saleVolume as number;
+      }
+      
+      if (form.values.unit !== product.unit) {
+        changedFields.unit = form.values.unit;
+      }
+      
+      if (form.values.delivery !== product.delivery) {
+        changedFields.delivery = form.values.delivery;
+      }
+      
+      // Изображения пока не обрабатываем, как вы указали
+      // if (form.values.images && form.values.images.length > 0) {
+      //   changedFields.images = form.values.images;
+      // }
+      
+      return changedFields;
+    };
+
+  
+
+    const handleSubmit = (e: React.FormEvent) => {
       e.preventDefault();
       const hasErrors = validateForm();
       console.log(hasErrors);
-
+    
       if (hasErrors) return;
+    
+      const changedFields = getChangedFields();
+  
+      if (Object.keys(changedFields).length === 0) {
+        console.log("Нет изменений для сохранения");
+        return;
+      }
+      
+      console.log("Отправляем только измененные поля:", changedFields);
+      handleEditProduct(changedFields);
+    };
 
-      producerStore.createProduct(form.values as CreateProductRequest);
-   };
-
+    
    return (
       <div className="bg-white overflow-y-auto p-5 gap-y-8 flex flex-col font-geist">
          <div className="flex flex-col items-center md:items-start md:flex-row gap-y-5 gap-x-5">
-            <AddPhotoInput
-               image={form.values.image || null}
-               error={form.errors.image}
-               onChange={(file) => handleChange("image", file)}
-            />
+         {/* <AddPhotoInput
+               images={form.values.images}
+               error={form.errors.images}
+               onChange={(files) => handleChange("images", files)}
+               isEditable
+            /> */}<div>Редактирование фото в разработке</div>
             <div className="flex flex-col items-center gap-y-2 md:w-1/3 w-full">
                <div
                   className={`w-full flex items-center gap-x-2 px-2 outline-none border-2 rounded-md ${
@@ -786,7 +861,7 @@ const EditProductModal: FC<EditProductModalProps> = ({ productId }) => {
                </span>
             </div>
 
-            <div
+            {/* <div
                className={`border-2 flex items-center md:gap-x-4 justify-between md:justify-start rounded-xl p-2 ${
                   form.errors.price ? "border-red-500" : "border-main-gray"
                }`}
@@ -820,7 +895,7 @@ const EditProductModal: FC<EditProductModalProps> = ({ productId }) => {
                      />
                   </svg>
                </button>
-            </div>
+            </div> */}
          </div>
          <div className="flex flex-col md:flex-row gap-y-6 md:gap-x-5 md:items-end justify-between w-full">
             <div className="flex flex-col md:w-fit w-full items-start md:items-center gap-y-2">

@@ -4,6 +4,7 @@ import RadioButtonGroup from "@/components/ui/RadiobuttonGroup";
 import Input from "@/components/ui/Input";
 import { validateEmail } from "@/utils/ValidateUtils";
 import { useStores } from "@/hooks/useStores";
+import Toast from "@/components/ui/Toast";
 
 interface FormState {
    values: {
@@ -30,6 +31,11 @@ const markupOptions = [
 
 const RegistrationCodeForm: FC = () => {
    const { adminStore } = useStores();
+   const [toast, setToast] = useState<{
+      message: string;
+      type: "success" | "error" | "warning";
+   } | null>(null);
+
    const [form, setForm] = useState<FormState>({
       values: {
          email: "",
@@ -89,14 +95,31 @@ const RegistrationCodeForm: FC = () => {
       if (!hasErrors) {
          const { email, code, overprice } = form.values;
          if (selectedUserType === "producer") {
-            const response = await adminStore.saveProducerCode({ email, code, overprice: overprice || markupOptions[0].value });
+            const response = await adminStore.saveProducerCode({
+               email,
+               code,
+               overprice: overprice || markupOptions[0].value,
+            });
             if (response) {
-               console.log(response);
+               setToast({ message: "Код успешно выдан", type: "success" });
+            } else {
+               setToast({
+                  message: "Произошла ошибка при выдаче кода",
+                  type: "error",
+               });
             }
          } else {
-            const response = await adminStore.createRegistrationCourierCode({ email, code });
+            const response = await adminStore.createRegistrationCourierCode({
+               email,
+               code,
+            });
             if (response) {
-               console.log(response);
+               setToast({ message: "Код успешно выдан", type: "success" });
+            } else {
+               setToast({
+                  message: "Произошла ошибка при выдаче кода",
+                  type: "error",
+               });
             }
          }
       }
@@ -113,8 +136,8 @@ const RegistrationCodeForm: FC = () => {
       );
    };
    return (
-      <div className="border-2 border-dark-green w-full px-8 py-5 rounded-md flex flex-col gap-4">
-         <h1 className="text-2xl font-bold text-main-gray">
+      <div className="border-2 border-dark-green w-full md:px-8 px-4 py-5 rounded-md flex flex-col gap-4">
+         <h1 className=" lg:text-2xl md:text-xl text-lg font-bold text-main-gray">
             Выдать код на регистрацию:
          </h1>
          <RadioButtonGroup
@@ -123,24 +146,24 @@ const RegistrationCodeForm: FC = () => {
             selected={selectedUserType}
             onChange={(value) => setSelectedUserType(value as string)}
          />
-         <h2 className="text-lg font-bold text-main-gray">
+         <h2 className="md:text-lg text-base font-bold text-main-gray">
             Введите почту для регистрации:
          </h2>
          <div className="flex gap-4">
             <Input
-               width="w-1/3"
+               width="md:w-1/3 w-full"
                placeholder="Введите почту"
                value={form.values.email}
                onChange={(e) => handleChange("email", e)}
                error={form.errors.email}
             />
          </div>
-         <h2 className="text-lg font-bold text-main-gray">
+         <h2 className="md:text-lg text-base font-bold text-main-gray">
             Введите код из 6 цифр или сгенерируйте его:
          </h2>
          <div className="flex gap-4">
             <Input
-               width="w-1/3"
+               width="md:w-1/3 w-full"
                placeholder="Введите код"
                value={form.values.code}
                onChange={(e) => handleChange("code", e)}
@@ -168,7 +191,7 @@ const RegistrationCodeForm: FC = () => {
          </div>
          {selectedUserType === "producer" && (
             <>
-               <h2 className="text-lg font-bold text-main-gray">
+               <h2 className="md:text-lg text-base font-bold text-main-gray">
                   Укажите наценку на продукцию (в процентах):
                </h2>
                <RadioButtonGroup
@@ -183,10 +206,11 @@ const RegistrationCodeForm: FC = () => {
          )}
          <button
             onClick={handleSubmitRegistrationCode}
-            className="bg-main-green w-1/4 text-white font-bold text-lg hover:scale-105 px-4 py-2 rounded-full cursor-pointer  transition-all duration-300"
+            className="bg-main-green md:w-1/4 w-full text-white font-bold md:text-lg text-base hover:scale-105 px-4 py-2 rounded-full cursor-pointer  transition-all duration-300"
          >
-              Выдать код
+            Выдать код
          </button>
+         {toast && <Toast message={toast.message} type={toast.type} />}
       </div>
    );
 };

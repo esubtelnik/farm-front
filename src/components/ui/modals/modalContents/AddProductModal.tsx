@@ -91,7 +91,7 @@ interface FormState {
       description: string;
       composition: string;
       storageConditions: string;
-      image: File | null;
+      images: File[];
       package: string;
       expirationDate: number | null;
       volume: number | null;
@@ -106,7 +106,7 @@ interface FormState {
       description: string | null;
       composition: string | null;
       storageConditions: string | null;
-      image: string | null;
+      images: string | null;
       package: string | null;
       expirationDate: string | null;
       volume: string | null;
@@ -180,7 +180,7 @@ const AddProductModal: FC<AddProductModalProps> = ({ handleAddProduct }) => {
          description: "",
          composition: "",
          storageConditions: "",
-         image: null,
+         images: [],
          package: "",
          expirationDate: 0,
          volume: 0,
@@ -195,7 +195,7 @@ const AddProductModal: FC<AddProductModalProps> = ({ handleAddProduct }) => {
          description: null,
          composition: null,
          storageConditions: null,
-         image: null,
+         images: null,
          package: null,
          expirationDate: null,
          volume: null,
@@ -230,7 +230,7 @@ const AddProductModal: FC<AddProductModalProps> = ({ handleAddProduct }) => {
          description: null,
          composition: null,
          storageConditions: null,
-         image: null,
+         images: null,
          package: null,
          expirationDate: null,
          volume: null,
@@ -243,8 +243,8 @@ const AddProductModal: FC<AddProductModalProps> = ({ handleAddProduct }) => {
          newErrors.title = "Введите название товара";
       }
 
-      if (!form.values.image) {
-         newErrors.image = "Выберите изображение";
+      if (!form.values.images || form.values.images.length === 0) {
+         newErrors.images = "Выберите изображение";
       }
 
       if (!form.values.productType) {
@@ -303,18 +303,18 @@ const AddProductModal: FC<AddProductModalProps> = ({ handleAddProduct }) => {
 
       if (hasErrors) return;
 
-      await handleAddProduct( form.values as CreateProductRequest);
+
+      await handleAddProduct(form.values as CreateProductRequest);
    };
-
-
 
    return (
       <div className="bg-white overflow-y-auto p-5 gap-y-8 flex flex-col font-geist">
          <div className="flex flex-col items-center md:items-start md:flex-row gap-y-5 gap-x-5">
             <AddPhotoInput
-               image={form.values.image || null}
-               error={form.errors.image}
-               onChange={(file) => handleChange("image", file)}
+               images={form.values.images}
+               error={form.errors.images}
+               onChange={(files) => handleChange("images", files)}
+               isEditable
             />
             <div className="flex flex-col items-center gap-y-2 md:w-1/3 w-full">
                <div
@@ -335,7 +335,7 @@ const AddProductModal: FC<AddProductModalProps> = ({ handleAddProduct }) => {
                            ? form.errors.title
                            : "Название продукта"
                      }
-                     value={form.values.title  || ""}
+                     value={form.values.title || ""}
                      onChange={(e) => handleChange("title", e.target.value)}
                   />
                   <svg
@@ -509,57 +509,58 @@ const AddProductModal: FC<AddProductModalProps> = ({ handleAddProduct }) => {
                      Сколько продукта вы можете поставить в день
                   </span>
                   <div className="flex justify-between items-center gap-x-2 w-full md:w-fit">
-
-                  <input
-                     type="text"
-                     className={`outline-none w-20 text-main-gray font-medium rounded-md text-center ${
-                        form.errors.volume
-                           ? "placeholder:text-red-500 bg-red-500/10"
-                           : "placeholder:text-main-gray bg-main-gray/10"
-                     }`}
-                     placeholder={form.errors.volume ? form.errors.volume : ""}
-                     value={form.values.volume || ""}
-                     onKeyPress={(e) => {
-                        if (!/[0-9]/.test(e.key)) {
-                           e.preventDefault();
+                     <input
+                        type="text"
+                        className={`outline-none w-20 text-main-gray font-medium rounded-md text-center ${
+                           form.errors.volume
+                              ? "placeholder:text-red-500 bg-red-500/10"
+                              : "placeholder:text-main-gray bg-main-gray/10"
+                        }`}
+                        placeholder={
+                           form.errors.volume ? form.errors.volume : ""
                         }
-                     }}
-                     onChange={(e) => {
-                        if (!selectedMeasure) {
-                           setForm((prev) => ({
-                              ...prev,
-                              errors: {
-                                 ...prev.errors,
-                                 unit: "Выберите единицу измерения",
-                                 volume: " ",
-                              },
-                           }));
-                           return;
-                        }
-                        const value = e.target.value;
-                        if (
-                           value === "" ||
-                           (parseInt(value) > 0 && /^\d+$/.test(value))
-                        ) {
-                           e.target.value = value;
-                        } else {
-                           e.target.value = value
-                              .replace(/[^0-9]/g, "")
-                              .replace(/^0+/, "");
-                        }
-                        handleChange("volume", parseInt(value));
-                     }}
-                     onBlur={(e) => {
-                        const value = parseInt(e.target.value);
-                        if (value <= 0 || isNaN(value)) {
-                           e.target.value = "";
-                        }
-                     }}
-                  />
-                  <span className="text-main-gray font-semibold md:text-lg text-sm text-center w-10">
-                     {selectedMeasure ? selectedMeasure : "..."}
-                  </span>
-               </div>
+                        value={form.values.volume || ""}
+                        onKeyPress={(e) => {
+                           if (!/[0-9]/.test(e.key)) {
+                              e.preventDefault();
+                           }
+                        }}
+                        onChange={(e) => {
+                           if (!selectedMeasure) {
+                              setForm((prev) => ({
+                                 ...prev,
+                                 errors: {
+                                    ...prev.errors,
+                                    unit: "Выберите единицу измерения",
+                                    volume: " ",
+                                 },
+                              }));
+                              return;
+                           }
+                           const value = e.target.value;
+                           if (
+                              value === "" ||
+                              (parseInt(value) > 0 && /^\d+$/.test(value))
+                           ) {
+                              e.target.value = value;
+                           } else {
+                              e.target.value = value
+                                 .replace(/[^0-9]/g, "")
+                                 .replace(/^0+/, "");
+                           }
+                           handleChange("volume", parseInt(value));
+                        }}
+                        onBlur={(e) => {
+                           const value = parseInt(e.target.value);
+                           if (value <= 0 || isNaN(value)) {
+                              e.target.value = "";
+                           }
+                        }}
+                     />
+                     <span className="text-main-gray font-semibold md:text-lg text-sm text-center w-10">
+                        {selectedMeasure ? selectedMeasure : "..."}
+                     </span>
+                  </div>
                </div>
                <div
                   className={`border-2 flex flex-col justify-between md:flex-row w-full items-center gap-x-4 rounded-xl p-2 ${
@@ -574,56 +575,57 @@ const AddProductModal: FC<AddProductModalProps> = ({ handleAddProduct }) => {
                      Размер одной продажи
                   </span>
                   <div className="flex w-full justify-between items-center gap-x-2 md:w-fit">
-
-                  <input
-                     type="text"
-                     className={`outline-none  w-20 text-main-gray font-medium rounded-md text-center ${
-                        form.errors.saleVolume
-                           ? "placeholder:text-red-500 bg-red-500/10"
-                           : "placeholder:text-main-gray bg-main-gray/10"
-                     }`}
-                     placeholder={form.errors.saleVolume ? form.errors.saleVolume : ""}
-                     value={form.values.saleVolume || ""}
-                     onKeyPress={(e) => {
-                        if (!/[0-9]/.test(e.key)) {
-                           e.preventDefault();
+                     <input
+                        type="text"
+                        className={`outline-none  w-20 text-main-gray font-medium rounded-md text-center ${
+                           form.errors.saleVolume
+                              ? "placeholder:text-red-500 bg-red-500/10"
+                              : "placeholder:text-main-gray bg-main-gray/10"
+                        }`}
+                        placeholder={
+                           form.errors.saleVolume ? form.errors.saleVolume : ""
                         }
-                     }}
-                     onChange={(e) => {
-                        if (!selectedMeasure) {
-                           setForm((prev) => ({
-                              ...prev,
-                              errors: {
-                                 ...prev.errors,
-                                 unit: "Выберите единицу измерения",
-                                 saleVolume: " ",
-                              },
-                           }));
-                           return;
-                        }
-                        const value = e.target.value;
-                        if (
-                           value === "" ||
-                           (parseInt(value) > 0 && /^\d+$/.test(value))
-                        ) {
-                           e.target.value = value;
-                        } else {
-                           e.target.value = value
-                              .replace(/[^0-9]/g, "")
-                              .replace(/^0+/, "");
-                        }
-                        handleChange("saleVolume", parseInt(value));
-                     }}
-                     onBlur={(e) => {
-                        const value = parseInt(e.target.value);
-                        if (value <= 0 || isNaN(value)) {
-                           e.target.value = "";
-                        }
-                     }}
-                  />
-                  <span className="text-main-gray font-semibold md:text-lg text-sm text-center w-10">
-                     {selectedMeasure ? selectedMeasure : "..."}
-                  </span>
+                        value={form.values.saleVolume || ""}
+                        onKeyPress={(e) => {
+                           if (!/[0-9]/.test(e.key)) {
+                              e.preventDefault();
+                           }
+                        }}
+                        onChange={(e) => {
+                           if (!selectedMeasure) {
+                              setForm((prev) => ({
+                                 ...prev,
+                                 errors: {
+                                    ...prev.errors,
+                                    unit: "Выберите единицу измерения",
+                                    saleVolume: " ",
+                                 },
+                              }));
+                              return;
+                           }
+                           const value = e.target.value;
+                           if (
+                              value === "" ||
+                              (parseInt(value) > 0 && /^\d+$/.test(value))
+                           ) {
+                              e.target.value = value;
+                           } else {
+                              e.target.value = value
+                                 .replace(/[^0-9]/g, "")
+                                 .replace(/^0+/, "");
+                           }
+                           handleChange("saleVolume", parseInt(value));
+                        }}
+                        onBlur={(e) => {
+                           const value = parseInt(e.target.value);
+                           if (value <= 0 || isNaN(value)) {
+                              e.target.value = "";
+                           }
+                        }}
+                     />
+                     <span className="text-main-gray font-semibold md:text-lg text-sm text-center w-10">
+                        {selectedMeasure ? selectedMeasure : "..."}
+                     </span>
                   </div>
                </div>
             </div>
@@ -785,7 +787,7 @@ const AddProductModal: FC<AddProductModalProps> = ({ handleAddProduct }) => {
                </span>
             </div>
 
-            <div
+            {/* <div
                className={`border-2 flex items-center md:gap-x-4 justify-between md:justify-start rounded-xl p-2 ${
                   form.errors.price ? "border-red-500" : "border-main-gray"
                }`}
@@ -819,7 +821,7 @@ const AddProductModal: FC<AddProductModalProps> = ({ handleAddProduct }) => {
                      />
                   </svg>
                </button>
-            </div>
+            </div> */}
          </div>
          <div className="flex flex-col md:flex-row gap-y-6 md:gap-x-5 md:items-end justify-between w-full">
             <div className="flex flex-col md:w-fit w-full items-start md:items-center gap-y-2">

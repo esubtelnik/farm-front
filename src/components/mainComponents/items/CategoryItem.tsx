@@ -29,7 +29,7 @@ const CategoryItem: FC<CategoryItemProps> = ({ category }) => {
   }
 >
   <Image
-    src={`${process.env.NEXT_PUBLIC_API_URL}${category.path}`}
+    src={`${process.env.NEXT_PUBLIC_IMAGE_URL}${category.path}`}
     alt={category.title}
     fill
     className="object-cover"

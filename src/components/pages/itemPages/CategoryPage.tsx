@@ -34,7 +34,7 @@ const CategoryPage: FC<CategoryPageProps> = ({
          <div className="relative w-full aspect-[3/1] md:aspect-[4/1]">
             <Image
                className="object-cover"
-               src={`${process.env.NEXT_PUBLIC_API_URL}${imageUrl}`}
+               src={`${process.env.NEXT_PUBLIC_IMAGE_URL}${imageUrl}`}
                alt="Баннер"
                fill
             />

@@ -104,7 +104,7 @@ const ProductPage: FC<ProductPageProps> = ({
          <div className="flex flex-col md:flex-row gap-x-10 md:p-6 ">
             <div className="relative w-full aspect-square md:w-96 md:h-96">
                <Image
-                  src="/image.png"
+                  src={`${process.env.NEXT_PUBLIC_IMAGE_URL}${product.image}`}
                   alt={product.title}
                   fill
                   className="object-cover md:rounded-2xl"

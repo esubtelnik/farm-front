@@ -22,7 +22,7 @@ const ProducerItem: FC<ProducerItemProps> = ({ isSmall, producer }) => {
       >
          <div className={`relative ${isSmall ? "md:w-[200px] md:h-[150px] w-[100px] h-[150px]" : "md:w-[400px] md:h-[300px] w-full h-[100px]"} overflow-hidden rounded-xl`}>
             <Image
-               src={"/image.png"}
+               src={`${process.env.NEXT_PUBLIC_IMAGE_URL}${producer.image}`}
                alt="Фермер"
                fill
                className="w-full h-full object-cover"

@@ -4,7 +4,7 @@ import type { Configuration, RuleSetRule } from "webpack";
 const nextConfig: NextConfig = {
   reactStrictMode: false,
   images: {
-    domains: ['cdn-uploads.huggingface.co', 'api.farmbasket.by'],
+    domains: ['cdn-uploads.huggingface.co', 'api.farmbasket.by', 'http://localhost:8000'],
   },
 
   webpack(config: Configuration) {

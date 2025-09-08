@@ -52,21 +52,21 @@ export const metadata: Metadata = {
       "здоровое питание",
    ],
 
-   authors: [{ name: "FARM-BASKET", url: "https://farm-basket.by" }],
+   authors: [{ name: "FARM-BASKET", url: "https://farmbasket.by" }],
    creator: "FARM-BASKET",
    publisher: "FARM-BASKET",
 
    openGraph: {
       type: "website",
       locale: "ru_RU",
-      url: "https://6b9ce86ff59b.ngrok-free.app",
+      url: "https://farm-basket.by",
       siteName: "FARM-BASKET",
       title: "FARM-BASKET - Натуральные фермерские продукты с доставкой",
       description:
          "Свежие овощи, фрукты, молочные продукты, мясо прямо от фермеров. Доставка по Москве. Гарантия качества.",
       images: [
          {
-            url: "/Logo.png",
+            url: "/SeoLogo.png",
             width: 1200,
             height: 630,
             alt: "FARM-BASKET - Фермерские продукты",

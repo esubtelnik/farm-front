@@ -37,6 +37,7 @@ const CategoryPage: FC<CategoryPageProps> = ({
                src={`${process.env.NEXT_PUBLIC_IMAGE_URL}${imageUrl}`}
                alt="Баннер"
                fill
+               unoptimized
             />
          </div>
 

@@ -26,6 +26,7 @@ const ProducerItem: FC<ProducerItemProps> = ({ isSmall, producer }) => {
                alt="Фермер"
                fill
                className="w-full h-full object-cover"
+               unoptimized
             />
          </div>
 

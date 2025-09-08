@@ -33,6 +33,7 @@ const CategoryItem: FC<CategoryItemProps> = ({ category }) => {
     alt={category.title}
     fill
     className="object-cover"
+    unoptimized
   />
 
   <motion.span

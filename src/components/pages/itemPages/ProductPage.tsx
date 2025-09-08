@@ -108,6 +108,7 @@ const ProductPage: FC<ProductPageProps> = ({
                   alt={product.title}
                   fill
                   className="object-cover md:rounded-2xl"
+                  unoptimized
                />
 
                <div className="hidden md:block absolute z-10 top-0 right-0 p-5">

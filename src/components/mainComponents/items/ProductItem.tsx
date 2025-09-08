@@ -46,6 +46,7 @@ const ProductItem: FC<ProductItemProps> = observer(
                      src={`${process.env.NEXT_PUBLIC_IMAGE_URL}${product.image}`}
                      alt={product.title}
                      className="object-cover rounded-t-2xl border-2 border-main-green"
+                     unoptimized
                   />
                </div>
                <div className="absolute z-10 top-0 right-0 md:p-5 p-3">

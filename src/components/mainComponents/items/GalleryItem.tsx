@@ -28,10 +28,11 @@ const GalleryItem: FC<GalleryItemProps> = ({
          /> */}
          <Image
             // src={image}
-            src="/image.png"
+            src={`${process.env.NEXT_PUBLIC_IMAGE_URL}${image}`}
             fill
             alt="Gallery Item"
             className="object-cover rounded-md"
+            unoptimized
          />
        {isEditable &&  <button
             className="absolute top-2 right-2 text-red-600 cursor-pointer"

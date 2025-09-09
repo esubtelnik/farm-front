@@ -45,7 +45,7 @@ export const validatePhoneNumber = (phone: string) => {
       return "Минимальная длина — 8 символов";
     }
   
-    if (!/[a-z]/.test(password)) {
+    if (!/[a-zA-Zа-яА-ЯёЁ]/.test(password)) {
       return "Добавьте хотя бы одну букву";
     }
   

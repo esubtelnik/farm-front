@@ -428,7 +428,7 @@ const FilterModal = ({
                   />
                }
             />
-            <FilterModalSelect
+            {/* <FilterModalSelect
                title="По времени доставки"
                content={
                   <DeliveryTimeFilter
@@ -436,7 +436,7 @@ const FilterModal = ({
                      searchDeliveryTime={selectedDeliveryTime}
                   />
                }
-            />
+            /> */}
          </div>
          <div className="flex justify-end mt-4">
             <button

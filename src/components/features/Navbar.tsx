@@ -115,12 +115,14 @@ const Navbar: FC<{
                      </svg>
                   </button>
                )}
+               <button className="w-full h-full cursor-pointer" onClick={() => router.push(routes.home.root)}>
                <LogoWhite className="w-full h-full" />
+               </button>
             </div>
 
             {/* {isUserDataReady && ( */}
             <>
-               <div className="hidden lg:flex gap-x-10 items-center">
+               <div className="hidden lg:flex gap-x-5 items-center">
                   {userType.type !== UserType.PRODUCER.type &&
                   userType.type !== UserType.COURIER.type &&
                   userType.type !== UserType.ADMIN.type ? (

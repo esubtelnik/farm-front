@@ -51,6 +51,9 @@ export const metadata: Metadata = {
       "эко продукты",
       "здоровое питание",
    ],
+   // icons: {
+   //    icon: "/favicon.png",
+   // },
 
    authors: [{ name: "FARM-BASKET", url: "https://farmbasket.by" }],
    creator: "FARM-BASKET",
@@ -59,7 +62,7 @@ export const metadata: Metadata = {
    openGraph: {
       type: "website",
       locale: "ru_RU",
-      url: "https://farm-basket.by",
+      url: "https://farmbasket.by",
       siteName: "FARM-BASKET",
       title: "FARM-BASKET - Натуральные фермерские продукты с доставкой",
       description:
@@ -80,9 +83,9 @@ export const metadata: Metadata = {
       card: "summary_large_image",
       title: "FARM-BASKET - Фермерские продукты с доставкой",
       description: "Натуральные продукты прямо от производителей",
-      images: ["https://6b9ce86ff59b.ngrok-free.app/LogoColor.svg"],
-      creator: "@farm-basket_by",
-      site: "@farm-basket_by",
+      images: ["https://farmbasket.by/SeoLogo.png"],
+      creator: "@farmbasket_by",
+      site: "@farmbasket_by",
    },
 
    // Robots настройки
@@ -113,7 +116,7 @@ export const metadata: Metadata = {
          {
             rel: "mask-icon",
             url: "/safari-pinned-tab.svg",
-            color: "#22c55e",
+            color: "#91bc46",
          },
       ],
    },
@@ -123,10 +126,10 @@ export const metadata: Metadata = {
 
    // Альтернативные ссылки
    alternates: {
-      canonical: "https://farm-basket.by",
+      canonical: "https://farmbasket.by",
       languages: {
-         "ru-RU": "https://farm-basket.by",
-         "en-US": "https://farm-basket.by/en",
+         "ru-RU": "https://farmbasket.by",
+         "en-US": "https://farmbasket.by/en",
       },
    },
 
@@ -142,16 +145,16 @@ export const metadata: Metadata = {
       "yandex-verification": "your-yandex-verification-code",
 
       // Тематика сайта
-      "theme-color": "#22c55e",
+      "theme-color": "#91bc46",
       "color-scheme": "light",
 
       // Для iOS Safari
       "apple-mobile-web-app-capable": "yes",
       "apple-mobile-web-app-status-bar-style": "default",
-      "apple-mobile-web-app-title": "FreshFarm",
+      "apple-mobile-web-app-title": "FARM-BASKET",
 
       // Для Microsoft
-      "msapplication-TileColor": "#22c55e",
+      "msapplication-TileColor": "#91bc46",
       "msapplication-config": "/browserconfig.xml",
 
       // Дополнительная информация
@@ -220,9 +223,7 @@ export default async function RootLayout({
             className={`${geistSans.variable} ${geistMono.variable} ${roboto.variable} antialiased`}
          >
             <AuthContextProvider initialUserType={userType}>
-               <ProductContextProvider>
-                  {children}
-               </ProductContextProvider>
+               <ProductContextProvider>{children}</ProductContextProvider>
             </AuthContextProvider>
          </body>
       </html>

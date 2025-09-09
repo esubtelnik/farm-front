@@ -11,6 +11,10 @@
    --text-xxs: 10px;
 }
 
+button {
+  @apply cursor-pointer;
+}
+
 .hide-scrollbar::-webkit-scrollbar {
   display: none;
 }

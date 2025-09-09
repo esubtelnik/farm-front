@@ -7,6 +7,7 @@ import { useAuthContext } from "@/context/AuthContext";
 import { FC, ReactNode, useEffect } from "react";
 import Navbar from "@/components/features/Navbar";
 import Footer from "@/components/features/Footer";
+import { useStores } from "@/hooks/useStores";
    
 
 interface LayoutProps {
@@ -17,26 +18,26 @@ interface LayoutProps {
 const MainLayout: FC<LayoutProps> = ({ children }) => {
    const { userType } = useAuthContext();
    console.log(userType);
-   // const { customerStore, producerStore, courierStore } = useStores();
+   const { customerStore, producerStore, courierStore } = useStores();
 
 
-   // useEffect(() => {
-   //    // if (!userType) return;
+      useEffect(() => {
+         if (!userType) return;
 
-   //    switch (userType) {
-   //       case UserType.CUSTOMER:
-   //          customerStore.fetchCustomerData();
-   //          break;
-   //       case UserType.PRODUCER:
-   //          producerStore.fetchProducerData();
-   //          break;
-   //       case UserType.COURIER:
-   //          courierStore.fetchCourierData();
-   //          break;
-   //    }
+         switch (userType) {
+            case UserType.CUSTOMER:
+               customerStore.fetchCustomerData();
+               break;
+            case UserType.PRODUCER:
+               producerStore.fetchProducerData();
+               break;
+            case UserType.COURIER:
+               courierStore.fetchCourierData();
+               break;
+         }
 
-   //    // eslint-disable-next-line react-hooks/exhaustive-deps
-   // }, [userType]);
+         // eslint-disable-next-line react-hooks/exhaustive-deps
+      }, [userType]);
 
    
    useEffect(() => {

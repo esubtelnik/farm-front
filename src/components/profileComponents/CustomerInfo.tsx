@@ -75,7 +75,7 @@ const CustomerInfo: FC<CustomerInfoProps> = observer(({ isCart = false }) => {
                         showCloseButton={false}
                      >
                         {/* <CreateOrderModal /> */}
-                        jjj
+                        <div>В разработке</div>
                      </Modal>
                   )}
                </>

@@ -17,11 +17,14 @@ const NavItem: FC<Props> = ({ link, onClick }) => {
    return (
       <Link href={link.path} onClick={onClick}>
          <span
-            className={`text-white text-sm font-semibold uppercase transition-all ${
-               isActive
-                  ? "underline decoration-[1.5px] underline-offset-4"
-                  : "hover:p-2 hover:border-2 hover:border-white hover:rounded-full hover:scale-100"
-            }`}
+            className={`text-white text-sm font-semibold uppercase 
+               transition-colors duration-300
+               px-2 py-1 
+               border-2 rounded-full
+               ${isActive
+                  ? "border-white"
+                  : "border-transparent hover:border-white"}
+            `}
          >
             {link.title}
          </span>

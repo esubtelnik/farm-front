@@ -38,7 +38,15 @@ const CustomerProfilePage: FC = observer(() => {
          ),
       },
       {
-         label: "История покупок",
+         label: "Избранное",
+         render: () => (
+            <div className="py-5">
+               <ProductList products={customerStore.favourites} />
+            </div>
+         ),
+      },
+      {
+         label: "Корзина",
          render: () => (
             <div className="py-5">
                <ProductList products={customerStore.cart} />
@@ -46,14 +54,11 @@ const CustomerProfilePage: FC = observer(() => {
          ),
       },
       {
-         label: "Лист ожидания",
-         render: () => <div className="py-5">jjj</div>,
-      },
-      {
-         label: "Избранное",
+         label: "История покупок",
          render: () => (
             <div className="py-5">
-               <ProductList products={customerStore.favourites} />
+               {/* <ProductList products={customerStore.cart} /> */}
+               В разработке
             </div>
          ),
       },

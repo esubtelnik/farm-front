@@ -155,7 +155,7 @@ const ProducerListItem: FC<ProducerListItemProps> = ({ producer }) => {
             </div>
          </div>
          <div className="pr-2 flex gap-5 items-center justify-center">
-            <Switcher isChecked={true} setIsChecked={() => {}} />
+            {/* <Switcher isChecked={true} setIsChecked={() => {}} /> */}
 
             <TooltipItem tooltipsText="Посмотреть продукты" position="top">
                <NextArrow

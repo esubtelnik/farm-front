@@ -100,7 +100,7 @@ const RegistrationCodeForm: FC = () => {
                code,
                overprice: overprice || markupOptions[0].value,
             });
-            if (response) {
+            if (response.success) {
                setToast({ message: "Код успешно выдан", type: "success" });
             } else {
                setToast({
@@ -113,7 +113,7 @@ const RegistrationCodeForm: FC = () => {
                email,
                code,
             });
-            if (response) {
+            if (response.success) {
                setToast({ message: "Код успешно выдан", type: "success" });
             } else {
                setToast({

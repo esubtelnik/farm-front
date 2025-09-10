@@ -51,9 +51,6 @@ export const metadata: Metadata = {
       "эко продукты",
       "здоровое питание",
    ],
-   // icons: {
-   //    icon: "/favicon.png",
-   // },
 
    authors: [{ name: "FARM-BASKET", url: "https://farmbasket.by" }],
    creator: "FARM-BASKET",
@@ -106,11 +103,10 @@ export const metadata: Metadata = {
    // Иконки
    icons: {
       icon: [
-         { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
-         { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
+         { url: "/favicon.ico", sizes: "16x16", type: "image/ico" },
       ],
       apple: [
-         { url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
+         { url: "/favicon.ico", sizes: "180x180", type: "image/ico" },
       ],
       other: [
          {

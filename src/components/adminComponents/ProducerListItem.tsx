@@ -6,7 +6,7 @@ import { useStores } from "@/hooks/useStores";
 import NextArrow from "../ui/NextArrow";
 import TooltipItem from "../ui/TooltipItem";
 import routes from "@/constants/routes";
-import Switcher from "../ui/Switcher";
+// import Switcher from "../ui/Switcher";
 
 const markupOptions = [
    { label: "15%", value: 15 },
@@ -33,18 +33,18 @@ const ProducerListItem: FC<ProducerListItemProps> = ({ producer }) => {
       }
    };
 
-   const handleChangeCode = async () => {
-      if (code !== producer.code) {
-         const res = await adminStore.saveProducerCode({
-            email: producer.producerEmail,
-            code: code,
-            overprice: markup,
-         });
-         if (res.success) {
-            setIsCodeEdit(false);
-         }
-      }
-   };
+   // const handleChangeCode = async () => {
+   //    if (code !== producer.code) {
+   //       const res = await adminStore.saveProducerCode({
+   //          email: producer.producerEmail,
+   //          code: code,
+   //          overprice: markup,
+   //       });
+   //       if (res.success) {
+   //          setIsCodeEdit(false);
+   //       }
+   //    }
+   // };
 
    const handleChangeOverprice = async () => {
       const res = await adminStore.changeProducerOverprice({
@@ -80,7 +80,7 @@ const ProducerListItem: FC<ProducerListItemProps> = ({ producer }) => {
                   onChange={(e) => setCode(e.target.value)}
                   readOnly={!isCodeEdit}
                />
-               {isCodeEdit ? (
+               {/* {isCodeEdit ? (
                   <button
                      onClick={handleChangeCode}
                      className="text-main-green cursor-pointer"
@@ -120,7 +120,7 @@ const ProducerListItem: FC<ProducerListItemProps> = ({ producer }) => {
                         />
                      </svg>
                   </button>
-               )}
+               )} */}
             </div>
             <div className="flex items-center w-full gap-10 justify-center">
                <RadioButtonGroup

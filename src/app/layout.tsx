@@ -52,6 +52,35 @@ export const metadata: Metadata = {
       "здоровое питание",
    ],
 
+   // icons: {
+   //    icon: "/favicon-1.ico",
+   //    apple: "/apple-touch-icon.png",
+   //    other: [
+   //      {
+   //        rel: "mask-icon",
+   //        url: "/safari-pinned-tab.svg",
+   //        color: "#91bc46",
+   //      },
+   //    ],
+   //  },
+
+   icons: {
+      icon: [
+         { url: "/icons/favicon-1.ico", sizes: "128x128", type: "image/x-icon" },
+      ],
+      apple: [
+         { url: "/icons/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
+      ],
+      other: [
+         {
+            rel: "mask-icon",
+            url: "/icons/safari-pinned-tab.svg",
+            color: "#91bc46",
+         },
+      ],
+   },
+
+
    authors: [{ name: "FARM-BASKET", url: "https://farmbasket.by" }],
    creator: "FARM-BASKET",
    publisher: "FARM-BASKET",
@@ -100,22 +129,7 @@ export const metadata: Metadata = {
       },
    },
 
-   // Иконки
-   icons: {
-      icon: [
-         { url: "/favicon.ico", sizes: "16x16", type: "image/ico" },
-      ],
-      apple: [
-         { url: "/favicon.ico", sizes: "180x180", type: "image/ico" },
-      ],
-      other: [
-         {
-            rel: "mask-icon",
-            url: "/safari-pinned-tab.svg",
-            color: "#91bc46",
-         },
-      ],
-   },
+   
 
    // // Манифест
    // manifest: "/manifest.json",

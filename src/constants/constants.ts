@@ -1,4 +1,4 @@
-export const activityTypes = ["КФХ", "Ремесленник", "Физ. лицо", "ИП"];
+export const activityTypes = ["КФХ", "Ремесленник", "Физ. лицо", "ИП", "ЛПХ"];
 
 export const measures = [
    { title: "кг.", value: "кг." },

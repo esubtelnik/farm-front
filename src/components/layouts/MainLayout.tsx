@@ -60,7 +60,7 @@ const MainLayout: FC<LayoutProps> = ({ children }) => {
    return (
       <div className="flex flex-col min-h-screen">
          <Navbar userType={userType} />
-         <main className="grow">{children}</main>
+         <main className={`grow ${userType.value === UserType.ADMIN.value ? "" : "lg:px-[100px] xl:px-[150px] px-0"}`}>{children}</main>
          <Footer />
       </div>
    );

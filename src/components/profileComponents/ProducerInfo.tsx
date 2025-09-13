@@ -8,6 +8,7 @@ import { useProductContext } from "@/context/ProductContext";
 import { ICategory } from "@/types/entities/Product";
 import Image from "next/image";
 import { activityTypes } from "@/constants/constants";
+import SaveChanges from "../ui/buttons/SaveChanges";
 
 const ProducerInfo: FC = observer(() => {
    const { producerStore } = useStores();
@@ -104,8 +105,7 @@ const ProducerInfo: FC = observer(() => {
    };
 
    const handleSave = async (
-      field?: "title" | "category" | "description" | "address" | "activity_type"
-   ) => {
+      field?: "title" | "category" | "description" | "address"   ) => {
       const updateData: {
          title?: string;
          category?: string;
@@ -138,12 +138,12 @@ const ProducerInfo: FC = observer(() => {
          updateData.address = address;
       }
 
-      if (field === "activity_type" || (!field && isActivityTypeEditable)) {
-         setIsActivityTypeEditable(false);
-         setIsActivityTypeLoading(true);
-         console.log("activityType", typeof activityType);
-         updateData.activityType = activityType;
-      }
+      // if (field === "activity_type" || (!field && isActivityTypeEditable)) {
+      //    setIsActivityTypeEditable(false);
+      //    setIsActivityTypeLoading(true);
+      //    console.log("activityType",activityType);
+      //    updateData.activityType = activityType;
+      // }
 
       await producerStore.updateProducer(updateData);
 
@@ -165,26 +165,35 @@ const ProducerInfo: FC = observer(() => {
       setIsAvatarLoading(false);
    };
 
+   const handleActivityTypeChange = async (type: string) => {
+      if (type === activityType) return;
+      setIsActivityTypeEditable(false);
+      setIsActivityTypeLoading(true);
+      await producerStore.updateProducer({ activityType: type });
+      setActivityType(type);
+      setIsActivityTypeLoading(false);
+   };
+
    //    console.log(import.meta.env.VITE_API_URL + profile?.image);
 
    return (
       <div className="flex flex-col gap-y-8 md:p-8 p-4">
-         <div className="flex flex-col md:flex-row gap-y-6 md:gap-x-8 gap-x-0 h-fit">
+         <div className="flex flex-col lg:flex-row gap-y-6 md:gap-x-8 gap-x-0 h-fit">
             {isLoading ? (
                <div className="relative">
-                  <Skeleton className="md:w-[400px] w-full h-[300px] rounded-md" />
+                  <Skeleton className="lg:w-[400px] w-full h-[300px] rounded-md" />
                </div>
             ) : (
                <div className="relative">
                   {!imageLoaded && isAvatarLoading ? (
-                     <Skeleton className="md:w-[400px] w-full h-[300px] rounded-md" />
+                     <Skeleton className="lg:w-[400px] w-full h-[300px] rounded-md" />
                   ) : profile?.image ? (
                      // <img
                      //    src={import.meta.env.VITE_API_URL + profile?.image}
                      //    className="object-cover w-[400px] h-[300px] rounded-md"
                      //    onLoad={() => setImageLoaded(true)}
                      // />
-                     <div className="md:w-[400px] w-full h-[300px]">
+                     <div className="lg:w-[400px] w-full h-[300px]">
                         <Image
                            alt={profile?.title ?? "avatar"}
                            fill
@@ -194,7 +203,7 @@ const ProducerInfo: FC = observer(() => {
                         />
                      </div>
                   ) : (
-                     <Skeleton className="w-[400px] h-[300px] rounded-md" />
+                     <Skeleton className="lg:w-[400px] w-full h-[300px] rounded-md" />
                   )}
 
                   <input
@@ -233,16 +242,16 @@ const ProducerInfo: FC = observer(() => {
             <div className="flex flex-col gap-y-3 flex-1 min-h-0">
                {isLoading ? (
                   <>
-                     <Skeleton className="h-12 md:w-48 w-full" />
-                     <Skeleton className="h-10 md:w-40 w-full" />
-                     <Skeleton className="h-12 md:w-64 w-full" />
-                     <Skeleton className="h-10 md:w-64 w-full" />
-                     <Skeleton className="md:h-full h-[100px] w-full" />
+                     <Skeleton className="h-12 lg:w-48 w-full" />
+                     <Skeleton className="h-10 lg:w-40 w-full" />
+                     <Skeleton className="h-12 lg:w-64 w-full" />
+                     <Skeleton className="h-10 lg:w-64 w-full" />
+                     <Skeleton className="lg:h-full h-[100px] w-full" />
                   </>
                ) : (
                   <>
-                     <span
-                        className={`text-main-green font-bold text-2xl flex items-center gap-x-2 border-2 border-box p-1 rounded-md transition-all duration-100 w-fit ${
+                     <div
+                        className={`text-main-green font-bold text-2xl flex items-center gap-x-2 border-2 border-box p-1 rounded-md transition-all duration-100 w-full lg:w-fit ${
                            isTitleEditable
                               ? "border-main-gray"
                               : isTitleLoading
@@ -252,7 +261,7 @@ const ProducerInfo: FC = observer(() => {
                      >
                         {isTitleEditable ? (
                            <div
-                              className="flex items-center gap-x-2"
+                              className="flex items-center gap-x-2 w-full lg:w-fit"
                               onBlur={(e) => {
                                  if (
                                     !e.currentTarget.contains(e.relatedTarget)
@@ -264,7 +273,7 @@ const ProducerInfo: FC = observer(() => {
                               tabIndex={-1}
                            >
                               <input
-                                 className="bg-transparent focus:outline-none"
+                                 className="bg-transparent focus:outline-none flex-1 min-w-0 truncate"
                                  value={title}
                                  autoFocus
                                  onChange={(e) => setTitle(e.target.value)}
@@ -276,25 +285,9 @@ const ProducerInfo: FC = observer(() => {
                                     }
                                  }}
                               />
-                              <button
-                                 className="cursor-pointer text-main-green"
-                                 onClick={() => handleSave("title")}
-                              >
-                                 <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    strokeWidth={2}
-                                    stroke="currentColor"
-                                    className="size-6"
-                                 >
-                                    <path
-                                       strokeLinecap="round"
-                                       strokeLinejoin="round"
-                                       d="m4.5 12.75 6 6 9-13.5"
-                                    />
-                                 </svg>
-                              </button>
+                             
+                           <SaveChanges onClick={() => handleSave("title")} />
+
                            </div>
                         ) : isTitleLoading ? (
                            <Skeleton className="h-8 md:w-48 w-full" />
@@ -322,8 +315,8 @@ const ProducerInfo: FC = observer(() => {
                               </button>
                            </>
                         )}
-                     </span>
-                     <span
+                     </div>
+                     <div
                         className={`text-main-gray w-full flex items-center gap-x-2 border-2 border-box rounded-md transition-all duration-100 md:w-fit ${
                            isCategoryEditable
                               ? "border-main-gray"
@@ -334,7 +327,7 @@ const ProducerInfo: FC = observer(() => {
                      >
                         {isCategoryEditable ? (
                            <div
-                              className="flex w-full items-center gap-x-2 relative p-1"
+                              className="flex w-full items-center gap-x-5 relative p-1"
                               ref={categoryDropdownRef}
                               onBlur={(e) => {
                                  if (
@@ -361,27 +354,28 @@ const ProducerInfo: FC = observer(() => {
                                     ? selectedCategories.join("; ")
                                     : "Выберите категории"}
                               </div>
-                              <button
-                                 className="cursor-pointer text-main-green"
-                                 onClick={() => handleSave("category")}
-                              >
-                                 <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    strokeWidth={2}
-                                    stroke="currentColor"
-                                    className="size-6"
+                              <SaveChanges onClick={() => handleSave("category")} />
+                                 {/* <button
+                                    className="cursor-pointer text-main-green"
+                                    onClick={() => handleSave("category")}
                                  >
-                                    <path
-                                       strokeLinecap="round"
-                                       strokeLinejoin="round"
-                                       d="m4.5 12.75 6 6 9-13.5"
-                                    />
-                                 </svg>
-                              </button>
+                                    <svg
+                                       xmlns="http://www.w3.org/2000/svg"
+                                       fill="none"
+                                       viewBox="0 0 24 24"
+                                       strokeWidth={2}
+                                       stroke="currentColor"
+                                       className="size-6"
+                                    >
+                                       <path
+                                          strokeLinecap="round"
+                                          strokeLinejoin="round"
+                                          d="m4.5 12.75 6 6 9-13.5"
+                                       />
+                                    </svg>
+                                 </button> */}
                               {isCategoryDropdownOpen && (
-                                 <div className="absolute  top-full left-0 mt-1 p-1 w-full md:w-[400px] max-h-[200px] overflow-y-auto border-2 border-main-gray bg-white flex flex-col gap-y-1 shadow-lg/30 z-10 rounded-md">
+                                 <div className="absolute  top-full left-0 mt-1 p-1 w-full sm:w-[400px] max-h-[200px] overflow-y-auto border-2 border-main-gray bg-white flex flex-col gap-y-1 shadow-lg/30 z-10 rounded-md">
                                     {categories.map((category) => {
                                        const isChecked =
                                           selectedCategories.includes(
@@ -409,6 +403,7 @@ const ProducerInfo: FC = observer(() => {
                                     })}
                                  </div>
                               )}
+
                            </div>
                         ) : isCategoryLoading ? (
                            <Skeleton className="h-8 w-48" />
@@ -441,7 +436,7 @@ const ProducerInfo: FC = observer(() => {
                               </button>
                            </>
                         )}
-                     </span>
+                     </div>
                      <span className="flex items-center gap-x-2">
                         <ReviewStars size="large" rating={profile.feedbackAv ?? 0} />
                         <span className="text-main-gray text-sm">Отзывы</span>
@@ -449,7 +444,7 @@ const ProducerInfo: FC = observer(() => {
                      <div className="text-main-gray flex flex-col flex-grow min-h-0">
                         {isDescriptionEditable ? (
                            <div
-                              className="flex h-full items-start gap-x-2 border-2 border-main-green rounded-md p-1"
+                              className="flex h-full items-end gap-x-2 border-2 border-main-green rounded-md p-1"
                               onBlur={(e) => {
                                  if (
                                     !e.currentTarget.contains(e.relatedTarget)
@@ -477,27 +472,12 @@ const ProducerInfo: FC = observer(() => {
                                        setIsDescriptionEditable(false);
                                        setDescription(profile?.description);
                                     }
+                                    if (e.key === "Enter") handleSave("description");
                                  }}
                               />
-                              <button
-                                 className="cursor-pointer text-main-green flex items-start outline-none"
-                                 onClick={() => handleSave("description")}
-                              >
-                                 <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                                    strokeWidth={2}
-                                    stroke="currentColor"
-                                    className="size-7"
-                                 >
-                                    <path
-                                       strokeLinecap="round"
-                                       strokeLinejoin="round"
-                                       d="m4.5 12.75 6 6 9-13.5"
-                                    />
-                                 </svg>
-                              </button>
+                          <div className="flex h-full items-end">
+                              <SaveChanges onClick={() => handleSave("description")} />
+                              </div>
                            </div>
                         ) : isDescriptionLoading ? (
                            <Skeleton className="md:h-full h-[100px] w-full" />
@@ -583,25 +563,8 @@ const ProducerInfo: FC = observer(() => {
                                  }
                               }}
                            />
-                           <button
-                              className="cursor-pointer text-main-green"
-                              onClick={() => handleSave("address")}
-                           >
-                              <svg
-                                 xmlns="http://www.w3.org/2000/svg"
-                                 fill="none"
-                                 viewBox="0 0 24 24"
-                                 strokeWidth={2}
-                                 stroke="currentColor"
-                                 className="size-6"
-                              >
-                                 <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    d="m4.5 12.75 6 6 9-13.5"
-                                 />
-                              </svg>
-                           </button>
+                           <SaveChanges onClick={() => handleSave("address")} />
+                          
                         </div>
                      ) : isAddressLoading ? (
                         <Skeleton className="h-7 md:w-96 w-full" />
@@ -664,7 +627,7 @@ const ProducerInfo: FC = observer(() => {
                            >
                               {activityType || "Выберите тип деятельности"}
                            </div>
-                           <button
+                           {/* <button
                               className="cursor-pointer text-main-green outline-none px-4"
                               onClick={() => handleSave("activity_type")}
                            >
@@ -682,7 +645,7 @@ const ProducerInfo: FC = observer(() => {
                                     d="m4.5 12.75 6 6 9-13.5"
                                  />
                               </svg>
-                           </button>
+                           </button> */}
                            {isActivityTypeDropdownOpen && (
                               <div className="absolute top-full left-0 mt-2 w-full max-h-[200px] overflow-y-auto border-2 border-main-gray bg-white flex flex-col gap-y-1 shadow-lg/30 z-10 rounded-md p-1">
                                  {activityTypes.map((type) => (
@@ -692,6 +655,7 @@ const ProducerInfo: FC = observer(() => {
                                        onClick={() => {
                                           setActivityType(type);
                                           setIsActivityTypeDropdownOpen(false);
+                                          handleActivityTypeChange(type);
                                        }}
                                        className={`w-full outline-none font-medium text-[13px] px-2 py-1 text-left rounded-sm transition-all duration-300 ${
                                           activityType === type

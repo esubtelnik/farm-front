@@ -123,7 +123,7 @@ const ProducerProfilePage: FC = observer(() => {
    ];
 
    return (
-      <div className="min-h-screen font-geist">
+      <div className="min-h-screen font-geist w-full">
          <ProducerInfo  />
          <Tabs tabs={tabItems} />
       </div>

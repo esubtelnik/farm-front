@@ -37,7 +37,7 @@ const ProductList: FC<ProductListProps> = ({
    }
 
    return (
-      <div className="grid lg:grid-cols-3 grid-cols-2 lg:gap-10 md:gap-5 gap-4 md:py-10 py-5 md:px-8 px-4 place-items-center">
+      <div className="grid lg:grid-cols-3 grid-cols-2 xl:gap-10 lg:gap-5 gap-4 md:py-10 py-5 md:px-8 px-4 place-items-center">
          {products.map((product) => (
             <ProductItem
                key={product.id}

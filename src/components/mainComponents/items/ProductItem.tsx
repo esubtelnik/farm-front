@@ -40,7 +40,7 @@ const ProductItem: FC<ProductItemProps> = observer(
             onClick={handleCardClick}
          >
             <div className="relative">
-               <div className="lg:w-96 lg:h-64 md:w-64 md:h-48 w-36 h-32">
+               <div className="lg:w-96 lg:h-64 md:w-64 md:h-48 w-36 h-48">
                   <Image
                      fill
                      src={`${process.env.NEXT_PUBLIC_IMAGE_URL}${product.images}`}
@@ -64,7 +64,7 @@ const ProductItem: FC<ProductItemProps> = observer(
             </div>
             <div className="flex flex-col w-full border-main-green border-b-2 border-r-2 border-l-2 rounded-bl-2xl rounded-br-2xl p-3 gap-y-1 relative">
                <span
-                  className="text-main-green font-semibold md:font-bold lg:text-xl md:text-lg text-base 
+                  className="text-main-green font-semibold md:font-bold lg:text-xl md:text-base  text-sm
                  leading-tight h-[3.6rem] md:h-[4.2rem] lg:h-[4.8rem]"
                   style={{
                      display: "-webkit-box",
@@ -76,19 +76,19 @@ const ProductItem: FC<ProductItemProps> = observer(
                >
                  {product.title}
                </span>
-               <span className="text-main-gray lg:text-base md:text-sm text-xs truncate block w-full">
+               <span className="text-main-gray/70 lg:text-base md:text-sm text-xs truncate block w-full">
                   От <span className="hidden md:inline">фермера: </span>{" "}
                   {product.producerName}
                </span>
                <div className="flex md:gap-x-4 gap-x-2">
                   <ReviewStars rating={product.feedbackAv} size="small" />
-                  <span className="hidden md:flex text-main-gray lg:text-sm md:text-xs text-xs items-center">
+                  {/* <span className="hidden md:flex text-main-gray lg:text-sm md:text-xs text-xs items-center">
                      Отзывы
-                  </span>
+                  </span> */}
                </div>
-               <div className="text-main-gray text-base">
-                  {product.price} руб.{" "}
-                  <span>
+               <div className="text-main-gray md:text-base text-xs">
+                  {product.price} р.{" "}
+                  <span className="text-main-gray/70 md:text-base text-[10px]"> 
                      /{product.saleVolume} {product.unit}
                   </span>
                </div>

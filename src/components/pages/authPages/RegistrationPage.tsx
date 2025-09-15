@@ -80,7 +80,7 @@ const RegistrationPage: FC = () => {
                (t) => t.value === userType
             );
             // console.log(foundType);
-            setUserType(foundType);
+            setUserType(foundType || UserType.CUSTOMER);
          } else {
             setUserType(UserType.CUSTOMER);
          }
@@ -94,8 +94,7 @@ const RegistrationPage: FC = () => {
       workCode?: string
    ) => {
       setRegErrorMessage("");
-
-      switch (userType.type) {
+      switch (userType?.type) {
          case UserType.PRODUCER.type:
             {
                const updatedData: ProducerRegisterRequest = {
@@ -162,7 +161,7 @@ const RegistrationPage: FC = () => {
    const handleCodeVerification = async (code: string) => {
       setVerifErrorMessage("");
 
-      switch (userType.type) {
+      switch (userType?.type) {
          case UserType.PRODUCER.type:
             {
                const updatedData: ProducerRegisterRequest = {
@@ -218,17 +217,19 @@ const RegistrationPage: FC = () => {
 
    return (
       <div>
-         {isEmailVerification ? (
+         {!isEmailVerification ? (
             <EmailVerification
                setRegisterData={handleCodeVerification}
                errorMessage={verifErrorMessage}
             />
          ) : (
-            <RegistrationForm
-               userType={userType}
-               setRegisterData={handleStartVerification}
-               errorMessage={regErrorMessage}
-            />
+            userType ? (
+               <RegistrationForm
+                  userType={userType}
+                  setRegisterData={handleStartVerification}
+                  errorMessage={regErrorMessage}
+               />
+            ) : <div></div>
          )}
       </div>
    );

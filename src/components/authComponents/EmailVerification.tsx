@@ -86,15 +86,15 @@ const EmailVerification: FC<EmailVerificationProps> = ({
                onResetError={() => handleChange("code", form.values.code)}
             />
          </div>
-         <div className="flex gap-x-8 items-center md:mt-7 mt-4">
+         <div className="flex flex-col sm:flex-row gap-x-8 items-center md:mt-7 mt-4 w-full">
 
          <button
             onClick={handleSubmitVerifyCode}
-            className="bg-main-green text-white font-semibold py-3 px-8 w-full md:w-fit rounded-full"
+            className="bg-main-green w-full sm:w-fit order-2 sm:order-1 text-white font-semibold py-3 px-8 rounded-full"
          >
             ПРОДОЛЖИТЬ
          </button>
-         <p className="h-full align-middle text-red-600">{errorMessage}</p>
+         <p className="h-full align-middle text-red-600 order-1 sm:order-2 mb-5 sm:mb-0">{errorMessage}</p>
 
          </div>
       </div>

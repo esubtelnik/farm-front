@@ -1,5 +1,7 @@
 import { FC } from "react";
 import { useAuthContext } from "@/context/AuthContext";
+import { useRouter } from "next/navigation";
+import routes from "@/constants/routes";
 
 interface WelcomeInfoProps {
    changeForm: (form: boolean) => void;
@@ -7,10 +9,15 @@ interface WelcomeInfoProps {
 
 const WelcomeInfo: FC<WelcomeInfoProps> = ({ changeForm }) => {
    const { setIsLogoShow } = useAuthContext();
+   const router = useRouter();
 
    const handleChange = () => {
       setIsLogoShow(false);
       changeForm(false);
+   };
+
+   const handleLoginNavigate = () => {
+      router.push(routes.auth.login);
    };
 
    return (
@@ -28,8 +35,8 @@ const WelcomeInfo: FC<WelcomeInfoProps> = ({ changeForm }) => {
             поддержку местных производителей. Это идеальное решение для тех, кто
             ценит качество, свежесть и заботу о здоровье!
          </p>
-         <div className="flex w-full justify-end outline-0 border-0  " >
-            <button onClick={handleChange} >
+         <div className="flex w-full justify-end outline-0 border-0  ">
+            <button onClick={handleChange}>
                <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -45,6 +52,15 @@ const WelcomeInfo: FC<WelcomeInfoProps> = ({ changeForm }) => {
                   />
                </svg>
             </button>
+         </div>
+         <div className="text-main-gray mt-3 text-sm md:text-base font-medium text-center">
+            Уже зарегистрированы?{" "}
+            <span
+               className="text-main-green cursor-pointer hover:underline"
+               onClick={handleLoginNavigate}
+            >
+               Войти
+            </span>
          </div>
       </div>
    );

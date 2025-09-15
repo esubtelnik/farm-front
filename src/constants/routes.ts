@@ -8,7 +8,12 @@ const routes = {
          login: "/auth/login/courier",
          register: "/auth/register/courier",
       },
+      admin: {
+         login: "/auth/login/admin",
+         register: "/auth/register/admin",
+      },
    },
+
    home: {
       root: "/",
       catalog: "/catalog",
@@ -20,10 +25,10 @@ const routes = {
    users: {
       profile: "/profile",
       customer: {
-        //  root: "/customer",
-        //  // profile: "/customer/profile",
-        //  list: "/customer/list",
-        //  edit: "/customer/edit",
+         //  root: "/customer",
+         //  // profile: "/customer/profile",
+         //  list: "/customer/list",
+         //  edit: "/customer/edit",
          cart: "/cart",
       },
       producer: {
@@ -50,12 +55,24 @@ const routes = {
       lists: {
          customers: "/admin/lists/customers",
          producers: "/admin/lists/producers",
-         products: (prodicerId: string | number) => `/admin/lists/products/${prodicerId}`,
+         products: (prodicerId: string | number) =>
+            `/admin/lists/products/${prodicerId}`,
          couriers: "/admin/lists/couriers",
          orders: "/admin/lists/orders",
          // products: "/admin/lists/products",
       },
       edit: "/admin/edit",
+
+   },
+
+   legal: {
+      privacyPolice: "/legal/privacy-police",
+      terms: "/legal/terms",
+      offer: "/legal/offer",
+   },
+
+   social: {
+      instagram: "https://www.instagram.com/farmbasket_belarus?igsh=MTYzMnB1dWN4d3ZnaA==",
    },
 };
 

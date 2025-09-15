@@ -37,7 +37,7 @@ import { fetchApi } from "@/lib/fetchApi";
 export interface AuthContextType {
    isLogoShow: boolean;
    setIsLogoShow: (isLogoShow: boolean) => void;
-   userType: UserTypeValue | null;
+   userType: UserTypeValue;
    //   isUserTypeLoading: boolean;
    getUserType: () => Promise<{ success: boolean; message?: string }>;
    loginCustomer: (
@@ -177,7 +177,7 @@ export const AuthContextProvider = ({
          }
       } catch (error) {
          console.error("Ошибка при выполнении запроса:", error);
-         setUserType(null);
+         setUserType(UserType.GUEST);
          return { success: false, message: "Ошибка сети или сервера" };
       }
    };

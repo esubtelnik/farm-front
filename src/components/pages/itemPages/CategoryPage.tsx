@@ -31,7 +31,7 @@ const CategoryPage: FC<CategoryPageProps> = ({
 
    return (
       <div className="font-geist">
-         <div className="relative w-full aspect-[3/1] md:aspect-[4/1]">
+       <div className="relative w-full aspect-[3/1] md:aspect-[4/1] bg-gradient-to-r from-dark-green to-main-green">
             <Image
                className="object-cover"
                src={`${process.env.NEXT_PUBLIC_IMAGE_URL}${imageUrl}`}

@@ -13,7 +13,7 @@ interface CategoryListProps {
 const CategoryList: FC<CategoryListProps> = ({ categories, isLoading }) => {
 
    return (
-      <div className="grid md:grid-cols-4 grid-cols-2 md:gap-10 gap-4 md:px-8 px-4 place-items-center mb-14">
+      <div className="grid md:grid-cols-4 grid-cols-2 sm:gap-10 gap-4 md:px-8 sm:px-12 px-4 place-items-center mb-14">
          {isLoading ? (
             Array.from({ length: 8 }).map((_, index) => (
                <Skeleton key={index} className="w-full aspect-square" />

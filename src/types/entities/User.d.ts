@@ -1,4 +1,5 @@
-import { IReview } from "./Review";
+import { IReview } from "@/types/entities/Review";
+import { UserType } from "@/constants/UserTypeEnum";
 
 export type UserTypeValue = (typeof UserType)[keyof typeof UserType];
 

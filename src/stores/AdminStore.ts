@@ -14,7 +14,7 @@ import {
    ChangeProducerOverpriceRequest,
    ChangeProductOverpriceRequest,
 } from "@/types/requests/AdminRequests";
-import { getCookie } from "cookies-next/client";
+import { deleteCookie, getCookie } from "cookies-next/client";
 import { fetchApi } from "@/lib/fetchApi";
 import { ICourierFromAdmin, IProducerFromAdmin } from "@/types/entities/User";
 import { IProductCard } from "@/types/entities/Product";
@@ -112,6 +112,11 @@ class AdminStore {
     }
     return { success: false, message: res.message };
  }
+
+ async logout() {
+   deleteCookie("token");
+
+}
 }
 
 const adminStore = new AdminStore();

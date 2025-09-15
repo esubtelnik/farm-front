@@ -241,7 +241,7 @@ const ProductPage: FC<ProductPageProps> = ({
                   </p>
                </div>
                <ProducerItem
-                  isSmall={true}
+                  styleType="small"
                   producer={productProducer as IProducer}
                />
             </div>

@@ -2,7 +2,7 @@ import { IReview } from "./Review";
 
 export interface ICategory {
    id: string;
-   path: string;
+   paths: [string, string];
    title: string;
    description: string;
 }

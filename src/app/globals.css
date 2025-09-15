@@ -11,6 +11,10 @@
    --text-xxs: 10px;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 button {
   @apply cursor-pointer;
 }
@@ -48,8 +52,16 @@ button {
   @apply flex flex-col;
 }
 
-.privacy-policy {
-  @apply md:px-10 py-3 md:text-xl text-xs/4 text-main-gray;
+.legal {
+  @apply md:px-10 px-2 pb-5 md:text-base leading-5 text-xs/4 text-main-gray;
+}
+
+.legal h2 {
+  @apply mt-4
+}
+
+.legal-title {
+  @apply md:px-10 px-2 py-5 md:py-8 md:text-2xl lg:text-3xl text-base  text-main-green font-bold;
 }
 
 ::-webkit-scrollbar {

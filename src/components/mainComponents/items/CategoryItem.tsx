@@ -1,6 +1,6 @@
 "use client";
-import { motion } from "framer-motion";
-import { FC, useState } from "react";
+// import { motion } from "framer-motion";
+import { FC } from "react";
 // // import img from "../../../assets/image.png";
 // import img from "@/assets/image.png";
 import Image from "next/image";
@@ -13,30 +13,30 @@ interface CategoryItemProps {
 }
 
 const CategoryItem: FC<CategoryItemProps> = ({ category }) => {
-   const [hovered, setHovered] = useState(false);
+  //  const [hovered, setHovered] = useState(false);
    const router = useRouter();
    return (
       <div
-  className="w-full aspect-square bg-white relative rounded-2xl overflow-hidden shadow-md/30 cursor-pointer"
-  onMouseEnter={() => setHovered(true)}
-  onMouseLeave={() => setHovered(false)}
-  onClick={() =>
-    router.push(
-      `/category/${category.title}?image=${encodeURIComponent(
-        category.path
-      )}`
-    )
-  }
->
-  <Image
-    src={`${process.env.NEXT_PUBLIC_IMAGE_URL}${category.path}`}
-    alt={category.title}
-    fill
-    className="object-cover"
-    unoptimized
-  />
+         className="w-full aspect-square bg-transparent rounded-[26px] relative overflow-hidden shadow-md/30 cursor-pointer"
+        //  onMouseEnter={() => setHovered(true)}
+        //  onMouseLeave={() => setHovered(false)}
+         onClick={() =>
+            router.push(
+               `/category/${category.title}?image=${encodeURIComponent(
+                  category.paths[1]
+               )}`
+            )
+         }
+      >
+         <Image
+            src={`${process.env.NEXT_PUBLIC_IMAGE_URL}${category.paths[0]}`}
+            alt={category.title}
+            fill
+            className="object-cover"
+            unoptimized
+         />
 
-  <motion.span
+         {/* <motion.span
     animate={{ height: hovered ? "100%" : "" }}
     transition={{ duration: 0.4, ease: "easeInOut" }}
     className="md:flex hidden absolute h-1/4 bottom-0 left-0 w-full bg-main-green/80 text-white text-xl font-bold text-center items-center justify-center break-words whitespace-normal px-3"
@@ -46,10 +46,8 @@ const CategoryItem: FC<CategoryItemProps> = ({ category }) => {
 
   <div className="md:hidden absolute bottom-0 left-0 w-full h-1/4 bg-main-green/80 text-white text-xs font-bold text-center flex items-center justify-center break-words whitespace-normal px-3">
     {category.title}
-  </div>
-</div>
-
-    
+  </div> */}
+      </div>
    );
 };
 

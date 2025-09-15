@@ -83,6 +83,27 @@ const Navbar: FC<{
       setIsMenuOpen(false);
    };
 
+   const handleLogo = () => {
+      switch (userType.type) {
+         case UserType.CUSTOMER.type:
+            router.push(routes.home.root);
+            break;
+         case UserType.PRODUCER.type:
+            router.push(routes.users.producer.profile);
+            break;
+         case UserType.COURIER.type:
+            router.push(routes.users.courier.profile);
+            break;
+         case UserType.ADMIN.type:
+            router.push(routes.admin.root);
+            break;
+         default:
+            router.push(routes.home.root);
+      }
+
+      setIsMenuOpen(false);
+   };
+
    const handleCart = () => {
       if (userType.type === UserType.CUSTOMER.type) {
          router.push(routes.users.customer.cart);
@@ -93,9 +114,28 @@ const Navbar: FC<{
       }
    };
 
+   const handleLogout = () => {
+      switch (userType.type) {
+         case UserType.CUSTOMER.type:
+            router.push(routes.auth.login);
+            break;
+         case UserType.PRODUCER.type:
+            router.push(routes.auth.login);
+            break;
+         case UserType.COURIER.type:
+            router.push(routes.auth.login);
+            break;
+         case UserType.ADMIN.type:
+            router.push(routes.auth.login);
+            break;
+         default:
+            break;
+      }
+   };
+
    return (
       <>
-         <nav className="sticky top-0 z-20 flex w-full items-center justify-between bg-main-green dark:bg-dark h-18 py-3 px-4 md:px-20 font-geist">
+         <nav className="sticky top-0 z-20 flex w-full items-center justify-between bg-main-green shadow-md dark:bg-dark h-18 py-3 px-4 md:px-20 font-geist">
             <div className="h-full order-2 lg:order-0 flex items-center gap-x-3">
                {userType.type === UserType.ADMIN.type && (
                   <button onClick={() => router.back()}>
@@ -115,8 +155,11 @@ const Navbar: FC<{
                      </svg>
                   </button>
                )}
-               <button className="w-full h-full cursor-pointer" onClick={() => router.push(routes.home.root)}>
-               <LogoWhite className="w-full h-full" />
+               <button
+                  className="w-full h-full cursor-pointer"
+                  onClick={handleLogo}
+               >
+                  <LogoWhite className="w-full h-full" />
                </button>
             </div>
 
@@ -179,12 +222,10 @@ const Navbar: FC<{
             <>
                <div
                   className="fixed inset-0 z-40 bg-black/50 overflow-hidden min-h-dvh h-dvh max-h-dvh"
-                 
                   onClick={() => setIsMenuOpen(false)}
                />
 
                <div className="fixed top-0 left-0 h-dvh max-h-dvh w-3/4 max-w-xs bg-main-green z-50 px-4 py-8 flex flex-col overflow-y-auto">
-                 
                   <div className="flex items-center justify-between mb-4">
                      <h1 className="text-white text-2xl font-bold font-geist">
                         Farm-Basket

@@ -15,7 +15,7 @@ const ProducerList: FC<ProducerListProps> = ({ producers, isLoading = false }) =
       </div>;
    }
    return (
-      <div className="grid md:grid-cols-3 grid-cols-2 gap-10 md:px-10 px-4 place-items-center">
+      <div className="grid md:grid-cols-3 grid-cols-2 gap-5 md:px-5 px-4 place-items-center w-full">
          {isLoading ? (
             <div className="flex justify-center items-center h-full">
                <span>Loading...</span>

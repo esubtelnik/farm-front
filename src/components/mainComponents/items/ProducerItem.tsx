@@ -8,19 +8,35 @@ import routes from "@/constants/routes";
 
 interface ProducerItemProps {
    producer: IProducerCard | IProducer;
-   isSmall?: boolean;
+   styleType?: "small" | "carousel" | "list";
 }
 
-const ProducerItem: FC<ProducerItemProps> = ({ isSmall, producer }) => {
+const styles = {
+   small: {
+      card: "w-full md:w-fit h-full flex md:gap-x-10 gap-x-2 md:p-4 p-2",
+      image: "md:w-[200px] md:h-[150px] w-[100px] h-[150px]",
+   },
+   carousel: {
+      card: "w-64 md:w-[500px] md:h-[450px] h-[350px] flex flex-col p-8",
+      image: "md:h-[300px] w-full h-[100px]",
+   },
+   list: {
+      card: "w-full md:h-[450px] h-[350px] flex flex-col p-8",
+      image: "md:h-[300px] w-full h-[100px]",
+   },
+};
+
+const ProducerItem: FC<ProducerItemProps> = ({
+   styleType = "list",
+   producer,
+}) => {
    return (
       <div
-         className={`${
-            isSmall
-               ? "w-full md:w-fit h-full flex md:gap-x-10 gap-x-2 md:p-4 p-2"
-               : "md:max-w-[500px] max-w-64 md:max-h-[450px] max-h-[350px] flex flex-col p-8"
-         } bg-white rounded-xl md:shadow-lg/20 shadow-sm/20 border border-main-gray/20 overflow-hidden cursor-pointer relative`}
+         className={`${styles[styleType].card} bg-white rounded-xl md:shadow-lg/20 shadow-sm/20 border border-main-gray/20 overflow-hidden cursor-pointer relative`}
       >
-         <div className={`relative ${isSmall ? "md:w-[200px] md:h-[150px] w-[100px] h-[150px]" : "md:w-[400px] md:h-[300px] w-full h-[100px]"} overflow-hidden rounded-xl`}>
+         <div
+            className={`relative ${styles[styleType].image} overflow-hidden rounded-xl`}
+         >
             <Image
                src={`${process.env.NEXT_PUBLIC_IMAGE_URL}${producer.image}`}
                alt="Фермер"
@@ -32,11 +48,12 @@ const ProducerItem: FC<ProducerItemProps> = ({ isSmall, producer }) => {
 
          <div
             className={`${
-               isSmall ? "my-1" : "md:my-4"
+               styleType === "small" ? "my-1" : "md:my-4"
             }  flex flex-col justify-between flex-grow`}
          >
             <div>
-               <h2 className="text-main-green font-semibold md:font-bold lg:text-xl md:text-lg text-base 
+               <h2
+                  className="text-main-green font-semibold md:font-bold lg:text-xl md:text-lg text-base 
                  leading-tight h-[3.6rem] md:h-[4.2rem] lg:h-[4.8rem]"
                   style={{
                      display: "-webkit-box",
@@ -44,7 +61,8 @@ const ProducerItem: FC<ProducerItemProps> = ({ isSmall, producer }) => {
                      WebkitBoxOrient: "vertical",
                      overflow: "hidden",
                      textOverflow: "ellipsis",
-                  }}>
+                  }}
+               >
                   {producer.title ?? "Название не указано"}
                </h2>
                <div className="flex items-center gap-2 mb-4">

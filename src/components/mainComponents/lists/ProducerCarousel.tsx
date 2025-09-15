@@ -46,7 +46,7 @@ const ProducerCarousel: FC<ProducerCarouselProps> = ({ producers }) => {
                   whileHover={{ scale: 1.03 }}
                   className="flex-shrink-0 md:py-10 py-2"
                >
-                  <ProducerItem producer={producer} />
+                  <ProducerItem producer={producer} styleType="carousel" />
                </motion.div>
             ))}
          </div>

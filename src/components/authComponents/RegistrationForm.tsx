@@ -4,6 +4,8 @@ import Switcher from "@/components/ui/Switcher";
 import { validateEmail, validatePassword } from "../../utils/ValidateUtils";
 import { UserTypeValue } from "../../types/entities/User";
 import { UserType } from "../../constants/UserTypeEnum";
+import Link from "next/link";
+import routes from "@/constants/routes";
 
 interface RegistrationFormProps {
    userType: UserTypeValue;
@@ -143,13 +145,13 @@ const RegistrationForm: FC<RegistrationFormProps> = ({
    return (
       <div className="w-full flex flex-col items-start justify-center font-geist p-2">
          <h1 className="md:text-3xl text-xl text-main-green font-bold">РЕГИСТРАЦИЯ</h1>
-         <p className="md:text-base text-sm/5 text-justify font-normal text-main-gray md:my-4 my-3">
+         <p className="md:text-base text-sm/5 text-start font-normal text-main-gray md:my-4 my-3">
             Зарегистрируйтесь, чтобы иметь доступ к настройкам личного кабинета,
             истории заказов, чату с производителями, подписке на продукты и
             корзину. <span className="font-bold">FARM-BASKET</span> знает все
             про удобство покупок!
          </p>
-         <div className="w-full flex flex-col md:space-y-6 space-y-4 md:mb-6 mb-4 ">
+         <div className="w-full flex flex-col md:space-y-6 space-y-4 md:mb-6 mb-4">
             {(userType?.type === UserType.PRODUCER.type ||
                userType?.type === UserType.COURIER.type) && (
                <Input
@@ -193,9 +195,9 @@ const RegistrationForm: FC<RegistrationFormProps> = ({
                      <div className="text-main-gray ml-2 text-sm cursor-pointer">
                         Введите Ваш индентификационный код, который присвоен при
                         оформлении{" "}
-                        <span className="text-main-green cursor-pointer underline">
+                        <Link href={routes.legal.terms} className="text-main-green cursor-pointer underline">
                            Соглашения о сотрудничестве
-                        </span>
+                        </Link>
                      </div>
                   </div>
                )}
@@ -239,16 +241,16 @@ const RegistrationForm: FC<RegistrationFormProps> = ({
                )}
             </div>
          </div>
-         <div className="flex gap-x-8 items-center md:mt-7 mt-4">
+         <div className="flex flex-col sm:flex-row gap-x-8 items-center md:mt-7 mt-4 w-full">
             <button
                onClick={handleSubmitRegistration}
-               className="bg-main-green text-white font-semibold py-3 px-8 rounded-full"
+               className="bg-main-green w-full sm:w-fit order-2 sm:order-1 text-white font-semibold py-3 px-8 rounded-full"
             >
                ЗАРЕГИСТРИРОВАТЬСЯ
             </button>
-            <p className="h-full align-middle text-red-600">{errorMessage}</p>
+            <p className="h-full align-middle text-red-600 order-1 md:order-2 mb-5 sm:mb-0">{errorMessage}</p>
          </div>
-      </div>
+               </div>
    );
 };
 

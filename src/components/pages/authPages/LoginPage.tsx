@@ -15,6 +15,7 @@ import { UserTypeValue } from "@/types/entities/User";
 import { UserType } from "@/constants/UserTypeEnum";
 import { AdminLoginRequest } from "@/types/requests/AdminRequests";
 import { usePathname, useRouter } from "next/navigation";
+import Link from "next/link";
 
 interface FormState {
    values: {
@@ -198,7 +199,7 @@ const LoginPage: FC = () => {
    };
 
    return (
-      <div className="w-full flex flex-col px-2 md:px-0 items-center justify-center font-geist">
+      <div className="w-full flex flex-col px-2 items-center justify-center font-geist">
          <h1 className="md:text-3xl text-xl text-main-green font-bold md:mb-16 mb-8">
             ВХОД В ЛИЧНЫЙ КАБИНЕТ
          </h1>
@@ -247,9 +248,9 @@ const LoginPage: FC = () => {
                      <div className="text-main-gray ml-2 text-sm cursor-pointer">
                         Введите Ваш индентификационный код, который присвоен при
                         оформлении{" "}
-                        <span className="text-main-green cursor-pointer underline">
+                        <Link href={routes.legal.terms} className="text-main-green cursor-pointer underline">
                            Соглашения о сотрудничестве
-                        </span>
+                        </Link>
                      </div>
                   </motion.div>
                )}
@@ -265,7 +266,7 @@ const LoginPage: FC = () => {
 
          <button
             onClick={handleSubmitLogin}
-            className="bg-main-green text-white font-semibold md:mb-7 mb-5 py-3 px-8 rounded-full cursor-pointer w-full md:w-auto"
+            className="bg-main-green md:text-base text-sm text-white font-semibold md:mb-7 mb-5 py-3 px-8 rounded-full cursor-pointer w-full md:w-auto"
          >
             ВОЙТИ
          </button>

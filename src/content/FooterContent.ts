@@ -3,22 +3,24 @@ import ApplePay from "@/assets/icons/ApplePay.svg";
 import Visa from "@/assets/icons/Visa.svg";
 import MasterCard from "@/assets/icons/MasterCard.svg";
 import BelCard from "@/assets/icons/BelCard.svg";
+import Instagram from "@/assets/icons/Instagram.svg";
 import routes from "@/constants/routes";
 import { FC, SVGProps } from "react";
 
-type FooterItem = {
+export type FooterItem = {
    text: string;
    type: "icon" | "link";
+   tag?: string;
    link?: string;
    icon?: FC<SVGProps<SVGSVGElement>>;
 };
 
-type FooterSection = {
+export type FooterSectionType = {
    title: string;
    items: FooterItem[];
 };
 
-export const FooterSiteLinks: FooterSection = {
+export const FooterSiteLinks: FooterSectionType = {
    title: "О FARM-BASKET",
    items: [
       { text: "Контакты", type: "link", link: routes.home.contacts },
@@ -26,17 +28,17 @@ export const FooterSiteLinks: FooterSection = {
    ],
 };
 
-export const FooterCustomerLinks: FooterSection = {
+export const FooterCustomerLinks: FooterSectionType = {
    title: "ПОКУПАТЕЛЯМ",
    items: [
       { text: "Каталог", type: "link", link: routes.home.catalog },
-      { text: "FAQ", type: "link" },
-      { text: "Возврат продукции", type: "link" },
-      { text: "Доставка", type: "link" },
+      { text: "FAQ", type: "link", link: `${routes.home.root}#faq` },
+      { text: "Возврат продукции", type: "link", link: routes.legal.offer },
+      { text: "Доставка", type: "link", link: routes.home.root },
    ],
 };
 
-export const FooterPaymentLinks: FooterSection = {
+export const FooterPaymentLinks: FooterSectionType = {
    title: "ПЛАТЕЖИ",
    items: [
       { text: "Samsung Pay", type: "icon", icon: SamsungPay },
@@ -47,12 +49,12 @@ export const FooterPaymentLinks: FooterSection = {
    ],
 };
 
-export const FooterContactsLinks: FooterSection = {
+export const FooterContactsLinks: FooterSectionType = {
    title: "КОНТАКТЫ",
    items: [
       { text: "+375 33 3729057", type: "link", link: routes.home.contacts },
       {
-         text: "Farm.basket.shop@gmail.com",
+         text: "farm.basket.shop@gmail.com",
          type: "link",
          link: routes.home.contacts,
       },
@@ -61,18 +63,26 @@ export const FooterContactsLinks: FooterSection = {
    ],
 };
 
-export const FooterLegalLinks: FooterSection = {
+export const FooterLegalLinks: FooterSectionType = {
    title: "ПРАВОВАЯ ИНФОРМАЦИЯ",
    items: [
-      { text: "Оферта", type: "link" },
-      { text: "Политика конфиденциальности", type: "link" },
+      { text: "Оферта", type: "link", link: routes.legal.offer },
+      { text: "Политика конфиденциальности", type: "link", link: routes.legal.privacyPolice },
    ],
 };
 
-export const FooterData: FooterSection[] = [
+export const FooterSocialLinks: FooterSectionType = {
+   title: "СОЦИАЛЬНЫЕ СЕТИ",
+   items: [
+      { text: "Instagram", tag: "@farmbasket_belarus", type: "icon", icon: Instagram, link: routes.social.instagram },
+   ],
+};
+
+export const FooterData: FooterSectionType[] = [
    FooterSiteLinks,
    FooterCustomerLinks,
    FooterPaymentLinks,
    FooterContactsLinks,
    FooterLegalLinks,
+   FooterSocialLinks,
 ];

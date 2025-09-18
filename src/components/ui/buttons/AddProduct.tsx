@@ -33,7 +33,7 @@ const AddProduct: FC = () => {
                isOpen={isModalOpen}
                onClose={() => setIsModalOpen(false)}
                showCloseButton={true}
-               size="w-[90%] h-fit"
+               className="overflow-y-auto p-4"
             >
                <AddProductModal handleAddProduct={(payload) => handleAddProduct(payload)} />
             </Modal>

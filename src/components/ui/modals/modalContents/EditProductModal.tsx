@@ -384,7 +384,7 @@ const EditProductModal: FC<EditProductModalProps> = ({ product, handleEditProduc
 
     
    return (
-      <div className="bg-white overflow-y-auto p-5 gap-y-8 flex flex-col font-geist">
+      <div className="bg-white overflow-y-hidden p-8 gap-y-8 flex flex-col font-geist">
          <div className="flex flex-col items-center md:items-start md:flex-row gap-y-5 gap-x-5">
          {/* <AddPhotoInput
                images={form.values.images}

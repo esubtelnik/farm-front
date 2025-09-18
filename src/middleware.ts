@@ -16,6 +16,7 @@ const accessRules: Record<string, string[]> = {
       routes.admin.root,
       routes.admin.lists.producers,
       routes.admin.lists.couriers,
+      routes.admin.readyCarts,
       "/admin/lists/products",
       routes.auth.login,
       routes.auth.register,

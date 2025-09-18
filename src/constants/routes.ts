@@ -52,6 +52,7 @@ const routes = {
    admin: {
       root: "/admin",
       login: "/auth/login/admin",
+      readyCarts: "/admin/ready-carts",
       lists: {
          customers: "/admin/lists/customers",
          producers: "/admin/lists/producers",

@@ -73,7 +73,7 @@ export const Modal: React.FC<ModalProps> = ({
                   }}
                >
                   <motion.div
-                     className={`bg-white max-w-[90%] max-h-[90%] rounded-2xl relative ${size} ${className} pointer-events-auto flex flex-col`}
+                     className={`bg-white max-w-[90%] max-h-[90vh] rounded-2xl relative ${size} ${className} pointer-events-auto flex flex-col`}
                      initial={{ scale: 0.95, opacity: 0 }}
                      animate={{ scale: 1, opacity: 1 }}
                      exit={{ scale: 0.95, opacity: 0 }}

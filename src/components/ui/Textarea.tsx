@@ -22,9 +22,9 @@ const Textarea: FC<TextareaProps> = ({
    onKeyDown,
 }) => {
    return (
-      <div className="relative w-full h-full">
+      <div className="relative w-full">
          <textarea
-            className={`w-full h-full outline-none resize-none border-2 rounded-2xl p-3 text-main-gray placeholder:font-semibold ${error ? "border-red-500 placeholder:text-red-500" : "border-main-gray placeholder:text-main-gray"}`}
+            className={`w-full outline-none resize-none border-2 rounded-2xl p-3 text-main-gray placeholder:font-semibold ${error ? "border-red-500 placeholder:text-red-500" : "border-main-gray placeholder:text-main-gray"}`}
             placeholder={error ? error : placeholder}
             value={value}
             rows={rows}

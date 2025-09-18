@@ -48,7 +48,7 @@ const EditProduct: FC<EditProductProps> = ({ productId }) => {
                isOpen={openModal}
                onClose={() => setOpenModal(false)}
                showCloseButton={true}
-               size="w-[90%] h-fit"
+               className="overflow-y-hidden p-4"
             >
                {isLoading && <Loader />}
                {product && !isLoading && <EditProductModal product={product} handleEditProduct={(payload) => handleEditProduct(payload)} />}

@@ -308,7 +308,7 @@ const AddProductModal: FC<AddProductModalProps> = ({ handleAddProduct }) => {
    };
 
    return (
-      <div className="bg-white overflow-y-auto p-5 gap-y-8 flex flex-col font-geist">
+      <div className="bg-white overflow-y-hidden p-8 gap-y-8 flex flex-col font-geist">
          <div className="flex flex-col items-center md:items-start md:flex-row gap-y-5 gap-x-5">
             <AddPhotoInput
                images={form.values.images}
@@ -398,7 +398,7 @@ const AddProductModal: FC<AddProductModalProps> = ({ handleAddProduct }) => {
                      </svg>
                   </button>
                   {isCategoryDropdownOpen && (
-                     <div className="absolute top-full left-0 mt-1 p-1 md:w-[400px] w-full max-h-[200px] overflow-y-auto border-2 border-main-gray bg-white flex flex-col gap-y-1 shadow-lg/30 z-100 rounded-md">
+                     <div className="absolute top-full left-0 mt-1 p-1 md:w-[400px] w-full max-h-[200px] overflow-y-auto border-2 border-main-gray bg-white flex flex-col gap-y-1 shadow-lg/30 z-[100] rounded-md">
                         {categories.map((category) => {
                            const isChecked = selectedCategories.includes(
                               category.title
@@ -470,7 +470,7 @@ const AddProductModal: FC<AddProductModalProps> = ({ handleAddProduct }) => {
                      </svg>
                   </button>
                   {isMeasureDropdownOpen && (
-                     <div className="absolute top-full left-0 mt-1 p-1 md:w-[200px] w-full max-h-[200px] overflow-y-auto border-2 border-main-gray bg-white flex flex-col gap-y-1 shadow-lg/30 z-100 rounded-md">
+                     <div className="absolute top-full left-0 mt-1 p-1 md:w-[200px] w-full max-h-[200px] overflow-y-auto border-2 border-main-gray bg-white flex flex-col gap-y-1 shadow-lg/30 z-[100] rounded-md">
                         {measures.map((measure) => {
                            const isChecked = selectedMeasure === measure.title;
 

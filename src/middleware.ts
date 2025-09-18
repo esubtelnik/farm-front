@@ -10,7 +10,13 @@ const findByValue = (value: string) =>
    Object.values(UserType).find((u) => u.value === value);
 
 const accessRules: Record<string, string[]> = {
-   [UserType.PRODUCER.value]: [routes.users.profile, "/product"],
+   [UserType.PRODUCER.value]: [
+      routes.users.profile,
+      "/product",
+      routes.auth.login,
+      routes.auth.register,
+      routes.auth.root
+   ],
    [UserType.CUSTOMER.value]: [],
    [UserType.ADMIN.value]: [
       routes.admin.root,
@@ -19,46 +25,53 @@ const accessRules: Record<string, string[]> = {
       routes.admin.readyCarts,
       "/admin/lists/products",
       routes.auth.login,
+      routes.auth.root,
       routes.auth.register,
       routes.auth.admin.login,
       routes.auth.admin.register,
    ],
-   [UserType.COURIER.value]: [routes.users.profile],
+   [UserType.COURIER.value]: [
+      routes.users.profile,
+      routes.auth.login,
+      routes.auth.register,
+      routes.auth.root,
+      routes.auth.root
+   ],
    [UserType.GUEST.value]: [],
 };
 
 export async function middleware(req: NextRequest) {
-    const token = req.cookies.get("token")?.value;
-    const pathname = req.nextUrl.pathname;
-  
-    let userType: UserTypeValue = UserType.GUEST;
-    if (token) {
+   const token = req.cookies.get("token")?.value;
+   const pathname = req.nextUrl.pathname;
+
+   let userType: UserTypeValue = UserType.GUEST;
+   if (token) {
       const res = await fetchApi(getAccountApi(token));
       if (res.success) {
-        userType = findByValue(res.data.account_type) || UserType.GUEST;
+         userType = findByValue(res.data.account_type) || UserType.GUEST;
       }
-    }
-  
-  //  console.log("🔥 Middleware сработал для:", pathname, "Тип:", userType.value);
-  
-    const allowedPaths = accessRules[userType.value] ?? [];
-  
-    if (allowedPaths.length > 0) {
+   }
+
+   //  console.log("🔥 Middleware сработал для:", pathname, "Тип:", userType.value);
+
+   const allowedPaths = accessRules[userType.value] ?? [];
+
+   if (allowedPaths.length > 0) {
       const isAllowed = allowedPaths.some((prefix) =>
-        pathname.startsWith(prefix)
+         pathname.startsWith(prefix)
       );
-  
+
       if (!isAllowed) {
-        const fallback = allowedPaths[0] || "/";
-        return NextResponse.redirect(new URL(fallback, req.url));
+         const fallback = allowedPaths[0] || "/";
+         return NextResponse.redirect(new URL(fallback, req.url));
       }
-    }
-  
-    return NextResponse.next();
-  }
-  
-  export const config = {
-    matcher: [
+   }
+
+   return NextResponse.next();
+}
+
+export const config = {
+   matcher: [
       "/((?!_next|api|.*\\.(?:png|jpg|jpeg|svg|ico|gif|webp|css|js|map)).*)",
-    ],
-  };
+   ],
+};

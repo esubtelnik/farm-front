@@ -217,7 +217,7 @@ const RegistrationPage: FC = () => {
 
    return (
       <div>
-         {!isEmailVerification ? (
+         {isEmailVerification ? (
             <EmailVerification
                setRegisterData={handleCodeVerification}
                errorMessage={verifErrorMessage}

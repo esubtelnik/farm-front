@@ -139,6 +139,7 @@ export const ProductContextProvider = ({
       message?: string;
    }> => {
       try {
+
          const response = await searchProductsApi(payload);
          if (response.successful) {
             return { success: true, products: response.data };

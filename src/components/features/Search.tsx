@@ -82,10 +82,12 @@
            category,
            categoryTitle,
          });
+
+         console.log(params);
        
-         const { success, products, message } = await searchProducts(params);
+
        
-         if (success) {
+        
            if (isCategoryPage) {
              const currentParams = new URLSearchParams(window.location.search); 
          
@@ -104,17 +106,23 @@
              )
              ;
            } else {
-             setSearchedProducts(products);
-             router.push(
-               routes.home.search +
-                 `?title=${title}&priceTo=${priceTo}&deliveryTo=${deliveryTimeTo}&category=${category.join(
-                   ";"
-                 )}`
-             );
+             const currentParams = new URLSearchParams(window.location.search); 
+         
+             currentParams.delete("title");
+             currentParams.delete("priceTo");
+             currentParams.delete("deliveryTo");
+        
+         
+             if (title) currentParams.set("title", title);
+             if (priceTo > 0) currentParams.set("priceTo", priceTo.toString());
+             if (deliveryTimeTo > 0) currentParams.set("deliveryTo", deliveryTimeTo.toString());
+
+             router.replace(
+               `${routes.home.search}?${currentParams.toString()}`, {scroll: false}
+             )
+             ;
            }
-         } else {
-           console.log(message);
-         }
+       
        };
        
        

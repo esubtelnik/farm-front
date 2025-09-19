@@ -167,6 +167,7 @@ const AddProductModal: FC<AddProductModalProps> = ({ handleAddProduct }) => {
          errors: {
             ...prev.errors,
             volume: null,
+            saleVolume: null,
          },
       }));
       setIsMeasureDropdownOpen(false);
@@ -251,24 +252,24 @@ const AddProductModal: FC<AddProductModalProps> = ({ handleAddProduct }) => {
          newErrors.productType = "Выберите категорию";
       }
 
-      if (!form.values.description) {
-         newErrors.description = "Введите описание товара";
-      }
+      // if (!form.values.description) {
+      //    newErrors.description = "Введите описание товара";
+      // }
 
-      if (!form.values.composition) {
-         newErrors.composition = "Введите состав товара";
-      }
+      // if (!form.values.composition) {
+      //    newErrors.composition = "Введите состав товара";
+      // }
 
-      if (!form.values.storageConditions) {
-         newErrors.storageConditions = "Введите условия хранения";
-      }
+      // if (!form.values.storageConditions) {
+      //    newErrors.storageConditions = "Введите условия хранения";
+      // }
 
-      if (!form.values.package) {
-         newErrors.package = "Введите упаковку";
-      }
+      // if (!form.values.package) {
+      //    newErrors.package = "Введите упаковку";
+      // }
 
       if (!form.values.saleVolume) {
-         newErrors.saleVolume = "Введите размер одной продажи";
+         newErrors.saleVolume = "Введите";
       }
 
       if (!form.values.unit) {
@@ -299,24 +300,39 @@ const AddProductModal: FC<AddProductModalProps> = ({ handleAddProduct }) => {
    const handleSubmit = async (e: React.FormEvent) => {
       e.preventDefault();
       const hasErrors = validateForm();
-      console.log(hasErrors);
 
       if (hasErrors) return;
+
+      if (!form.values.description) {
+         form.values.description = "-";
+      }
+
+      if (!form.values.composition) {
+         form.values.composition = "-";
+      }
+
+      if (!form.values.storageConditions) {
+         form.values.storageConditions = "-";
+      }
+
+      if (!form.values.package) {
+         form.values.package = "-";
+      }
 
 
       await handleAddProduct(form.values as CreateProductRequest);
    };
 
    return (
-      <div className="bg-white overflow-y-hidden p-8 gap-y-8 flex flex-col font-geist">
-         <div className="flex flex-col items-center md:items-start md:flex-row gap-y-5 gap-x-5">
+      <div className="bg-white w-full overflow-y-hidden p-8 gap-y-8 flex flex-col font-geist">
+         <div className="flex flex-col items-center lg:items-start lg:flex-row gap-y-5 gap-x-5">
             <AddPhotoInput
                images={form.values.images}
                error={form.errors.images}
                onChange={(files) => handleChange("images", files)}
                isEditable
             />
-            <div className="flex flex-col items-center gap-y-2 md:w-1/3 w-full">
+            <div className="flex flex-col items-center gap-y-2 lg:w-1/3 w-full">
                <div
                   className={`w-full flex items-center gap-x-2 px-2 outline-none border-2 rounded-md ${
                      form.errors.title
@@ -495,9 +511,9 @@ const AddProductModal: FC<AddProductModalProps> = ({ handleAddProduct }) => {
                   )}
                </div>
             </div>
-            <div className="flex flex-col items-center gap-y-4 ">
+            <div className="flex flex-col items-center gap-y-4 w-full ">
                <div
-                  className={`border-2 flex flex-col md:flex-row items-center gap-x-4 rounded-xl p-2 ${
+                  className={`border-2 flex w-full flex-col justify-between md:flex-row items-center gap-x-4 rounded-xl p-2 ${
                      form.errors.volume ? "border-red-500" : "border-main-gray"
                   }`}
                >
@@ -563,13 +579,13 @@ const AddProductModal: FC<AddProductModalProps> = ({ handleAddProduct }) => {
                   </div>
                </div>
                <div
-                  className={`border-2 flex flex-col justify-between md:flex-row w-full items-center gap-x-4 rounded-xl p-2 ${
-                     form.errors.volume ? "border-red-500" : "border-main-gray"
+                  className={`border-2 w-full flex flex-col justify-between md:flex-row items-center gap-x-4 rounded-xl p-2 ${
+                     form.errors.saleVolume ? "border-red-500" : "border-main-gray"
                   }`}
                >
                   <span
                      className={`font-semibold md:text-lg text-sm text-left w-full ${
-                        form.errors.volume ? "text-red-500" : "text-main-gray"
+                        form.errors.saleVolume ? "text-red-500" : "text-main-gray"
                      }`}
                   >
                      Размер одной продажи

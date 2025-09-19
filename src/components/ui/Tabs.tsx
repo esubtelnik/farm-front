@@ -1,6 +1,4 @@
-"use client";
-import { FC, ReactNode, useState } from "react";
-import { observer } from "mobx-react-lite";
+import { forwardRef, useImperativeHandle, useState, ReactNode, useRef } from "react";
 
 interface TabItem {
   label: string;
@@ -12,8 +10,25 @@ interface TabsProps {
   tabs: TabItem[];
 }
 
-const Tabs: FC<TabsProps> = observer(({ tabs }) => {
+export interface TabsHandle {
+  goToTab: (index: number) => void;
+}
+
+const Tabs = forwardRef<TabsHandle, TabsProps>(({ tabs }, ref) => {
   const [activeTab, setActiveTab] = useState(0);
+  const buttonsRef = useRef<(HTMLButtonElement | null)[]>([]);
+
+  useImperativeHandle(ref, () => ({
+    goToTab: (index: number) => {
+      setActiveTab(index);
+
+      // прокрутка по X к активной кнопке
+      const btn = buttonsRef.current[index];
+      if (btn) {
+        btn.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
+      }
+    },
+  }));
 
   const greenTabs = tabs.filter(tab => !tab.isGray);
   const grayTabs = tabs.filter(tab => tab.isGray);
@@ -22,12 +37,16 @@ const Tabs: FC<TabsProps> = observer(({ tabs }) => {
     <div className="w-full">
       <div className="flex overflow-x-auto hide-scrollbar justify-between border-b-4 border-main-green md:px-7 w-full">
         <div className="flex">
-          {greenTabs.map((tab) => {
+          {greenTabs.map(tab => {
             const originalIndex = tabs.indexOf(tab);
             const isActive = originalIndex === activeTab;
             return (
               <button
                 key={originalIndex}
+                ref={el => {
+                  buttonsRef.current[originalIndex] = el;
+                }}
+                
                 onClick={() => setActiveTab(originalIndex)}
                 className={`cursor-pointer text-sm md:text-base py-2 px-6 font-semibold transition-colors border-t-2 border-r-2 border-l-2 border-main-green rounded-t-2xl ${
                   isActive ? "bg-main-green text-white" : "text-main-green"
@@ -40,12 +59,16 @@ const Tabs: FC<TabsProps> = observer(({ tabs }) => {
         </div>
 
         <div className="flex">
-          {grayTabs.map((tab) => {
+          {grayTabs.map(tab => {
             const originalIndex = tabs.indexOf(tab);
             const isActive = originalIndex === activeTab;
             return (
               <button
                 key={originalIndex}
+                ref={el => {
+                  buttonsRef.current[originalIndex] = el;
+                }}
+                
                 onClick={() => setActiveTab(originalIndex)}
                 className={`cursor-pointer py-2 px-6 text-sm md:text-base font-semibold transition-colors border-t-2 border-r-2 border-l-2 border-main-gray rounded-t-2xl ${
                   isActive ? "bg-main-gray text-white" : "text-main-gray"
@@ -61,5 +84,7 @@ const Tabs: FC<TabsProps> = observer(({ tabs }) => {
     </div>
   );
 });
+
+Tabs.displayName = "Tabs";
 
 export default Tabs;

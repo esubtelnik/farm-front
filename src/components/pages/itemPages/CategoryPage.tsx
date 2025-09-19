@@ -6,7 +6,7 @@ import Title from "@/components/ui/Title";
 import Hr from "@/components/ui/Hr";
 //import Search from "@/components/ui/Search";
 import { ICategory, IProductCard } from "@/types/entities/Product";
-import { useParams, useSearchParams } from "next/navigation";
+import { useParams } from "next/navigation";
 import Image from "next/image";
 import Search from "@/components/features/Search";
 interface CategoryPageProps {
@@ -22,11 +22,11 @@ const CategoryPage: FC<CategoryPageProps> = ({
 }) => {
    // const [products, setProducts] = useState<IProductCard[]>([]);
    // const [isLoading, setIsLoading] = useState(false);
-   console.log(products);
+
 
    const params = useParams();
-   const searchParams = useSearchParams();
-   const imageUrl = searchParams.get("image");
+   //const searchParams = useSearchParams();
+   //const imageUrl = searchParams.get("image");
    const categoryTitle = decodeURIComponent(params.slug as string);
 
    return (
@@ -34,10 +34,9 @@ const CategoryPage: FC<CategoryPageProps> = ({
        <div className="relative w-full aspect-[3/1] md:aspect-[4/1] bg-gradient-to-r from-dark-green to-main-green">
             <Image
                className="object-cover"
-               src={`${process.env.NEXT_PUBLIC_IMAGE_URL}${imageUrl}`}
+               src={`${process.env.NEXT_PUBLIC_IMAGE_URL}${category.paths[1]}`}
                alt="Баннер"
                fill
-               unoptimized
             />
          </div>
 

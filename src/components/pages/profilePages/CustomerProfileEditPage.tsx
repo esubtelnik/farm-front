@@ -108,7 +108,7 @@ const CustomerProfileEditPage: FC = () => {
       if (result.success) {
          router.push(routes.users.profile);
       } else {
-         console.log("Ошибка при обновлении данных:", result.message);
+         console.error("Ошибка при обновлении данных:", result.message);
       }
    };
 

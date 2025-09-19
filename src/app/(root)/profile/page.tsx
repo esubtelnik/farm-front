@@ -13,11 +13,9 @@ export default async function Profile() {
    let userType: number = UserType.GUEST.type;
 
    if (token) {
-      console.log("token", token);
       try {
          const res = await fetchApi(getAccountApi(token));
          if (res.success) {
-            console.log("Аккаунт:", res.data);
             const foundType = Object.values(UserType).find(
                 (t) => t.value === res.data.account_type
              ) || UserType.GUEST;

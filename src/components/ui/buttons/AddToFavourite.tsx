@@ -5,7 +5,8 @@ import { UserType } from "@/constants/UserTypeEnum";
 import { useStores } from "@/hooks/useStores";
 import { IProductCard } from "@/types/entities/Product";
 import { Modal } from "@/components/ui/modals/Modal";
-import LoginModal from "../modals/modalContents/LoginModal";
+import LoginModal from "@/components/ui/modals/modalContents/LoginModal";
+import Toast from "@/components/ui/Toast";
 
 
 interface AddToFavouriteProps {
@@ -14,10 +15,10 @@ interface AddToFavouriteProps {
    onToggle: (newState: boolean) => void;
 }
 
-const AddToFavourite: FC<AddToFavouriteProps> = ({ isInFavourites, product }) => {
+const AddToFavourite: FC<AddToFavouriteProps> = ({ isInFavourites, product, onToggle }) => {
   const { userType } = useAuthContext();
   const { customerStore } = useStores();
-
+  const [toast, setToast] = useState<{ message: string; type: "success" | "error" | "warning" | "info" } | null>(null);
   const [openModal, setOpenModal] = useState(false);
 
   const handleAddToFavourites = async (e: React.MouseEvent<HTMLButtonElement>) => {
@@ -25,8 +26,12 @@ const AddToFavourite: FC<AddToFavouriteProps> = ({ isInFavourites, product }) =>
     if (userType === UserType.CUSTOMER) {
       if (isInFavourites) {
         await customerStore.removeFromFavourites({ productId: product.id });
+        onToggle(false);
+        setToast({ message: "Продукт успешно удален из избранного", type: "info" });
       } else {
         await customerStore.addToFavourites(product);
+        onToggle(true);
+        setToast({ message: "Продукт успешно добавлен в избранное", type: "success" });
       }
     } else {
       setOpenModal(true);
@@ -35,6 +40,9 @@ const AddToFavourite: FC<AddToFavouriteProps> = ({ isInFavourites, product }) =>
 
    return (
       <>
+         {toast && (
+            <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />
+         )}
          {openModal && (
             <Modal
                isOpen={openModal}

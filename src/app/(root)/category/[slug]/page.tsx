@@ -22,7 +22,6 @@ export default async function Category({
    const resCategory = await fetchApi(
       getCategoryByTitleApi({ title: decodedSlug }, token)
    );
-   console.log(resCategory.data);
 
    const res = await fetchApi(
       searchProductsApi(

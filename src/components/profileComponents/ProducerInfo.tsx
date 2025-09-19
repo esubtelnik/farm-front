@@ -10,7 +10,11 @@ import Image from "next/image";
 import { activityTypes } from "@/constants/constants";
 import SaveChanges from "../ui/buttons/SaveChanges";
 
-const ProducerInfo: FC = observer(() => {
+interface ProducerInfoProps {
+   goToReviews: () => void;
+}
+
+const ProducerInfo: FC<ProducerInfoProps> = observer(({ goToReviews }) => {
    const { producerStore } = useStores();
    const { getCategories } = useProductContext();
 
@@ -197,7 +201,7 @@ const ProducerInfo: FC = observer(() => {
                         <Image
                            alt={profile?.title ?? "avatar"}
                            fill
-                           src="/image.png"
+                           src={`${process.env.NEXT_PUBLIC_IMAGE_URL}${profile?.image}`}
                            className="object-cover rounded-md"
                            onLoad={() => setImageLoaded(true)}
                         />
@@ -439,7 +443,7 @@ const ProducerInfo: FC = observer(() => {
                      </div>
                      <span className="flex items-center gap-x-2">
                         <ReviewStars size="large" rating={profile.feedbackAv ?? 0} />
-                        <span className="text-main-gray text-sm">Отзывы</span>
+                        <button onClick={goToReviews} className="text-main-gray text-sm cursor-pointer">Отзывы</button>
                      </span>
                      <div className="text-main-gray flex flex-col flex-grow min-h-0">
                         {isDescriptionEditable ? (
@@ -467,6 +471,14 @@ const ProducerInfo: FC = observer(() => {
                                  onChange={(e) =>
                                     setDescription(e.target.value)
                                  }
+                                 onBlur={(e) => {
+                                    if (
+                                       !e.currentTarget.contains(e.relatedTarget)
+                                    ) {
+                                       setIsDescriptionEditable(false);
+                                       setDescription(profile?.description);
+                                    }
+                                 }}
                                  onKeyDown={(e) => {
                                     if (e.key === "Escape") {
                                        setIsDescriptionEditable(false);
@@ -491,6 +503,7 @@ const ProducerInfo: FC = observer(() => {
                                        ? "Укажите описание"
                                        : ""
                                  }
+                                 
                                  value={profile?.description}
                                  readOnly
                               />
@@ -498,6 +511,7 @@ const ProducerInfo: FC = observer(() => {
                                  className="cursor-pointer text-main-gray flex items-start outline-none"
                                  onClick={() => {
                                     setIsDescriptionEditable(true);
+
                                  }}
                               >
                                  <svg

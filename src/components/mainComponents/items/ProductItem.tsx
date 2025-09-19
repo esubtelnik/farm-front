@@ -11,6 +11,7 @@ import { useRouter } from "next/navigation";
 import ReviewStars from "@/components/ui/ReviewStars";
 import routes from "@/constants/routes";
 import EditProduct from "@/components/ui/buttons/EditProduct";
+import DeleteProduct from "@/components/ui/buttons/DeleteProduct";
 
 interface ProductItemProps {
    product: IProductCard;
@@ -59,7 +60,12 @@ const ProductItem: FC<ProductItemProps> = observer(
                         }}
                      />
                   )}
-                  {isEditable && <EditProduct productId={product.id} />}
+                  {isEditable && (
+                     <div className="flex flex-col gap-y-2">
+                        <EditProduct productId={product.id} />
+                        <DeleteProduct productId={product.id} />
+                     </div>
+                  )}
                </div>
             </div>
             <div className="flex flex-col w-full border-main-green border-b-2 border-r-2 border-l-2 rounded-bl-2xl rounded-br-2xl p-3 gap-y-1 relative">
@@ -74,7 +80,7 @@ const ProductItem: FC<ProductItemProps> = observer(
                      textOverflow: "ellipsis",
                   }}
                >
-                 {product.title}
+                  {product.title}
                </span>
                <span className="text-main-gray/70 lg:text-base md:text-sm text-xs truncate block w-full">
                   От <span className="hidden md:inline">фермера: </span>{" "}
@@ -88,7 +94,7 @@ const ProductItem: FC<ProductItemProps> = observer(
                </div>
                <div className="text-main-gray md:text-base text-xs">
                   {product.price} р.{" "}
-                  <span className="text-main-gray/70 md:text-base text-[10px]"> 
+                  <span className="text-main-gray/70 md:text-base text-[10px]">
                      /{product.saleVolume} {product.unit}
                   </span>
                </div>

@@ -208,19 +208,15 @@ export default async function RootLayout({
    children: React.ReactNode;
 }>) {
    const token = (await cookies()).get("token")?.value;
-   console.log("token", token);
    let userType = "guest";
 
    if (token) {
-      console.log("token", token);
       try {
          const res = await fetchApi(getAccountApi(token));
          if (res.success) {
-            console.log("Аккаунт:", res.data);
             userType = res.data.account_type.toString();
          } else {
             userType = "guest";
-            console.error("Ошибка:", res.message);
          }
       } catch (e) {
          console.error("Ошибка получения аккаунта:", e);

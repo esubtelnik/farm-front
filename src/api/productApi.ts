@@ -8,8 +8,12 @@ import {
    AddReviewRequest,
    GetCategoryByTitleRequest,
    UpdateProductRequest,
+   DeleteProductRequest,
 } from "@/types/requests/ProductRequests";
-import { CreateProductResponse, UpdateProductResponse } from "@/types/responses/ProductResponses";
+import {
+   CreateProductResponse,
+   UpdateProductResponse,
+} from "@/types/responses/ProductResponses";
 import { ApiClient } from "@/lib/apiClient";
 import { ApiResponse } from "@/types/ApiResponse";
 
@@ -37,7 +41,7 @@ export const createProductApi = async (
    token?: string
 ): Promise<ApiResponse<CreateProductResponse>> => {
    const formData = new FormData();
-   
+
    formData.append("title", payload.title);
    formData.append("price", String(payload.price));
    formData.append("productType", payload.productType);
@@ -50,35 +54,43 @@ export const createProductApi = async (
    formData.append("saleVolume", String(payload.saleVolume));
    formData.append("unit", payload.unit);
    formData.append("delivery", String(payload.delivery));
- 
-  
+
    if (payload.images && payload.images.length > 0) {
-     payload.images.forEach((file) => {
-       formData.append("images", file); 
-     });
+      payload.images.forEach((file) => {
+         formData.append("images", file);
+      });
    }
-   console.log(formData);
- 
-   return await ApiClient.post<
-      FormData,
-      ApiResponse<CreateProductResponse>
-   >("/api/product/create", formData, token, {
-      headers: {
-         "Content-Type": "multipart/form-data",
-      },
-   });
+
+   return await ApiClient.post<FormData, ApiResponse<CreateProductResponse>>(
+      "/api/product/create",
+      formData,
+      token,
+      {
+         headers: {
+            "Content-Type": "multipart/form-data",
+         },
+      }
+   );
 };
 
+export const deleteProductApi = async (
+   payload: DeleteProductRequest,
+   token?: string
+): Promise<ApiResponse<string>> => {
+   return await ApiClient.delete<DeleteProductRequest, ApiResponse<string>>(
+      "/api/product",
+      payload,
+      token
+   );
+};
 
-export const   updateProductApi = async (
+export const updateProductApi = async (
    payload: UpdateProductRequest,
    productId: string,
    token?: string
 ): Promise<ApiResponse<UpdateProductResponse>> => {
    const formData = new FormData();
 
-   console.log(payload);
-   
    Object.entries(payload).forEach(([key, value]) => {
       if (value !== undefined && value !== null) {
          if (key === "images" && Array.isArray(value)) {
@@ -88,17 +100,17 @@ export const   updateProductApi = async (
          }
       }
    });
-  
 
- 
-   return await ApiClient.patch<
-      FormData,
-      ApiResponse<UpdateProductResponse>
-   >("/api/product/update?productId=" + productId,  formData, token, {
-      headers: {
-         "Content-Type": "multipart/form-data",
-      },
-   });
+   return await ApiClient.patch<FormData, ApiResponse<UpdateProductResponse>>(
+      "/api/product/update?productId=" + productId,
+      formData,
+      token,
+      {
+         headers: {
+            "Content-Type": "multipart/form-data",
+         },
+      }
+   );
 };
 
 export const getProductsByProducerIdApi = async (

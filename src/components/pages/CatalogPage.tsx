@@ -6,6 +6,8 @@ import Title from "@/components/ui/Title";
 import CategoryList from "@/components/mainComponents/lists/CategoryList";
 //import { useProductContext } from "@/context/ProductContext";
 import { ICategory } from "@/types/entities/Product";
+import Search from "../features/Search";
+
 
 interface CatalogPageProps {
    categories: ICategory[];
@@ -46,7 +48,7 @@ const CatalogPage: FC<CatalogPageProps> = ({ categories }) => {
          <Hr />
          <div className="flex md:pr-12 mb-5">
             <Title title="Каталог" />
-               {/* <Search isCatalogPage={true} /> */}
+               <Search isCatalogPage={true} />
             </div>
             <CategoryList categories={categories} />
       </div>

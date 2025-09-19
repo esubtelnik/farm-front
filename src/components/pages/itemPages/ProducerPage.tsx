@@ -1,8 +1,8 @@
 "use client";
-import { FC, useState } from "react";
+import { FC, useRef, useState } from "react";
 
 import ProductList from "@/components/mainComponents/lists/ProductList";
-import Tabs from "@/components/ui/Tabs";
+import Tabs, { TabsHandle } from "@/components/ui/Tabs";
 import ReviewList from "@/components/mainComponents/lists/ReviewList";
 import GalleryList from "@/components/mainComponents/lists/GalleryList";
 import ProducerInfoCustomerView from "@/components/profileComponents/ProducerInfoCustomerView";
@@ -25,9 +25,9 @@ interface ProducerPageProps {
 
 const ProducerPage: FC<ProducerPageProps> = ({ producer, products, gallery, certificates, isLoading = false }) => {
 
-   const [producerData, setProducerData] = useState<IProducer | null>(producer);
+   const [producerData, setProducerData] = useState<IProducer>(producer);
    const [isReviewLoading, setIsReviewLoading] = useState(false);
-
+   const tabsRef = useRef<TabsHandle>(null);
    const handleAddReview = async (
       rating: number,
       comment: string
@@ -120,8 +120,8 @@ const ProducerPage: FC<ProducerPageProps> = ({ producer, products, gallery, cert
    ];
    return (
       <div className="min-h-screen font-geist">
-         <ProducerInfoCustomerView producer={producerData} isLoading={isLoading} />
-         <Tabs tabs={tabItems} />
+         <ProducerInfoCustomerView goToReviews={() => tabsRef.current?.goToTab(3)} producer={producerData} isLoading={isLoading} />
+         <Tabs tabs={tabItems} ref={tabsRef} />
       </div>
    );
 };

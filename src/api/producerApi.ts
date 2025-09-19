@@ -45,7 +45,6 @@ export const updateProducerApi = async (
   payload: ProducerUpdateRequest,
   token?: string
 ): Promise<ApiResponse<ProducerResponse>> => {
-  console.log("payload", payload);
   return await ApiClient.patch<
     ProducerUpdateRequest,
     ApiResponse<ProducerResponse>

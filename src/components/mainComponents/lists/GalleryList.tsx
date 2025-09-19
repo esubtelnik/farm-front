@@ -17,7 +17,7 @@ const GalleryList: FC<GalleryListProps> = ({
    isEditable = false,
    isLoading,
    onAddPhoto,
-   onDeletePhoto
+   onDeletePhoto,
 }) => {
    const [loading, setLoading] = useState(isLoading || false);
    const [photoAmount, setPhotoAmount] = useState(images.length);
@@ -32,7 +32,6 @@ const GalleryList: FC<GalleryListProps> = ({
 
    const handleAddPhoto = async (image: File) => {
       setPhotoAmount(photoAmount + 1);
-      console.log("image", image);
       setLoading(true);
       await onAddPhoto?.(image);
       setLoading(false);
@@ -49,7 +48,7 @@ const GalleryList: FC<GalleryListProps> = ({
       return (
          <>
             {isEditable ? (
-               <AddPhoto size={'md:size-64 size-36'} onClick={handleAddPhoto} />
+               <AddPhoto size={"md:size-64 size-36"} onClick={handleAddPhoto} />
             ) : (
                <div className="flex flex-col items-center justify-center h-full">
                   <p className="text-gray-500">Нет изображений</p>
@@ -60,16 +59,26 @@ const GalleryList: FC<GalleryListProps> = ({
    }
 
    return (
-      <div className="grid md:grid-cols-5 grid-cols-2 justify-items-center md:gap-5 gap-4">
-         {loading ?
-            Array.from({ length: photoAmount }).map((_, index) => (
-               <Skeleton key={index} className="md:size-64 size-36 rounded-md" />
-            ))
-         :
-            images.map((image) => (
-               <GalleryItem key={image} isEditable={isEditable} image={image} isLoading={loading} onDeletePhoto={handleDeletePhoto} />
-            ))}
-         {isEditable && <AddPhoto size={'md:size-64 size-36'} onClick={handleAddPhoto} />}
+      <div className="grid lg:grid-cols-4 md:grid-cols-3 grid-cols-2 justify-items-center md:gap-8 gap-4">
+         {loading
+            ? Array.from({ length: photoAmount }).map((_, index) => (
+                 <Skeleton
+                    key={index}
+                    className="w-full h-full rounded-md"
+                 />
+              ))
+            : images.map((image) => (
+                 <GalleryItem
+                    key={image}
+                    isEditable={isEditable}
+                    image={image}
+                    isLoading={loading}
+                    onDeletePhoto={handleDeletePhoto}
+                 />
+              ))}
+         {isEditable && (
+            <AddPhoto size={"w-full h-full"} onClick={handleAddPhoto} />
+         )}
       </div>
    );
 };

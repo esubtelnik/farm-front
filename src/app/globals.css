@@ -11,10 +11,6 @@
    --text-xxs: 10px;
 }
 
-html {
-  scroll-behavior: smooth;
-}
-
 button {
   @apply cursor-pointer;
 }

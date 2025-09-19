@@ -191,14 +191,14 @@ export const AuthContextProvider = ({
          setCookie("token", response.data.token, {
             expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
             secure: true,
-            httpOnly: false,
-            sameSite: "strict",
+            sameSite: "lax",
+            path: "/",
          });
          setUserType(UserType.CUSTOMER);
 
          return { success: true };
       } else {
-         console.log("Ошибка входа:", response.message);
+         console.error("Ошибка входа:", response.message);
          return { success: false, message: response.message };
       }
    };
@@ -209,16 +209,17 @@ export const AuthContextProvider = ({
       const response = await fetchApi(loginProducerApi(loginData));
 
       if (response.success) {
-         console.log("Успешный вход!", response.data);
+
          setCookie("token", response.data.token, {
             expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
             secure: true,
-            sameSite: "strict",
+            sameSite: "lax",
+            path: "/",
          });
          setUserType(UserType.PRODUCER);
          return { success: true };
       } else {
-         console.log("Ошибка входа:", response.message);
+         console.error("Ошибка входа:", response.message);
          return { success: false, message: response.message };
       }
    };
@@ -228,16 +229,16 @@ export const AuthContextProvider = ({
    ): Promise<{ success: boolean; message?: string }> => {
       const response = await fetchApi(loginCourierApi(loginData));
       if (response.success) {
-         console.log("Успешный вход!", response.data);
          setCookie("token", response.data.token, {
             expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
             secure: true,
-            sameSite: "strict",
+            sameSite: "lax",
+            path: "/",
          });
          setUserType(UserType.COURIER);
          return { success: true };
       } else {
-         console.log("Ошибка входа:", response.message);
+         console.error("Ошибка входа:", response.message);
          return { success: false, message: response.message };
       }
    };
@@ -247,16 +248,16 @@ export const AuthContextProvider = ({
    ): Promise<{ success: boolean; message?: string }> => {
       const response = await fetchApi(loginAdminApi(loginData));
       if (response.success) {
-         console.log("Успешный вход!", response.data);
          setCookie("token", response.data.token, {
             expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
             secure: true,
-            sameSite: "strict",
+            sameSite: "lax",
+            path: "/",
          });
          setUserType(UserType.ADMIN);
          return { success: true };
       } else {
-         console.log("Ошибка входа:", response.message);
+         console.error("Ошибка входа:", response.message);
          return { success: false, message: response.message };
       }
    };
@@ -266,11 +267,11 @@ export const AuthContextProvider = ({
    ): Promise<{ success: boolean; message?: string }> => {
       const response = await fetchApi(registerCustomerApi(registerData));
       if (response.success) {
-         console.log("Успешный вход!", response.data);
          setCookie("token", response.data.token, {
             expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
             secure: true,
-            sameSite: "strict",
+            sameSite: "lax",
+            path: "/",
          });
          setUserType(UserType.CUSTOMER);
          return { success: true };
@@ -284,17 +285,17 @@ export const AuthContextProvider = ({
       registerData: ProducerRegisterRequest
    ): Promise<{ success: boolean; message?: string }> => {
       const response = await fetchApi(registerProducerApi(registerData));
-      if (response.success) {
-         console.log("Успешный вход!", response.data);
+      if (response.success) { 
          setCookie("token", response.data.token, {
             expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
             secure: true,
-            sameSite: "strict",
+            sameSite: "lax",
+            path: "/",
          });
          setUserType(UserType.PRODUCER);
          return { success: true };
       } else {
-         console.log("Ошибка входа:", response.message);
+         console.error("Ошибка входа:", response.message);
          return { success: false, message: response.message };
       }
    };
@@ -304,16 +305,16 @@ export const AuthContextProvider = ({
    ): Promise<{ success: boolean; message?: string }> => {
       const response = await fetchApi(registerCourierApi(registerData));
       if (response.success) {
-         console.log("Успешный вход!", response.data);
          setCookie("token", response.data.token, {
             expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
             secure: true,
-            sameSite: "strict",
+            sameSite: "lax",
+            path: "/",
          });
          setUserType(UserType.COURIER);
          return { success: true };
       } else {
-         console.log("Ошибка входа:", response.message);
+         console.error("Ошибка входа:", response.message);
          return { success: false, message: response.message };
       }
    };
@@ -342,7 +343,7 @@ export const AuthContextProvider = ({
       if (response.success) {
          return { success: true };
       } else {
-         console.log("Ошибка входа:", response.message);
+         console.error("Ошибка входа:", response.message);
          return { success: false, message: response.message };
       }
    };
@@ -354,7 +355,7 @@ export const AuthContextProvider = ({
       if (response.success) {
          return { success: true };
       } else {
-         console.log("Ошибка входа:", response.message);
+         console.error("Ошибка входа:", response.message);
          return { success: false, message: response.message };
       }
    };
@@ -366,7 +367,7 @@ export const AuthContextProvider = ({
       if (response.success) {
          return { success: true };
       } else {
-         console.log("Ошибка входа:", response.message);
+         console.error("Ошибка входа:", response.message);
          return { success: false, message: response.message };
       }
    };
@@ -376,11 +377,10 @@ export const AuthContextProvider = ({
    ): Promise<{ success: boolean; message?: string }> => {
       const response = await fetchApi(updateCustomerApi(data));
       if (response.success) {
-         console.log("Успешно!", response.data);
 
          return { success: true };
       } else {
-         console.log("Ошибка:", response.message);
+         console.error("Ошибка:", response.message);
          return { success: false, message: response.message };
       }
    };

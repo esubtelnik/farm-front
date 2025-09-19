@@ -16,17 +16,13 @@ interface SearchPageProps {
 export default async function Search({ searchParams }: SearchPageProps) {
     const token = (await cookies()).get("token")?.value;
 
-    console.log((await searchParams))
-
    const params: SearchProductsRequest = {
     title: (await searchParams).title || "",
     priceTo: Number((await searchParams).priceTo),
-    deliveryTo: Number((await searchParams).deliveryTo),
+   //  deliveryTo: Number((await searchParams).deliveryTo),
     
     category: (await searchParams).category?.trim() ? (await searchParams).category?.split(";") : [],
   };
-
-   console.log(params);
 
    const response = await fetchApi(searchProductsApi(params, token));
    const searchedProducts = response.success ? response.data : [];

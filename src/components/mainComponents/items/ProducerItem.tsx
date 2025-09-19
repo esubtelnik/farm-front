@@ -5,6 +5,7 @@ import ReviewStars from "@/components/ui/ReviewStars";
 import NextArrow from "@/components/ui/NextArrow";
 import { IProducer, IProducerCard } from "@/types/entities/User";
 import routes from "@/constants/routes";
+import Link from "next/link";
 
 interface ProducerItemProps {
    producer: IProducerCard | IProducer;
@@ -31,9 +32,11 @@ const ProducerItem: FC<ProducerItemProps> = ({
    producer,
 }) => {
    return (
-      <div
+      <Link
          className={`${styles[styleType].card} bg-white rounded-xl md:shadow-lg/20 shadow-sm/20 border border-main-gray/20 overflow-hidden cursor-pointer relative`}
+      href={`${routes.items.producer(producer.id)}`}
       >
+      
          <div
             className={`relative ${styles[styleType].image} overflow-hidden rounded-xl`}
          >
@@ -77,7 +80,8 @@ const ProducerItem: FC<ProducerItemProps> = ({
                <NextArrow route={`${routes.items.producer(producer.id)}`} />
             </div>
          </div>
-      </div>
+         </Link>
+
    );
 };
 

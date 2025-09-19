@@ -10,6 +10,8 @@ import { UserTypeValue } from "@/types/entities/User";
 import { UserType } from "@/constants/UserTypeEnum";
 import { useRouter } from "next/navigation";
 import routes from "@/constants/routes";
+import LogOut from "../ui/buttons/LogOut";
+import { useStores } from "@/hooks/useStores";
 
 const AccountButton: FC<{
    onClick: () => void;
@@ -18,7 +20,7 @@ const AccountButton: FC<{
 }> = ({ onClick, label, className = "" }) => (
    <button
       onClick={onClick}
-      className={`flex font-semibold text-sm gap-x-3 items-center text-main-green bg-white rounded-full py-2 px-4 hover:drop-shadow-md hover:shadow-md ${className}`}
+      className={`flex font-semibold md:text-sm text-xs md:gap-x-3 gap-x-1 items-center text-main-green bg-white rounded-full py-2 md:px-4 px-2 hover:drop-shadow-md hover:shadow-md ${className}`}
    >
       <span>{label}</span>
       <UserCircleIcon className="w-full h-full" />
@@ -31,7 +33,7 @@ const CartButton: FC<{ onClick?: () => void; className?: string }> = ({
 }) => (
    <button
       onClick={onClick}
-      className={`border-2 border-white hover:border-4 transition-all rounded-full p-1 text-white size-12 ${className}`}
+      className={`border-2 border-white hover:border-4 transition-all rounded-full p-1 text-white md:size-12 size-10 ${className}`}
    >
       <Cart className="w-full h-full" />
    </button>
@@ -45,6 +47,9 @@ const Navbar: FC<{
    const router = useRouter();
    // const isUserDataReady = !isUserTypeLoading && userType !== null;
    const isGuest = userType === UserType.GUEST;
+
+   const { adminStore, producerStore, courierStore, customerStore } =
+      useStores();
 
    useEffect(() => {
       if (isMenuOpen) {
@@ -117,16 +122,20 @@ const Navbar: FC<{
    const handleLogout = () => {
       switch (userType.type) {
          case UserType.CUSTOMER.type:
+            customerStore.logout();
             router.push(routes.auth.login);
             break;
          case UserType.PRODUCER.type:
+            producerStore.logout();
             router.push(routes.auth.login);
             break;
          case UserType.COURIER.type:
+            courierStore.logout();
             router.push(routes.auth.login);
             break;
          case UserType.ADMIN.type:
-            router.push(routes.auth.login);
+            adminStore.logout();
+            router.push(routes.auth.admin.login);
             break;
          default:
             break;
@@ -135,7 +144,7 @@ const Navbar: FC<{
 
    return (
       <>
-         <nav className="sticky top-0 z-20 flex w-full items-center justify-between bg-main-green shadow-md dark:bg-dark h-18 py-3 px-4 md:px-20 font-geist">
+         <nav className="sticky top-0 z-20 flex w-full items-center justify-between bg-main-green shadow-md dark:bg-dark h-18 py-3 sm:px-4 px-2 md:px-20 font-geist">
             <div className="h-full order-2 lg:order-0 flex items-center gap-x-3">
                {userType.type === UserType.ADMIN.type && (
                   <button onClick={() => router.back()}>
@@ -163,7 +172,7 @@ const Navbar: FC<{
                </button>
             </div>
 
-            {/* {isUserDataReady && ( */}
+            {/* Десктопное меню */}
             <>
                <div className="hidden lg:flex gap-x-5 items-center">
                   {userType.type !== UserType.PRODUCER.type &&
@@ -180,7 +189,17 @@ const Navbar: FC<{
                         />
                      </>
                   ) : (
-                     <AccountButton onClick={handleAccount} label="ПРОФИЛЬ" />
+                     <>
+                        <AccountButton
+                           onClick={handleAccount}
+                           label="ПРОФИЛЬ"
+                        />
+                        <LogOut
+                              onClick={() => {
+                                 handleLogout();
+                           }}
+                        />
+                     </>
                   )}
                </div>
 
@@ -208,11 +227,14 @@ const Navbar: FC<{
                      </svg>
                   </button>
                ) : (
-                  <AccountButton
-                     onClick={handleAccount}
-                     label="ПРОФИЛЬ"
-                     className="md:hidden md:order-0 order-2 self-start"
-                  />
+                  <div className="flex lg:hidden order-2 self-start md:gap-x-2 gap-x-1 items-center">
+                     <AccountButton onClick={handleAccount} label="ПРОФИЛЬ" />
+                     <LogOut
+                        onClick={() => {
+                           console.log("sdsd");
+                        }}
+                     />
+                  </div>
                )}
             </>
             {/* )} */}

@@ -15,6 +15,8 @@ import { addReviewApi } from "@/api/productApi";
 import { getCookie } from "cookies-next";
 import { mapProductToCard } from "@/utils/MappingTypes";
 import PhotoViewer from "@/components/ui/PhotoViewer";
+import Link from "next/link";
+import routes from "@/constants/routes";
 
 interface ProductPageProps {
    product: IProduct;
@@ -116,7 +118,7 @@ const ProductPage: FC<ProductPageProps> = ({
                <div className="hidden md:block absolute z-10 top-0 right-0 p-5">
                   <AddToFavourite
                      isInFavourites={isInFavourites}
-                     product={mapProductToCard(product)} 
+                     product={mapProductToCard(product)}
                      onToggle={(newState: boolean) => {
                         setIsInFavourites(newState);
                      }}
@@ -124,13 +126,16 @@ const ProductPage: FC<ProductPageProps> = ({
                </div>
             </div>
             <div className="flex flex-col p-3 md:p-0 md:gap-y-4 relative">
+               <div className="flex items-center justify-between">
                <span className="text-main-green font-bold lg:text-3xl text-2xl">
                   {product.title}
-                  <div className="md:hidden absolute z-10 top-0 right-0 m-5 flex gap-x-2">
+                  
+               </span>
+               <div className="md:hidden my-4 flex gap-x-2">
                      <div className="border-2 border-main-green rounded-full">
                         <AddToFavourite
                            isInFavourites={isInFavourites}
-                           product={mapProductToCard(product)} 
+                           product={mapProductToCard(product)}
                            onToggle={(newState: boolean) => {
                               setIsInFavourites(newState);
                            }}
@@ -138,18 +143,19 @@ const ProductPage: FC<ProductPageProps> = ({
                      </div>
                      <div className="border-2 border-main-green rounded-full">
                         <AddToCart
-                        isInCart={isInCart}
-                        product={mapProductToCard(product)} 
-                        onToggle={(newState: boolean) => {
-                           setIsInCart(newState);
-                        }}
-                     />
+                           isInCart={isInCart}
+                           product={mapProductToCard(product)}
+                           onToggle={(newState: boolean) => {
+                              setIsInCart(newState);
+                           }}
+                        />
                      </div>
                   </div>
-               </span>
-               <span className="block text-main-gray lg:text-base text-sm">
-                  От фермера: {product.producerName}
-               </span>
+               </div>
+                  <Link className="block text-main-gray lg:text-base text-sm hover:text-main-green transition-all duration-200" href={`${routes.items.producer(product.producerId)}`}>
+                     От фермера: {product.producerName}
+                  </Link>
+              
                <div className="flex items-center justify-between my-7 md:my-0">
                   <div className="md:hidden ">
                      <span className="font-bold text-main-green text-lg">
@@ -233,7 +239,7 @@ const ProductPage: FC<ProductPageProps> = ({
                   </p>
                   <p>
                      <span className="font-bold">Объем: </span>
-                     {product.volume}
+                     {product.volume} {product.unit}
                   </p>
                   <p>
                      <span className="font-bold">Упаковка: </span>
@@ -258,7 +264,7 @@ const ProductPage: FC<ProductPageProps> = ({
 
             <AddToCart
                isInCart={isInCart}
-               product={mapProductToCard(product)} 
+               product={mapProductToCard(product)}
                onToggle={(newState: boolean) => {
                   setIsInCart(newState);
                }}

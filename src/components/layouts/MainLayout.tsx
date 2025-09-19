@@ -18,7 +18,6 @@ interface LayoutProps {
 
 const MainLayout: FC<LayoutProps> = ({ children }) => {
    const { userType } = useAuthContext();
-   console.log(userType);
    const { customerStore, producerStore, courierStore } = useStores();
 
 
@@ -41,22 +40,21 @@ const MainLayout: FC<LayoutProps> = ({ children }) => {
       }, [userType]);
 
    
-   useEffect(() => {
-      // if (!userType) return;
-      console.log("here");
-      switch (userType) {
-         case UserType.CUSTOMER:
-           console.log("CUSTOMER");
-            break;
-         case UserType.PRODUCER:
-            console.log("PRODUCER");
-            break;
-         case UserType.COURIER:
-            console.log("COURIER");
-            break;
-      }
+   // useEffect(() => {
+   //    // if (!userType) return;
+   //    switch (userType) {
+   //       case UserType.CUSTOMER:
+   //         console.log("CUSTOMER");
+   //          break;
+   //       case UserType.PRODUCER:
+   //          console.log("PRODUCER");
+   //          break;
+   //       case UserType.COURIER:
+   //          console.log("COURIER");
+   //          break;
+   //    }
 
-   }, [userType]);
+   // }, [userType]);
 
    const pathname = usePathname();
    const isAdminPage = pathname.startsWith("/admin");

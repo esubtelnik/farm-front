@@ -13,6 +13,7 @@ const AddProduct: FC = () => {
 
 
    const handleAddProduct = async (payload: CreateProductRequest) => {
+
       
       const result = await producerStore.createProduct(payload);
       if (result.success) {
@@ -33,6 +34,7 @@ const AddProduct: FC = () => {
                isOpen={isModalOpen}
                onClose={() => setIsModalOpen(false)}
                showCloseButton={true}
+               size="w-full"
                className="overflow-y-auto p-4"
             >
                <AddProductModal handleAddProduct={(payload) => handleAddProduct(payload)} />

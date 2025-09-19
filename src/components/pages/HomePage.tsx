@@ -13,6 +13,8 @@ import { IProducerCard } from "@/types/entities/User";
 // import { ICategory } from "../types/entities/Product";
 // import NextArrow from "../components/helpers/NextArrow";
 // import routes from "../constants/Routes";
+import routes from "@/constants/routes";
+import Link from "next/link";
 
 interface HomePageProps {
    categories: ICategory[];
@@ -83,7 +85,10 @@ const HomePage: FC<HomePageProps> = ({ categories, producers }) => {
             Питание с FARM-BASKET - залог крепкого здоровья !
          </p>
          <div className="flex items-center justify-center md:gap-x-12 gap-x-4 md:py-10 py-5 md:px-0 px-4 w-full ">
-            <div className="md:w-[70px] w-[35px]">
+            <Link className="md:w-[70px] w-[35px]"
+                  
+href={routes.home.root}
+            >
                <Image
                   src="/LogoColor.svg"
                   alt="Logo"
@@ -91,7 +96,7 @@ const HomePage: FC<HomePageProps> = ({ categories, producers }) => {
                   height={70}
                   priority={true}
                />
-            </div>
+            </Link>
             <div className="md:w-3/5 w-full">
              <Search />
             </div>

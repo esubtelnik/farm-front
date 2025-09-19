@@ -1,8 +1,8 @@
 "use client";
-import { FC, useEffect, useState } from "react";
+import { FC, useEffect, useState, useRef } from "react";
 
 import ProductList from "@/components/mainComponents/lists/ProductList";
-import Tabs from "@/components/ui/Tabs";
+import Tabs, { TabsHandle } from "@/components/ui/Tabs";
 import ReviewList from "@/components/mainComponents/lists/ReviewList";
 import GalleryList from "@/components/mainComponents/lists/GalleryList";
 import ProducerInfo from "@/components/profileComponents/ProducerInfo";
@@ -12,13 +12,18 @@ import AddProduct from "@/components/ui/buttons/AddProduct";
 import { IProductCard } from "@/types/entities/Product";
 import { IReview } from "@/types/entities/Review";
 
+
 const ProducerProfilePage: FC = observer(() => {
    const [isLoading, setIsLoading] = useState(true);
    const [gallery, setGallery] = useState<string[]>([]);
    const [certificates, setCertificates] = useState<string[]>([]);
    const [products, setProducts] = useState<IProductCard[]>([]);
    const [reviews, setReviews] = useState<IReview[]>([]);
+
+
    const { producerStore } = useStores();
+const tabsRef = useRef<TabsHandle>(null);
+
 
    useEffect(() => {
       const fetchData = async () => {
@@ -124,8 +129,8 @@ const ProducerProfilePage: FC = observer(() => {
 
    return (
       <div className="min-h-screen font-geist w-full">
-         <ProducerInfo  />
-         <Tabs tabs={tabItems} />
+         <ProducerInfo goToReviews={() => tabsRef.current?.goToTab(3)}  />
+         <Tabs tabs={tabItems} ref={tabsRef} />
       </div>
    );
 });

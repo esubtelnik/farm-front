@@ -82,7 +82,6 @@ const RegistrationCodeForm: FC = () => {
          ...prev,
          errors: newErrors,
       }));
-      console.log(newErrors);
 
       return Object.values(newErrors).some((error) => error !== null);
    };

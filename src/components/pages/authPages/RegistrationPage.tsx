@@ -62,8 +62,6 @@ const RegistrationPage: FC = () => {
    const location = usePathname();
 
    useEffect(() => {
-      console.log(searchParams);
-      console.log(location);
 
       if (location === routes.auth.courier.register) {
          setUserType(UserType.COURIER);
@@ -142,7 +140,6 @@ const RegistrationPage: FC = () => {
                   fio: fio || "",
                   courierCode: workCode || "",
                };
-               console.log("courier", updatedData);
                setRegisterCourierData(updatedData);
                const result = await initCourier({
                   email,
@@ -180,7 +177,6 @@ const RegistrationPage: FC = () => {
             break;
          case UserType.CUSTOMER.type:
             {
-               console.log("customer");
                const updatedData: CustomerRegisterRequest = {
                   ...registerCustomerData,
                   code: code,
@@ -206,7 +202,6 @@ const RegistrationPage: FC = () => {
                const result = await registerCourier(updatedData);
                if (result.success) {
                   router.push(routes.users.courier.profile);
-                  console.log("success");
                } else {
                   setVerifErrorMessage(result.message || "Неизвестная ошибка");
                }

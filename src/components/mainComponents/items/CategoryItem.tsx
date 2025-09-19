@@ -6,6 +6,7 @@ import { FC } from "react";
 import Image from "next/image";
 import { ICategory } from "@/types/entities/Product";
 import { useRouter } from "next/navigation";
+import routes from "@/constants/routes";
 // import { useNavigate } from "react-router-dom";
 
 interface CategoryItemProps {
@@ -13,20 +14,14 @@ interface CategoryItemProps {
 }
 
 const CategoryItem: FC<CategoryItemProps> = ({ category }) => {
-  //  const [hovered, setHovered] = useState(false);
+   //  const [hovered, setHovered] = useState(false);
    const router = useRouter();
    return (
       <div
-         className="w-full aspect-square bg-transparent rounded-[26px] relative overflow-hidden shadow-md/30 cursor-pointer"
-        //  onMouseEnter={() => setHovered(true)}
-        //  onMouseLeave={() => setHovered(false)}
-         onClick={() =>
-            router.push(
-               `/category/${category.title}?image=${encodeURIComponent(
-                  category.paths[1]
-               )}`
-            )
-         }
+         className="w-full aspect-square bg-linear-to-b from-white to-main-green  rounded-[20px] relative overflow-hidden shadow-md/30 cursor-pointer"
+         //  onMouseEnter={() => setHovered(true)}
+         //  onMouseLeave={() => setHovered(false)}
+         onClick={() => router.push(routes.items.category(category.title))}
       >
          <Image
             src={`${process.env.NEXT_PUBLIC_IMAGE_URL}${category.paths[0]}`}

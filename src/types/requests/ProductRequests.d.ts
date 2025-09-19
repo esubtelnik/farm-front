@@ -55,6 +55,10 @@ export interface UpdateProductRequest {
     delivery?: number;
 }
 
+export interface DeleteProductRequest {
+    productId: string;
+}
+
 
 export interface AddToFavouritesRequest {
     productId: string;

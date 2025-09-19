@@ -5,21 +5,25 @@ import Search from "@/components/features/Search";
 import Hr from "@/components/ui/Hr";
 import ProductList from "@/components/mainComponents/lists/ProductList";
 import { IProductCard } from "@/types/entities/Product";
+import routes from "@/constants/routes";
+import Link from "next/link";
 
 interface SearchPageProps {
    products: IProductCard[];
 }
 
 const SearchPage: FC<SearchPageProps> = ({ products }) => {
+
    return (
       <div className="min-h-screen font-geist">
-     
          <div className="flex items-center justify-center gap-x-12 py-10 w-full ">
-            <div className="max-w-[70px] md:w-full w-[35px]">
-               <LogoColor />
+            <div className="max-w-[70px] md:w-full w-[35px] cursor-pointer">
+               <Link className="md:w-[70px] w-[35px]" href={routes.home.root}>
+                  <LogoColor />
+               </Link>
             </div>
             <div className="w-3/5">
-               <Search/>
+               <Search />
             </div>
          </div>
          <Hr />

@@ -5,7 +5,8 @@ import { UserType } from "@/constants/UserTypeEnum";
 import { useStores } from "@/hooks/useStores";
 import { IProductCard } from "@/types/entities/Product";
 import { Modal } from "@/components/ui/modals/Modal";
-import LoginModal from "../modals/modalContents/LoginModal";
+import LoginModal from "@/components/ui/modals/modalContents/LoginModal";
+import Toast from "@/components/ui/Toast";
 
 interface AddToCartProps {
    isInCart: boolean;
@@ -18,6 +19,8 @@ const AddToCart: FC<AddToCartProps> = ({ isInCart, product, onToggle }) => {
    const { customerStore } = useStores();
 
    const [isModalOpen, setIsModalOpen] = useState(false);
+  const [toast, setToast] = useState<{ message: string; type: "success" | "error" | "warning" | "info" } | null>(null);
+
 
    const handleAddToCart = async (e: React.MouseEvent<HTMLButtonElement>) => {
       e.stopPropagation();
@@ -25,9 +28,12 @@ const AddToCart: FC<AddToCartProps> = ({ isInCart, product, onToggle }) => {
          if (isInCart) {
             await customerStore.removeFromCart({ productId: product.id });
             onToggle(false);
+            setToast({ message: "Продукт успешно удален из корзины", type: "info" });
          } else {
             await customerStore.addToCart(product);
             onToggle(true);
+        setToast({ message: "Продукт успешно добавлен в корзины", type: "success" });
+
          }
       } else {
          setIsModalOpen(true);
@@ -36,6 +42,9 @@ const AddToCart: FC<AddToCartProps> = ({ isInCart, product, onToggle }) => {
 
    return (
       <>
+         {toast && (
+            <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />
+         )}    
          {isModalOpen && (
             <Modal
                isOpen={isModalOpen}

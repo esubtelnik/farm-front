@@ -13,8 +13,10 @@ interface CustomerInfoProps {
 }
 
 const CustomerInfo: FC<CustomerInfoProps> = observer(({ isCart = false }) => {
-   const [isCreateOrderModalOpen, setIsCreateOrderModalOpen] = useState(false);
    const { customerStore } = useStores();
+
+   const [isCreateOrderModalOpen, setIsCreateOrderModalOpen] = useState(false);
+   const [cartItems, setCartItems] = useState(async () => await customerStore.getCartItems());
    const profile = customerStore.profile;
    const isLoading = !profile;
 
@@ -22,6 +24,7 @@ const CustomerInfo: FC<CustomerInfoProps> = observer(({ isCart = false }) => {
 
    const handleClearCart = async () => {
       await customerStore.removeAllFromCart();
+      setCartItems(customerStore.getCartItems());
    };
 
    const handleLogout = async () => {
@@ -61,9 +64,9 @@ const CustomerInfo: FC<CustomerInfoProps> = observer(({ isCart = false }) => {
                <>
                   <button
                      onClick={handleCreateOrder}
-                     className="flex items-center justify-between text-sm md:text-base gap-x-2 border-2 border-main-green text-main-green px-4 rounded-full py-2 h-fit hover:scale-105 transition-all duration-100 cursor-pointer"
+                     className="flex items-center justify-center text-sm md:text-base gap-x-2 border-2 border-main-green text-main-green px-4 rounded-full py-2 h-fit hover:scale-105 transition-all duration-100 cursor-pointer"
                   >
-                     Оформить заказ
+                     Оформить заказ ({cartItems})
                   </button>
                   <button
                      onClick={handleClearCart}

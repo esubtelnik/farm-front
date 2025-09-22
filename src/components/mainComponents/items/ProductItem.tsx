@@ -1,5 +1,5 @@
 "use client";
-import { FC, useState } from "react";
+import { FC } from "react";
 import AddToCart from "@/components/ui/buttons/AddToCart";
 import AddToFavourite from "@/components/ui/buttons/AddToFavourite";
 import { IProductCard } from "@/types/entities/Product";
@@ -22,10 +22,8 @@ const ProductItem: FC<ProductItemProps> = observer(
    ({ product, isEditable = false }) => {
       const router = useRouter();
 
-      const [isInFavourites, setIsInFavourites] = useState(
-         product.isInFavourites
-      );
-      const [isInCart, setIsInCart] = useState(product.isInCart);
+      // const [isInFavourites, setIsInFavourites] = useState(product.isInFavourites);
+      // const [isInCart, setIsInCart] = useState(product.isInCart);
 
       const handleCardClick = (e: React.MouseEvent<HTMLDivElement>) => {
          e.stopPropagation();
@@ -50,14 +48,12 @@ const ProductItem: FC<ProductItemProps> = observer(
                      unoptimized
                   />
                </div>
-               <div className="absolute z-10 top-0 right-0 md:p-5 p-3">
+               <div className="absolute z-10 top-0 right-0 md:p-5 sm:p-3 p-1">
                   {!isEditable && (
                      <AddToFavourite
-                        isInFavourites={isInFavourites}
+                        isInFavourites={product.isInFavourites}
                         product={product}
-                        onToggle={(newState: boolean) => {
-                           setIsInFavourites(newState);
-                        }}
+                        onToggle={() => {}}
                      />
                   )}
                   {isEditable && (
@@ -82,7 +78,7 @@ const ProductItem: FC<ProductItemProps> = observer(
                >
                   {product.title}
                </span>
-               <span className="text-main-gray/70 lg:text-base md:text-sm text-xs truncate block w-full">
+               <span className="text-main-gray/70 lg:text-base md:text-sm text-xs truncate block w-full my-1">
                   От <span className="hidden md:inline">фермера: </span>{" "}
                   {product.producerName}
                </span>
@@ -98,14 +94,12 @@ const ProductItem: FC<ProductItemProps> = observer(
                      /{product.saleVolume} {product.unit}
                   </span>
                </div>
-               <div className="absolute z-10 bottom-0 right-0 md:p-5 p-3">
+               <div className="absolute z-10 bottom-0 right-0 md:p-5 sm:p-3 p-1">
                   {!isEditable && (
                      <AddToCart
-                        isInCart={isInCart}
+                        isInCart={product.isInCart}
                         product={product}
-                        onToggle={(newState: boolean) => {
-                           setIsInCart(newState);
-                        }}
+                        onToggle={() => {}}
                      />
                   )}
                </div>

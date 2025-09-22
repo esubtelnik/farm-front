@@ -1,9 +1,6 @@
 "use client";
 import { FC, useState } from "react";
-import { IProduct } from "@/types/entities/Product";
 import { Modal } from "@/components/ui/modals/Modal";
-import Loader from "../Loader";
-import { DeleteProductRequest } from "@/types/requests/ProductRequests";
 import { useStores } from "@/hooks/useStores";
 import Toast from "../Toast";
 import DeleteProductModal from "../modals/modalContents/DeleteProductModal";

@@ -8,40 +8,65 @@ import { Modal } from "@/components/ui/modals/Modal";
 import LoginModal from "@/components/ui/modals/modalContents/LoginModal";
 import Toast from "@/components/ui/Toast";
 
-
 interface AddToFavouriteProps {
+   cardType?: "item" | "page";
    isInFavourites: boolean;
    product: IProductCard;
    onToggle: (newState: boolean) => void;
 }
 
-const AddToFavourite: FC<AddToFavouriteProps> = ({ isInFavourites, product, onToggle }) => {
-  const { userType } = useAuthContext();
-  const { customerStore } = useStores();
-  const [toast, setToast] = useState<{ message: string; type: "success" | "error" | "warning" | "info" } | null>(null);
-  const [openModal, setOpenModal] = useState(false);
+const AddToFavourite: FC<AddToFavouriteProps> = ({
+   isInFavourites,
+   product,
+   onToggle,
+   cardType = "item",
+}) => {
+   const { userType } = useAuthContext();
+   const { customerStore } = useStores();
+   const [toast, setToast] = useState<{
+      message: string;
+      type: "success" | "error" | "warning" | "info";
+   } | null>(null);
+   const [openModal, setOpenModal] = useState(false);
 
-  const handleAddToFavourites = async (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.stopPropagation();
-    if (userType === UserType.CUSTOMER) {
-      if (isInFavourites) {
-        await customerStore.removeFromFavourites({ productId: product.id });
-        onToggle(false);
-        setToast({ message: "Продукт успешно удален из избранного", type: "info" });
+   const handleAddToFavourites = async (
+      e: React.MouseEvent<HTMLButtonElement>
+   ) => {
+      e.stopPropagation();
+      if (userType === UserType.CUSTOMER) {
+         if (isInFavourites) {
+            await customerStore.removeFromFavourites({ productId: product.id });
+            onToggle(false);
+            setToast({
+               message: "Продукт успешно удален из избранного",
+               type: "info",
+            });
+         } else {
+            await customerStore.addToFavourites(product);
+            onToggle(true);
+            setToast({
+               message: "Продукт успешно добавлен в избранное",
+               type: "success",
+            });
+         }
       } else {
-        await customerStore.addToFavourites(product);
-        onToggle(true);
-        setToast({ message: "Продукт успешно добавлен в избранное", type: "success" });
+         setOpenModal(true);
       }
-    } else {
-      setOpenModal(true);
-    }
-  };  
+   };
+
+   const buttonSize = {
+      item: "md:p-2 p-1.5 lg:size-14 md:size-12 size-10",
+      page: "md:p-2 p-1 lg:size-12 md:size-10 size-8",
+   }[cardType];
 
    return (
       <>
          {toast && (
-            <Toast message={toast.message} type={toast.type} onClose={() => setToast(null)} />
+            <Toast
+               message={toast.message}
+               type={toast.type}
+               onClose={() => setToast(null)}
+            />
          )}
          {openModal && (
             <Modal
@@ -51,7 +76,6 @@ const AddToFavourite: FC<AddToFavouriteProps> = ({ isInFavourites, product, onTo
                size="w-fit h-fit"
             >
                <LoginModal />
-         
             </Modal>
          )}
          <button
@@ -60,14 +84,13 @@ const AddToFavourite: FC<AddToFavouriteProps> = ({ isInFavourites, product, onTo
                isInFavourites
                   ? "bg-main-green text-white"
                   : "bg-white text-main-green"
-            } rounded-full flex items-center justify-center md:p-2 p-1 lg:size-12 md:size-10 size-8 cursor-pointer`}
+            } rounded-full flex items-center justify-center ${buttonSize} cursor-pointer`}
             onClick={handleAddToFavourites}
          >
             <svg
                xmlns="http://www.w3.org/2000/svg"
                fill="none"
                viewBox="0 0 24 24"
-               
                stroke="currentColor"
                className="w-full h-full md:stroke-3 stroke-2"
             >

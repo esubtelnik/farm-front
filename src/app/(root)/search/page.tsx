@@ -7,7 +7,7 @@ import SearchPage from "@/components/pages/SearchPage";
 interface SearchPageProps {
    searchParams: Promise<{
       title?: string;
-      priceTo?: string;
+      priceTo?: number;
       deliveryTo?: string;
       category?: string;
    }>;
@@ -16,13 +16,14 @@ interface SearchPageProps {
 export default async function Search({ searchParams }: SearchPageProps) {
     const token = (await cookies()).get("token")?.value;
 
-   const params: SearchProductsRequest = {
-    title: (await searchParams).title || "",
-    priceTo: Number((await searchParams).priceTo),
-   //  deliveryTo: Number((await searchParams).deliveryTo),
-    
-    category: (await searchParams).category?.trim() ? (await searchParams).category?.split(";") : [],
-  };
+    const { title, priceTo, deliveryTo, category } = await searchParams;
+
+    const params: SearchProductsRequest = {
+      ...(title && { title }),
+      ...(priceTo && { priceTo: Number(priceTo) }),
+      ...(deliveryTo && { deliveryTo: Number(deliveryTo) }),
+      ...(category?.trim() && { category: category.split(";") }),
+    };
 
    const response = await fetchApi(searchProductsApi(params, token));
    const searchedProducts = response.success ? response.data : [];

@@ -1,6 +1,5 @@
 "use client";
 import { FC, useState } from "react";
-import { useRouter } from "next/navigation";
 import routes from "@/constants/routes";
 import RegistrationCodeForm from "@/components/adminComponents/RegistrationCodeForm";
 import AdminActionButton from "@/components/adminComponents/AdminActionButton";

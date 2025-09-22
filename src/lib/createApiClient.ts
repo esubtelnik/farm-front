@@ -4,7 +4,7 @@ import axios, { AxiosInstance } from "axios";
 
 export function createApiClient(token?: string): AxiosInstance {
   const instance = axios.create({
-    baseURL:  process.env.NEXT_PUBLIC_API_URL,
+    baseURL:  process.env.NEXT_PUBLIC_DEV_URL,
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",

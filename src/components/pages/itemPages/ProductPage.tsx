@@ -132,7 +132,7 @@ const ProductPage: FC<ProductPageProps> = ({
                   
                </span>
                <div className="md:hidden my-4 flex gap-x-2">
-                     <div className="border-2 border-main-green rounded-full">
+                     <div className="">
                         <AddToFavourite
                            isInFavourites={isInFavourites}
                            product={mapProductToCard(product)}
@@ -141,7 +141,7 @@ const ProductPage: FC<ProductPageProps> = ({
                            }}
                         />
                      </div>
-                     <div className="border-2 border-main-green rounded-full">
+                     <div className="">
                         <AddToCart
                            isInCart={isInCart}
                            product={mapProductToCard(product)}

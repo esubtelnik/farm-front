@@ -16,17 +16,18 @@ import { UserType } from "@/constants/UserTypeEnum";
 import { AdminLoginRequest } from "@/types/requests/AdminRequests";
 import { usePathname, useRouter } from "next/navigation";
 import Link from "next/link";
+// import Link from "next/link";
 
 interface FormState {
    values: {
       email: string;
       password: string;
-      workCode?: string;
+      // workCode?: string;
    };
    errors: {
       email: string | null;
       password: string | null;
-      workCode: string | null;
+      // workCode: string | null;
    };
 }
 
@@ -58,12 +59,12 @@ const LoginPage: FC = () => {
       values: {
          email: "",
          password: "",
-         workCode: "",
+         // workCode: "",
       },
       errors: {
          email: null,
          password: null,
-         workCode: null,
+         // workCode: null,
       },
    });
 
@@ -88,20 +89,20 @@ const LoginPage: FC = () => {
       const newErrors: FormState["errors"] = {
          email: null,
          password: null,
-         workCode: null,
+         // workCode: null,
       };
       newErrors.email = validateEmail(form.values.email);
 
       if (form.values.password.length < 1) {
          newErrors.password = "Пароль должен быть минимум 6 символов";
       }
-      if (
-         (loginUserType.type === UserType.PRODUCER.type ||
-            loginUserType.type === UserType.COURIER.type) &&
-         (!form.values.workCode || form.values.workCode.length < 3)
-      ) {
-         newErrors.workCode = "Введите корректный код";
-      }
+      // if (
+      //    (loginUserType.type === UserType.PRODUCER.type ||
+      //       loginUserType.type === UserType.COURIER.type) &&
+      //    (!form.values.workCode || form.values.workCode.length < 3)
+      // ) {
+      //    newErrors.workCode = "Введите корректный код";
+      // }
 
       setForm((prev) => ({
          ...prev,
@@ -144,7 +145,7 @@ const LoginPage: FC = () => {
                   const loginProducerData: ProducerLoginRequest = {
                      email: form.values.email,
                      password: form.values.password,
-                     shopCode: form.values.workCode || "",
+                     // shopCode: form.values.workCode || "",
                   };
 
                   const result = await loginProducer(loginProducerData);
@@ -162,7 +163,7 @@ const LoginPage: FC = () => {
                   const loginCourierData: CourierLoginRequest = {
                      email: form.values.email,
                      password: form.values.password,
-                     courierCode: form.values.workCode || "",
+                     // courierCode: form.values.workCode || "",
                   };
 
                   const result = await loginCourier(loginCourierData);
@@ -224,7 +225,7 @@ const LoginPage: FC = () => {
                   Забыли пароль?
                </span>
             </div>
-            <AnimatePresence>
+            {/* <AnimatePresence>
                {(loginUserType.type === UserType.PRODUCER.type ||
                   loginUserType.type === UserType.COURIER.type) && (
                   <motion.div
@@ -250,6 +251,24 @@ const LoginPage: FC = () => {
                            Соглашения о сотрудничестве
                         </Link>
                      </div>
+                  </motion.div>
+               )}
+            </AnimatePresence> */}
+               <AnimatePresence>
+               {(loginUserType.type === UserType.PRODUCER.type ||
+                  loginUserType.type === UserType.COURIER.type) && (
+                  <motion.div
+                     className="text-main-gray ml-2"
+                     initial={{ opacity: 0, y: -10 }}
+                     animate={{ opacity: 1, y: 0 }}
+                     exit={{ opacity: 0, y: -10 }}
+                     transition={{ duration: 0.3 }}
+                  >
+                   Нажимая, вы соглашаетесь с условиями{" "}
+                        <Link href={routes.legal.terms} className="text-main-green cursor-pointer underline">
+                           Соглашения о сотрудничестве
+                        </Link>
+                  
                   </motion.div>
                )}
             </AnimatePresence>

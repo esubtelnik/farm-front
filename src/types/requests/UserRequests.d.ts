@@ -35,7 +35,7 @@ export interface ProducerRegisterRequest {
 export interface ProducerLoginRequest {
    email: string;
    password: string;
-   shopCode: string;
+   // shopCode: string;
 
 }
 
@@ -57,7 +57,7 @@ export interface CourierRegisterRequest {
 export interface CourierLoginRequest {
    email: string;
    password: string;
-   courierCode: string;
+   // courierCode: string;
 
 }
 

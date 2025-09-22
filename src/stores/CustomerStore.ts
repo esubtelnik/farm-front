@@ -1,4 +1,5 @@
 "use client";
+
 import { makeAutoObservable, runInAction } from "mobx";
 import {
    getCustomerApi,
@@ -58,6 +59,8 @@ class CustomerStore {
             runInAction(() => {
                this.cart = res.data.products;
             });
+         } else {
+            this.cart = [];
          }
       } catch (e) {
          console.error("Ошибка получения корзины", e);
@@ -72,6 +75,8 @@ class CustomerStore {
             runInAction(() => {
                this.favourites = res.data.products;
             });
+         } else {
+            this.favourites = [];
          }
       } catch (e) {
          console.error("Ошибка получения избранного", e);
@@ -256,6 +261,43 @@ class CustomerStore {
          return { success: false, message: "Ошибка при обновлении профиля" };
       }
    }
+
+   async getCartItems() {
+      return this.cart.length;
+   }
+
+   syncProductsWithUserData(products: IProductCard[]): IProductCard[] {
+     const result = products.map(product => {
+      const isInCart = this.cart.some(cartItem => cartItem.id === product.id);
+      const isInFavourites = this.favourites.some(favItem => favItem.id === product.id);
+           
+      return {
+         ...product,
+         isInCart,
+         isInFavourites
+      };
+   });
+
+   return result;
+}
+
+async ensureUserDataLoaded() {
+   // Проверяем, есть ли токен
+   const token = getCookie("token")?.toString();
+   if (!token) return;
+
+   if (!this.profile) {
+      await this.fetchCustomerData();
+   }
+   await Promise.all([
+      this.fetchCustomerCart(),
+      this.fetchCustomerFavourites()
+   ]);
+}
+
+get isDataInitialized(): boolean {
+   return this.profile !== null;
+}
 
    async logout() {
       deleteCookie("token");

@@ -109,7 +109,8 @@ const ProducerInfo: FC<ProducerInfoProps> = observer(({ goToReviews }) => {
    };
 
    const handleSave = async (
-      field?: "title" | "category" | "description" | "address"   ) => {
+      field?: "title" | "category" | "description" | "address"
+   ) => {
       const updateData: {
          title?: string;
          category?: string;
@@ -117,6 +118,8 @@ const ProducerInfo: FC<ProducerInfoProps> = observer(({ goToReviews }) => {
          address?: string;
          activityType?: string;
       } = {};
+
+      console.log("field", field);
 
       if (field === "title" || (!field && isTitleEditable)) {
          setIsTitleEditable(false);
@@ -289,9 +292,10 @@ const ProducerInfo: FC<ProducerInfoProps> = observer(({ goToReviews }) => {
                                     }
                                  }}
                               />
-                             
-                           <SaveChanges onClick={() => handleSave("title")} />
 
+                              <SaveChanges
+                                 onClick={() => handleSave("title")}
+                              />
                            </div>
                         ) : isTitleLoading ? (
                            <Skeleton className="h-8 md:w-48 w-full" />
@@ -358,8 +362,10 @@ const ProducerInfo: FC<ProducerInfoProps> = observer(({ goToReviews }) => {
                                     ? selectedCategories.join("; ")
                                     : "Выберите категории"}
                               </div>
-                              <SaveChanges onClick={() => handleSave("category")} />
-                                 {/* <button
+                              <SaveChanges
+                                 onClick={() => handleSave("category")}
+                              />
+                              {/* <button
                                     className="cursor-pointer text-main-green"
                                     onClick={() => handleSave("category")}
                                  >
@@ -407,7 +413,6 @@ const ProducerInfo: FC<ProducerInfoProps> = observer(({ goToReviews }) => {
                                     })}
                                  </div>
                               )}
-
                            </div>
                         ) : isCategoryLoading ? (
                            <Skeleton className="h-8 w-48" />
@@ -442,8 +447,16 @@ const ProducerInfo: FC<ProducerInfoProps> = observer(({ goToReviews }) => {
                         )}
                      </div>
                      <span className="flex items-center gap-x-2">
-                        <ReviewStars size="large" rating={profile.feedbackAv ?? 0} />
-                        <button onClick={goToReviews} className="text-main-gray text-sm cursor-pointer">Отзывы</button>
+                        <ReviewStars
+                           size="large"
+                           rating={profile.feedbackAv ?? 0}
+                        />
+                        <button
+                           onClick={goToReviews}
+                           className="text-main-gray text-sm cursor-pointer"
+                        >
+                           Отзывы
+                        </button>
                      </span>
                      <div className="text-main-gray flex flex-col flex-grow min-h-0">
                         {isDescriptionEditable ? (
@@ -471,24 +484,20 @@ const ProducerInfo: FC<ProducerInfoProps> = observer(({ goToReviews }) => {
                                  onChange={(e) =>
                                     setDescription(e.target.value)
                                  }
-                                 onBlur={(e) => {
-                                    if (
-                                       !e.currentTarget.contains(e.relatedTarget)
-                                    ) {
-                                       setIsDescriptionEditable(false);
-                                       setDescription(profile?.description);
-                                    }
-                                 }}
+                              
                                  onKeyDown={(e) => {
                                     if (e.key === "Escape") {
                                        setIsDescriptionEditable(false);
                                        setDescription(profile?.description);
                                     }
-                                    if (e.key === "Enter") handleSave("description");
+                                    if (e.key === "Enter")
+                                       handleSave("description");
                                  }}
                               />
-                          <div className="flex h-full items-end">
-                              <SaveChanges onClick={() => handleSave("description")} />
+                              <div className="flex h-full items-end">
+                                 <SaveChanges
+                                    onClick={() => handleSave("description")}
+                                 />
                               </div>
                            </div>
                         ) : isDescriptionLoading ? (
@@ -503,7 +512,6 @@ const ProducerInfo: FC<ProducerInfoProps> = observer(({ goToReviews }) => {
                                        ? "Укажите описание"
                                        : ""
                                  }
-                                 
                                  value={profile?.description}
                                  readOnly
                               />
@@ -511,7 +519,6 @@ const ProducerInfo: FC<ProducerInfoProps> = observer(({ goToReviews }) => {
                                  className="cursor-pointer text-main-gray flex items-start outline-none"
                                  onClick={() => {
                                     setIsDescriptionEditable(true);
-
                                  }}
                               >
                                  <svg
@@ -578,7 +585,6 @@ const ProducerInfo: FC<ProducerInfoProps> = observer(({ goToReviews }) => {
                               }}
                            />
                            <SaveChanges onClick={() => handleSave("address")} />
-                          
                         </div>
                      ) : isAddressLoading ? (
                         <Skeleton className="h-7 md:w-96 w-full" />

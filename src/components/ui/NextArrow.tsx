@@ -22,7 +22,7 @@ const NextArrow: FC<NextArrowProps> = ({ route }) => {
          viewBox="0 0 24 24"
          strokeWidth={3}
          stroke="currentColor"
-         className="md:size-8 size-6 text-main-green md:hover:text-dark-green md:hover:border-3 hover:border-dark-green hover:rounded-full md:hover:scale-125 transition-all"
+         className="md:size-8 sm:size-6 size-4 text-main-green md:hover:text-dark-green md:hover:border-3 hover:border-dark-green hover:rounded-full md:hover:scale-125 transition-all"
       >
          <path
             strokeLinecap="round"

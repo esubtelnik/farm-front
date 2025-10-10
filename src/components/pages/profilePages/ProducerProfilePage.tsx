@@ -9,7 +9,7 @@ import ProducerInfo from "@/components/profileComponents/ProducerInfo";
 import { observer } from "mobx-react-lite";
 import { useStores } from "@/hooks/useStores";
 import AddProduct from "@/components/ui/buttons/AddProduct";
-import { IProductCard } from "@/types/entities/Product";
+import { IDisplayCard } from "@/types/entities/Display";
 import { IReview } from "@/types/entities/Review";
 
 
@@ -17,7 +17,7 @@ const ProducerProfilePage: FC = observer(() => {
    const [isLoading, setIsLoading] = useState(true);
    const [gallery, setGallery] = useState<string[]>([]);
    const [certificates, setCertificates] = useState<string[]>([]);
-   const [products, setProducts] = useState<IProductCard[]>([]);
+   const [products, setProducts] = useState<IDisplayCard[]>([]);
    const [reviews, setReviews] = useState<IReview[]>([]);
 
 

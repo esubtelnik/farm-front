@@ -3,16 +3,16 @@ import Basket from "@/assets/icons/Basket.svg";
 import { useAuthContext } from "@/context/AuthContext";
 import { UserType } from "@/constants/UserTypeEnum";
 import { useStores } from "@/hooks/useStores";
-import { IProductCard } from "@/types/entities/Product";
 import { Modal } from "@/components/ui/modals/Modal";
 import LoginModal from "@/components/ui/modals/modalContents/LoginModal";
 import Toast from "@/components/ui/Toast";
 import RemoveFromCartModal from "../modals/modalContents/RemoveFromCartModal";
+import { IDisplayCard } from "@/types/entities/Display";
 
 interface AddToCartProps {
    cardType?: "item" | "page";
    isInCart: boolean;
-   product: IProductCard;
+   product: IDisplayCard;
    onToggle: (newState: boolean) => void;
 }
 
@@ -33,7 +33,7 @@ const AddToCart: FC<AddToCartProps> = ({
       type: "success" | "error" | "warning" | "info";
    } | null>(null);
    const handleRemoveFromCart = async () => {
-      await customerStore.removeFromCart({ productId: product.id });
+      await customerStore.removeFromCart(product);
       setIsRemoveFromCartModalOpen(false);
       onToggle(false);
       setToast({ message: "Продукт успешно удален из корзины", type: "info" });

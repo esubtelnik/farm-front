@@ -6,6 +6,7 @@ import Textarea from "@/components/ui/Textarea";
 import { UpdateProductRequest } from "@/types/requests/ProductRequests";
 import { measures } from "@/constants/constants";
 import { IProduct } from "@/types/entities/Product";
+import Switcher from "@/components/ui/Switcher";
 
 const DeliveryTimeFilter = ({
    setValue,
@@ -95,10 +96,11 @@ interface FormState {
       images?: File[];
       package?: string;
       expirationDate?: number | null;
-      volume?: number | null;
+      dailyVolume?: number | null;
       saleVolume?: number | null;
       unit?: string;
       delivery?: number;
+      inaccuracy?: number | string;
    };
    errors: {
       title: string | null;
@@ -110,10 +112,11 @@ interface FormState {
       images: string | null;
       package: string | null;
       expirationDate: string | null;
-      volume: string | null;
+      dailyVolume: string | null;
       saleVolume: string | null;
       unit: string | null;
       delivery: string | null;
+      inaccuracy: string | null;
    };
 }
 
@@ -142,7 +145,9 @@ const EditProductModal: FC<EditProductModalProps> = ({
 
    const [statusMessage, setStatusMessage] = useState<string>("");
 
-   const [isInStock, setIsInStock] = useState(false);
+   const [isInStock, setIsInStock] = useState(
+      product.volume > 0 ? true : false
+   );
 
    useEffect(() => {
       const handleClickOutside = (event: MouseEvent) => {
@@ -178,29 +183,34 @@ const EditProductModal: FC<EditProductModalProps> = ({
          ...prev,
          errors: {
             ...prev.errors,
-            volume: null,
+            dailyVolume: null,
             saleVolume: null,
          },
       }));
       setIsMeasureDropdownOpen(false);
    };
 
-
    const [form, setForm] = useState<FormState>({
       values: {
          title: product.title ?? "",
          price: product.price ?? null,
          productType: product.productType ?? "",
-         description: product.description === "-" ? "" : product.description || "",
-         composition: product.composition === "-" ? "" : product.composition || "",
-         storageConditions: product.storageConditions === "-" ? "" : product.storageConditions || "",
+         description:
+            product.description === "-" ? "" : product.description || "",
+         composition:
+            product.composition === "-" ? "" : product.composition || "",
+         storageConditions:
+            product.storageConditions === "-"
+               ? ""
+               : product.storageConditions || "",
          images: [],
          package: product.package === "-" ? "" : product.package || "",
          expirationDate: product.expirationDate ?? null,
-         volume: product.volume ?? null,
+         dailyVolume: product.volume ?? null,
          saleVolume: product.saleVolume ?? null,
          unit: product.unit ?? "",
          delivery: product.delivery ?? 1,
+         inaccuracy: product.inaccuracy ?? 0,
       },
       errors: {
          title: null,
@@ -212,22 +222,14 @@ const EditProductModal: FC<EditProductModalProps> = ({
          images: null,
          package: null,
          expirationDate: null,
-         volume: null,
+         dailyVolume: null,
          saleVolume: null,
          unit: null,
          delivery: null,
+         inaccuracy: null,
       },
    });
 
-   
-   // useEffect(() => {
-   //    if (isInStock) {
-   //     handleChange("volume", product.volume ?? 0);
-   //    } else {
-   //     handleChange("volume", null);
-   //    }
- 
-   //  }, [product.volume]);
 
    const handleChange = <K extends keyof FormState["values"]>(
       field: K,
@@ -258,10 +260,11 @@ const EditProductModal: FC<EditProductModalProps> = ({
          images: null,
          package: null,
          expirationDate: null,
-         volume: null,
+         dailyVolume: null,
          saleVolume: null,
          unit: null,
          delivery: null,
+         inaccuracy: null,
       };
 
       if (!form.values.title) {
@@ -305,10 +308,6 @@ const EditProductModal: FC<EditProductModalProps> = ({
          newErrors.expirationDate = "Введите";
       }
 
-      if (!form.values.volume) {
-         newErrors.volume = "Введите";
-      }
-
       if (!form.values.price) {
          newErrors.price = "Введите";
       }
@@ -324,6 +323,14 @@ const EditProductModal: FC<EditProductModalProps> = ({
    const getChangedFields = (): Partial<UpdateProductRequest> => {
       const changedFields: Partial<UpdateProductRequest> = {};
 
+      if (form.values.inaccuracy !== product.inaccuracy) {
+         if (!form.values.inaccuracy || form.values.inaccuracy === 0) {
+            changedFields.inaccuracy = 0;
+         } else {
+            changedFields.inaccuracy = form.values.inaccuracy as number;
+         }
+      }
+
       if (form.values.title !== product.title) {
          changedFields.title = form.values.title;
       }
@@ -336,28 +343,35 @@ const EditProductModal: FC<EditProductModalProps> = ({
          changedFields.productType = form.values.productType;
       }
 
-      if (form.values.description !== product.description) {
-         changedFields.description = form.values.description;
+      const newDescription = form.values.description?.trim() || "-";
+      if (newDescription !== product.description) {
+         changedFields.description = newDescription;
+      }
+      const newComposition = form.values.composition?.trim() || "-";
+      if (newComposition !== product.composition) {
+         changedFields.composition = newComposition;
       }
 
-      if (form.values.composition !== product.composition) {
-         changedFields.composition = form.values.composition;
+      const newStorage = form.values.storageConditions?.trim() || "-";
+      if (newStorage !== product.storageConditions) {
+         changedFields.storageConditions = newStorage;
       }
 
-      if (form.values.storageConditions !== product.storageConditions) {
-         changedFields.storageConditions = form.values.storageConditions;
-      }
-
-      if (form.values.package !== product.package) {
-         changedFields.package = form.values.package;
+      const newPackage = form.values.package?.trim() || "-";
+      if (newPackage !== product.package) {
+         changedFields.package = newPackage;
       }
 
       if (form.values.expirationDate !== product.expirationDate) {
          changedFields.expirationDate = form.values.expirationDate as number;
       }
 
-      if (form.values.volume !== product.volume) {
-         changedFields.volume = form.values.volume as number;
+      if (form.values.dailyVolume !== product.volume) {
+         if (isInStock) {
+            changedFields.dailyVolume = form.values.dailyVolume as number;
+         } else {
+            changedFields.dailyVolume = 0;
+         }
       }
 
       if (form.values.saleVolume !== product.saleVolume) {
@@ -380,6 +394,20 @@ const EditProductModal: FC<EditProductModalProps> = ({
       return changedFields;
    };
 
+   useEffect(() => {
+      if (isInStock) {
+         handleChange("dailyVolume", product.volume);
+      } else {
+         handleChange("dailyVolume", 0);
+      }
+   }, [isInStock]);
+
+   useEffect(() => {
+      if (form.values.dailyVolume === 0) {
+         setIsInStock(false);
+      }
+   }, [form.values.dailyVolume]);
+
    const handleSubmit = (e: React.FormEvent) => {
       e.preventDefault();
       const hasErrors = validateForm();
@@ -391,23 +419,6 @@ const EditProductModal: FC<EditProductModalProps> = ({
       if (Object.keys(changedFields).length === 0) {
          setStatusMessage("Нет изменений для сохранения");
          return;
-      }
-
-      
-      if (!form.values.description) {
-         form.values.description = "-";
-      }
-
-      if (!form.values.composition) {
-         form.values.composition = "-";
-      }
-
-      if (!form.values.storageConditions) {
-         form.values.storageConditions = "-";
-      }
-
-      if (!form.values.package) {
-         form.values.package = "-";
       }
 
       handleEditProduct(changedFields);
@@ -605,65 +616,76 @@ const EditProductModal: FC<EditProductModalProps> = ({
             <div className="flex flex-col items-center gap-y-4 w-full ">
                <div
                   className={`border-2 flex w-full flex-col justify-between md:flex-row items-center gap-x-4 rounded-xl p-2 ${
-                     form.errors.volume ? "border-red-500" : "border-main-gray"
+                     form.errors.dailyVolume ? "border-red-500" : "border-main-gray"
                   }`}
                >
                   <span
                      className={`font-semibold md:text-lg text-sm text-left ${
-                        form.errors.volume ? "text-red-500" : "text-main-gray"
+                        form.errors.dailyVolume ? "text-red-500" : "text-main-gray"
                      }`}
                   >
                      Сколько продукта вы можете поставить в день
                   </span>
                   <div className="flex justify-between items-center gap-x-2 w-full md:w-fit">
-                     <input
-                        type="text"
-                        className={`outline-none w-20 text-main-gray font-medium rounded-md text-center ${
-                           form.errors.volume
-                              ? "placeholder:text-red-500 bg-red-500/10"
-                              : "placeholder:text-main-gray bg-main-gray/10"
-                        }`}
-                        placeholder={
-                           form.errors.volume ? form.errors.volume : ""
-                        }
-                        value={form.values.volume || ""}
-                        onKeyPress={(e) => {
-                           if (!/[0-9]/.test(e.key)) {
-                              e.preventDefault();
+                     <div className="flex justify-between items-center gap-x-2 w-full md:w-fit">
+                        <input
+                           type="text"
+                           disabled={form.values.dailyVolume === 0}
+                           className={`outline-none w-20 text-main-gray font-medium rounded-md text-center ${
+                              form.errors.dailyVolume
+                                 ? "placeholder:text-red-500 bg-red-500/10"
+                                 : "placeholder:text-main-gray bg-main-gray/10"
+                           } ${
+                              form.values.dailyVolume === 0
+                                 ? "opacity-50 cursor-not-allowed"
+                                 : ""
+                           }`}
+                           placeholder={
+                              form.errors.dailyVolume ? form.errors.dailyVolume : ""
                            }
-                        }}
-                        onChange={(e) => {
-                           if (!selectedMeasure) {
-                              setForm((prev) => ({
-                                 ...prev,
-                                 errors: {
-                                    ...prev.errors,
-                                    unit: "Выберите единицу измерения",
-                                    volume: " ",
-                                 },
-                              }));
-                              return;
+                           value={
+                              form.values.dailyVolume === 0
+                                 ? "0"
+                                 : form.values.dailyVolume || ""
                            }
-                           const value = e.target.value;
-                           if (
-                              value === "" ||
-                              (parseInt(value) > 0 && /^\d+$/.test(value))
-                           ) {
-                              e.target.value = value;
-                           } else {
-                              e.target.value = value
-                                 .replace(/[^0-9]/g, "")
-                                 .replace(/^0+/, "");
-                           }
-                           handleChange("volume", parseInt(value));
-                        }}
-                        onBlur={(e) => {
-                           const value = parseInt(e.target.value);
-                           if (value <= 0 || isNaN(value)) {
-                              e.target.value = "";
-                           }
-                        }}
-                     />
+                           onKeyPress={(e) => {
+                              if (!/[0-9]/.test(e.key)) {
+                                 e.preventDefault();
+                              }
+                           }}
+                           onChange={(e) => {
+                              if (!selectedMeasure) {
+                                 setForm((prev) => ({
+                                    ...prev,
+                                    errors: {
+                                       ...prev.errors,
+                                       unit: "Выберите единицу измерения",
+                                       volume: " ",
+                                    },
+                                 }));
+                                 return;
+                              }
+                              const value = e.target.value;
+                              if (
+                                 value === "" ||
+                                 (parseInt(value) > 0 && /^\d+$/.test(value))
+                              ) {
+                                 e.target.value = value;
+                              } else {
+                                 e.target.value = value
+                                    .replace(/[^0-9]/g, "")
+                                    .replace(/^0+/, "");
+                              }
+                              handleChange("dailyVolume", parseInt(value));
+                           }}
+                           onBlur={(e) => {
+                              const value = parseInt(e.target.value);
+                              if (value <= 0 || isNaN(value)) {
+                                 e.target.value = "";
+                              }
+                           }}
+                        />
+                     </div>
                      <span className="text-main-gray font-semibold md:text-lg text-sm text-center w-10">
                         {selectedMeasure ? selectedMeasure : "..."}
                      </span>
@@ -671,12 +693,12 @@ const EditProductModal: FC<EditProductModalProps> = ({
                </div>
                <div
                   className={`border-2 flex w-full flex-col justify-between md:flex-row items-center gap-x-4 rounded-xl p-2 ${
-                     form.errors.volume ? "border-red-500" : "border-main-gray"
+                     form.errors.saleVolume ? "border-red-500" : "border-main-gray"
                   }`}
                >
                   <span
                      className={`font-semibold md:text-lg text-sm text-left w-full ${
-                        form.errors.volume ? "text-red-500" : "text-main-gray"
+                        form.errors.saleVolume ? "text-red-500" : "text-main-gray"
                      }`}
                   >
                      Размер одной продажи
@@ -735,6 +757,74 @@ const EditProductModal: FC<EditProductModalProps> = ({
                      </span>
                   </div>
                </div>
+               <div
+                  className={`border-2 w-full flex flex-col justify-between md:flex-row items-center gap-x-4 rounded-xl p-2 ${
+                     form.errors.inaccuracy
+                        ? "border-red-500"
+                        : "border-main-gray"
+                  }`}
+               >
+                  <span
+                     className={`font-semibold md:text-lg text-sm text-left w-full ${
+                        form.errors.inaccuracy
+                           ? "text-red-500"
+                           : "text-main-gray"
+                     }`}
+                  >
+                     Введите погрешность, если она есть
+                  </span>
+                  <div className="flex w-full justify-between items-center gap-x-2 md:w-fit">
+                     <input
+                        type="text"
+                        className={`outline-none w-20 text-main-gray font-medium rounded-md text-center ${
+                           form.errors.inaccuracy
+                              ? "placeholder:text-red-500 bg-red-500/10"
+                              : "placeholder:text-main-gray bg-main-gray/10"
+                        }`}
+                        placeholder={
+                           form.errors.inaccuracy ? form.errors.inaccuracy : ""
+                        }
+                        value={form.values.inaccuracy ?? ""}
+                        onKeyPress={(e) => {
+                           if (!/[0-9]/.test(e.key)) {
+                              e.preventDefault();
+                           }
+                        }}
+                        onChange={(e) => {
+                           if (!selectedMeasure) {
+                              setForm((prev) => ({
+                                 ...prev,
+                                 errors: {
+                                    ...prev.errors,
+                                    unit: "Выберите единицу измерения",
+                                    inaccuracy: " ",
+                                 },
+                              }));
+                              return;
+                           }
+
+                           let value = e.target.value;
+
+
+                           value = value.replace(/[^0-9]/g, "");
+
+                           handleChange("inaccuracy", value === "" ? "" : parseInt(value));
+                        }}
+                        onBlur={(e) => {
+                           const value = e.target.value.trim();
+                         
+                           if (value === "") {
+                              handleChange("inaccuracy", 0);
+                           }
+                        }}
+                     />
+
+                     <span className="text-main-gray font-semibold md:text-lg text-sm text-center w-10">
+                        {selectedMeasure ? selectedMeasure : "..."}
+                     </span>
+                  </div>
+               </div>
+            
             </div>
          </div>
          <div className="grid md:grid-cols-2 grid-cols-1 md:gap-5 gap-y-4">
@@ -894,7 +984,7 @@ const EditProductModal: FC<EditProductModalProps> = ({
                </span>
             </div>
 
-            {/* <div
+            <div
                className={`border-2 flex items-center md:gap-x-4 justify-between md:justify-start rounded-xl p-2 ${
                   form.errors.price ? "border-red-500" : "border-main-gray"
                }`}
@@ -907,28 +997,18 @@ const EditProductModal: FC<EditProductModalProps> = ({
                   Наличие
                </span>
 
-               <button
-                  className={`bg-main-gray/10 cursor-pointer rounded-md  ${
-                     isInStock ? "text-main-green" : "text-transparent"
-                  }`}
-                  onClick={() => setIsInStock(!isInStock)}
-               >
-                  <svg
-                     xmlns="http://www.w3.org/2000/svg"
-                     fill="none"
-                     viewBox="0 0 24 24"
-                     strokeWidth={4}
-                     stroke="currentColor"
-                     className="size-6"
-                  >
-                     <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="m4.5 12.75 6 6 9-13.5"
-                     />
-                  </svg>
-               </button>
-            </div> */}
+               <Switcher
+                  isChecked={isInStock}
+                  setIsChecked={() => setIsInStock(!isInStock)}
+               />
+            </div>
+            {!isInStock && (
+               <div className="text-red-500 font-semibold text-sm">
+                  Чтобы выставить количество постовляемого товара,
+                  <br />
+                  необходимо указать что он в наличии
+               </div>
+            )}
          </div>
          <div className="flex flex-col md:flex-row gap-y-6 md:gap-x-5 md:items-end justify-between w-full">
             <div className="flex flex-col md:w-fit w-full items-start md:items-center gap-y-2">
@@ -939,16 +1019,16 @@ const EditProductModal: FC<EditProductModalProps> = ({
                   setValue={(value) => handleChange("delivery", value)}
                />
             </div>
-          
+
             <button
                onClick={handleSubmit}
-               className={`bg-main-green text-white py-2 px-4 rounded-full font-medium shadow-md/40 hover:scale-110 transition-all duration-100 md:w-fit w-full ${statusMessage ? "bg-main-gray" : ""}`}
+               className={`bg-main-green text-white py-2 px-4 rounded-full font-medium shadow-md/40 hover:scale-110 transition-all duration-100 md:w-fit w-full ${
+                  statusMessage ? "bg-main-gray" : ""
+               }`}
             >
                {statusMessage ? statusMessage : "СОХРАНИТЬ"}
             </button>
-          
          </div>
-         
       </div>
    );
 };

@@ -10,18 +10,18 @@ import {
    deleteCertificateApi,
 } from "@/api/producerApi";
 import { IProducer } from "@/types/entities/User";
-import { IProductCard } from "@/types/entities/Product";
 import { ProducerUpdateRequest } from "@/types/requests/UserRequests";
 import { CreateProductRequest, DeleteProductRequest, UpdateProductRequest } from "@/types/requests/ProductRequests";
 import { createProductApi, deleteProductApi, getProductsByProducerIdApi, updateProductApi } from "@/api/productApi";
 import { getCookie, deleteCookie } from "cookies-next";
 import { fetchApi } from "@/lib/fetchApi";
+import { IDisplayCard } from "@/types/entities/Display";
 
 class ProducerStore {
    profile: IProducer | null = null;
    gallery: string[] = [];
    certificates: string[] = [];
-   products: IProductCard[] = [];
+   products: IDisplayCard[] = [];
 
    constructor() {
       makeAutoObservable(this);

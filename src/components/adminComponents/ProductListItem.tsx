@@ -1,11 +1,11 @@
 "use client";
 
 import { FC, useEffect, useState } from "react";
-import { IProductCard } from "@/types/entities/Product";
 import { useStores } from "@/hooks/useStores";
+import { IDisplayCard } from "@/types/entities/Display";
 
 interface ProductListItemProps {
-   product: IProductCard;
+   product: IDisplayCard;
 }
 
 const ProductListItem: FC<ProductListItemProps> = ({ product }) => {
@@ -21,13 +21,16 @@ const ProductListItem: FC<ProductListItemProps> = ({ product }) => {
             productId: product.id,
             overprice: overprice,
          });
-         if (res.success) {
+         if (res.success && product.basePrice && product.discount) {
             setIsEdit(false);
             setShowChangePrice(false);
             setOverprice(overprice);
-            setPrice(product.basePrice -
-               (product.basePrice * product.discount) / 100 +
-               product.basePrice * (overprice / 100));
+
+            setPrice(
+               product.basePrice -
+                  (product.basePrice * product.discount) / 100 +
+                  product.basePrice * (overprice / 100)
+            );
          }
       }
    };
@@ -47,7 +50,7 @@ const ProductListItem: FC<ProductListItemProps> = ({ product }) => {
             <p>{product.basePrice}</p>
             <p>{product.discount}%</p>
             <p className={`${showChangePrice ? "text-main-green" : ""}`}>
-               {showChangePrice
+               {showChangePrice && product.basePrice && product.discount
                   ? Number(
                        product.basePrice -
                           (product.basePrice * product.discount) / 100 +

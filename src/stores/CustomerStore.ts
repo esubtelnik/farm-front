@@ -16,22 +16,22 @@ import {
 import { updateCustomerApi } from "@/api/userApi";
 
 import { ICustomer } from "@/types/entities/User";
-import { IProductCard } from "@/types/entities/Product";
+
 import {
    AddToCartRequest,
    RemoveFromCartRequest,
    AddToFavouritesRequest,
    RemoveFromFavouritesRequest,
-} from "@/types/requests/ProductRequests";
+} from "@/types/requests/CustomerRequests";
 import { CustomerUpdateRequest } from "@/types/requests/UserRequests";
 import { getCookie, deleteCookie } from "cookies-next";
 import { fetchApi } from "@/lib/fetchApi";
-
+import { IDisplayCard } from "@/types/entities/Display";
 
 class CustomerStore {
    profile: ICustomer | null = null;
-   favourites: IProductCard[] = [];
-   cart: IProductCard[] = [];
+   favourites: IDisplayCard[] = [];
+   cart: IDisplayCard[] = [];
 
    constructor() {
       makeAutoObservable(this);
@@ -57,7 +57,9 @@ class CustomerStore {
          const res = await fetchApi(getCustomerCartApi(token));
          if (res.success) {
             runInAction(() => {
-               this.cart = res.data.products;
+               const products = res.data.products ?? [];
+               const readyBaskets = res.data.readyBaskets ?? [];
+               this.cart = [...products, ...readyBaskets];
             });
          } else {
             this.cart = [];
@@ -73,7 +75,9 @@ class CustomerStore {
          const res = await fetchApi(getCustomerFavouritesApi(token));
          if (res.success) {
             runInAction(() => {
-               this.favourites = res.data.products;
+               const products = res.data.products ?? [];
+               const readyBaskets = res.data.readyBaskets ?? [];
+               this.favourites = [...products, ...readyBaskets];
             });
          } else {
             this.favourites = [];
@@ -84,10 +88,13 @@ class CustomerStore {
    }
 
    async addToFavourites(
-      product: IProductCard
+      product: IDisplayCard
    ): Promise<{ success: boolean; message?: string }> {
       try {
-         const payload: AddToFavouritesRequest = { productId: product.id };
+         const payload: AddToFavouritesRequest = {
+            productId: product.id,
+            isBasket: product.type === "basket",
+         };
          const newProduct = { ...product, isInFavourites: true };
          const token = getCookie("token")?.toString();
          const res = await fetchApi(addToFavouritesApi(payload, token));
@@ -112,43 +119,44 @@ class CustomerStore {
    }
 
    async removeFromFavourites(
-      payload: RemoveFromFavouritesRequest
+      product: IDisplayCard
    ): Promise<{ success: boolean; message?: string }> {
       try {
+         const payload: RemoveFromFavouritesRequest = {
+            productId: product.id,
+            isBasket: product.type === "basket",
+         };
          const token = getCookie("token")?.toString();
-         const res = await fetchApi(removeFromFavouritesApi(payload, token));
+         const res = await fetchApi(removeFromFavouritesApi(payload, token)); 
          if (res.success) {
             runInAction(() => {
-           
-                  this.favourites = this.favourites.filter(
-                     (p) => p.id !== payload.productId
-                  );
+               this.favourites = this.favourites.filter(
+                  (p) => p.id !== product.id
+               );
 
-                  this.cart = this.cart.map((item) =>
-                     item.id === payload.productId
-                        ? { ...item, isInFavourites: false }
-                        : item
-                  );
-             
+               this.cart = this.cart.map((item) =>
+                  item.id === product.id
+                     ? { ...item, isInFavourites: false }
+                     : item
+               );
             });
 
-             // const productInFavourites = this.favourites.find(
-               //    (p) => p.id === payload.productId
-               // );
-               // if (productInFavourites) {
-               //    const index = this.favourites.indexOf(productInFavourites);
-               //    this.favourites.splice(index, 1);
-               // }
-               
-               
-               // const productInCart = this.cart.find((p) => p.id === payload.productId);
-               // if (productInCart) productInCart.isInFavourites = false;
-               
-               // const productInFavouritesList = this.favourites.find(
-               //    (p) => p.id === payload.productId
-               // );
-               // if (productInFavouritesList) productInFavouritesList.isInFavourites = false;
-             
+            // const productInFavourites = this.favourites.find(
+            //    (p) => p.id === payload.productId
+            // );
+            // if (productInFavourites) {
+            //    const index = this.favourites.indexOf(productInFavourites);
+            //    this.favourites.splice(index, 1);
+            // }
+
+            // const productInCart = this.cart.find((p) => p.id === payload.productId);
+            // if (productInCart) productInCart.isInFavourites = false;
+
+            // const productInFavouritesList = this.favourites.find(
+            //    (p) => p.id === payload.productId
+            // );
+            // if (productInFavouritesList) productInFavouritesList.isInFavourites = false;
+
             return { success: true };
          } else {
             return { success: false, message: res.message };
@@ -163,10 +171,13 @@ class CustomerStore {
    }
 
    async addToCart(
-      product: IProductCard
+      product: IDisplayCard
    ): Promise<{ success: boolean; message?: string }> {
       try {
-         const payload: AddToCartRequest = { productId: product.id };
+         const payload: AddToCartRequest = {
+            productId: product.id,
+            isBasket: product.type === "basket",
+         };
          const newProduct = { ...product, isInCart: true };
          const token = getCookie("token")?.toString();
          const res = await fetchApi(addToCartApi(payload, token));
@@ -188,19 +199,23 @@ class CustomerStore {
    }
 
    async removeFromCart(
-      payload: RemoveFromCartRequest
+      product: IDisplayCard
    ): Promise<{ success: boolean; message?: string }> {
       try {
          const token = getCookie("token")?.toString();
+         const payload: RemoveFromCartRequest = {
+            productId: product.id,
+            isBasket: product.type === "basket",
+         };
          const res = await fetchApi(removeFromCartApi(payload, token));
 
          if (res.success) {
             runInAction(() => {
                this.cart = this.cart.filter(
-                  (item) => item.id !== payload.productId
+                  (item) => item.id !== product.id
                );
                this.favourites = this.favourites.map((item) =>
-                  item.id === payload.productId
+                  item.id === product.id
                      ? { ...item, isInCart: false }
                      : item
                );
@@ -223,14 +238,14 @@ class CustomerStore {
             runInAction(() => {
                runInAction(() => {
                   // const cartProductIds = this.cart.map(item => item.id);
-                  
+
                   this.cart = [];
-                  
-                  this.favourites = this.favourites.map(item => ({
+
+                  this.favourites = this.favourites.map((item) => ({
                      ...item,
-                     isInCart: false
-                 }));
-              }); 
+                     isInCart: false,
+                  }));
+               });
             });
             return { success: true };
          } else {
@@ -266,38 +281,41 @@ class CustomerStore {
       return this.cart.length;
    }
 
-   syncProductsWithUserData(products: IProductCard[]): IProductCard[] {
-     const result = products.map(product => {
-      const isInCart = this.cart.some(cartItem => cartItem.id === product.id);
-      const isInFavourites = this.favourites.some(favItem => favItem.id === product.id);
-           
-      return {
-         ...product,
-         isInCart,
-         isInFavourites
-      };
-   });
+   syncProductsWithUserData(products: IDisplayCard[]): IDisplayCard[] {
+      const result = products.map((product) => {
+         const isInCart = this.cart.some(
+            (cartItem) => cartItem.id === product.id
+         );
+         const isInFavourites = this.favourites.some(
+            (favItem) => favItem.id === product.id
+         );
 
-   return result;
-}
+         return {
+            ...product,
+            isInCart,
+            isInFavourites,
+         };
+      });
 
-async ensureUserDataLoaded() {
-   // Проверяем, есть ли токен
-   const token = getCookie("token")?.toString();
-   if (!token) return;
-
-   if (!this.profile) {
-      await this.fetchCustomerData();
+      return result;
    }
-   await Promise.all([
-      this.fetchCustomerCart(),
-      this.fetchCustomerFavourites()
-   ]);
-}
 
-get isDataInitialized(): boolean {
-   return this.profile !== null;
-}
+   async ensureUserDataLoaded() {
+      const token = getCookie("token")?.toString();
+      if (!token) return;
+
+      if (!this.profile) {
+         await this.fetchCustomerData();
+      }
+      await Promise.all([
+         this.fetchCustomerCart(),
+         this.fetchCustomerFavourites(),
+      ]);
+   }
+
+   get isDataInitialized(): boolean {
+      return this.profile !== null;
+   }
 
    async logout() {
       deleteCookie("token");

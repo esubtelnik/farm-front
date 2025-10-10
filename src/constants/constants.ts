@@ -1,3 +1,5 @@
+export const readyBasketType = 'Готовые корзины'
+
 export const activityTypes = ["КФХ", "Ремесленник", "Физ. лицо", "ИП", "ЛПХ"];
 
 export const measures = [

@@ -1,4 +1,9 @@
-import { ICategory, IProduct, IProductCard } from "@/types/entities/Product";
+import {
+   ICategory,
+   IProduct,
+   IProductCard,
+   IReadyBasket,
+} from "@/types/entities/Product";
 import { IReview } from "@/types/entities/Review";
 import {
    CreateProductRequest,
@@ -9,6 +14,7 @@ import {
    GetCategoryByTitleRequest,
    UpdateProductRequest,
    DeleteProductRequest,
+   GetReadyBasketByIdRequest,
 } from "@/types/requests/ProductRequests";
 import {
    CreateProductResponse,
@@ -16,6 +22,8 @@ import {
 } from "@/types/responses/ProductResponses";
 import { ApiClient } from "@/lib/apiClient";
 import { ApiResponse } from "@/types/ApiResponse";
+import { IDisplayCard } from "@/types/entities/Display";
+import { mapToDisplayCard } from "@/utils/MappingTypes";
 
 export const getCategoriesApi = async (
    token?: string
@@ -116,11 +124,18 @@ export const updateProductApi = async (
 export const getProductsByProducerIdApi = async (
    payload: GetProductsByProducerIdRequest,
    token?: string
-): Promise<ApiResponse<IProductCard[]>> => {
-   return await ApiClient.get<ApiResponse<IProductCard[]>>(
-      `/api/product/producer/${payload.producerId}`,
-      token
-   );
+): Promise<ApiResponse<IDisplayCard[]>> => {
+   const response = await ApiClient.get<
+   ApiResponse<(IProductCard | IReadyBasket)[]>
+ >(`/api/product/producer/${payload.producerId}`, token); 
+
+   const mappedData: IDisplayCard[] = (response.data ?? []).map(mapToDisplayCard);
+
+   return {
+      successful: response.successful,
+      data: mappedData,
+      error: response.error,
+   };
 };
 
 export const getProductByIdApi = async (
@@ -137,13 +152,39 @@ export const getProductByIdApi = async (
 export const searchProductsApi = async (
    payload: SearchProductsRequest,
    token?: string
-): Promise<ApiResponse<IProductCard[]>> => {
-   return await ApiClient.post<
+): Promise<ApiResponse<IDisplayCard[]>> => {
+   const response = await ApiClient.post<
       SearchProductsRequest,
-      ApiResponse<IProductCard[]>
+      ApiResponse<(IProductCard | IReadyBasket)[]>
    >("/api/product/search", payload, token);
+
+   const mappedData: IDisplayCard[] = response.data.map(mapToDisplayCard);
+   return {
+      successful: response.successful,
+      data: mappedData,
+      error: response.error,
+   };
 };
 
+export const searchOnlyProductsApi = async (
+   payload: SearchProductsRequest,
+   token?: string
+): Promise<ApiResponse<IProductCard[]>> => {
+   const response = await ApiClient.post<
+      SearchProductsRequest,
+      ApiResponse<(IProductCard | IReadyBasket)[]>
+   >("/api/product/search", payload, token);
+
+   const filtered = response.data.filter(
+      (item): item is IProductCard => !("products" in item)
+   );
+
+   return {
+      successful: response.successful,
+      data: filtered,
+      error: response.error,
+   };
+};
 export const addReviewApi = async (
    payload: AddReviewRequest,
    token?: string
@@ -151,6 +192,25 @@ export const addReviewApi = async (
    return await ApiClient.post<AddReviewRequest, ApiResponse<IReview>>(
       "/api/product/feedback",
       payload,
+      token
+   );
+};
+
+export const getAllReadyBasketsApi = async (
+   token?: string
+): Promise<ApiResponse<IReadyBasket[]>> => {
+   return await ApiClient.get<ApiResponse<IReadyBasket[]>>(
+      "/api/product/basket/all",
+      token
+   );
+};
+
+export const getReadyBasketByIdApi = async (
+   payload: GetReadyBasketByIdRequest,
+   token?: string
+): Promise<ApiResponse<IReadyBasket>> => {
+   return await ApiClient.get<ApiResponse<IReadyBasket>>(
+      "/api/product/basket/" + payload.id,
       token
    );
 };

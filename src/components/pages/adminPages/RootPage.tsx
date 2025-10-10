@@ -24,7 +24,11 @@ const RootPage: FC = () => {
             {isRegistrationCodeFormOpen && <RegistrationCodeForm />}
             <AdminActionButton
                label="Готовые корзины"
-               path={routes.admin.readyCarts}
+               path={routes.admin.lists.readyBaskets}
+            />
+              <AdminActionButton
+               label="Создать готовую корзину"
+               path={routes.admin.items.addReadyBasket}
             />
             <AdminActionButton
                label="Список производителей"

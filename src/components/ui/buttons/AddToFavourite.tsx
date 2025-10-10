@@ -3,15 +3,15 @@ import { FC, useState } from "react";
 import { useAuthContext } from "@/context/AuthContext";
 import { UserType } from "@/constants/UserTypeEnum";
 import { useStores } from "@/hooks/useStores";
-import { IProductCard } from "@/types/entities/Product";
 import { Modal } from "@/components/ui/modals/Modal";
 import LoginModal from "@/components/ui/modals/modalContents/LoginModal";
 import Toast from "@/components/ui/Toast";
+import { IDisplayCard } from "@/types/entities/Display";
 
 interface AddToFavouriteProps {
    cardType?: "item" | "page";
    isInFavourites: boolean;
-   product: IProductCard;
+   product: IDisplayCard;
    onToggle: (newState: boolean) => void;
 }
 
@@ -35,7 +35,7 @@ const AddToFavourite: FC<AddToFavouriteProps> = ({
       e.stopPropagation();
       if (userType === UserType.CUSTOMER) {
          if (isInFavourites) {
-            await customerStore.removeFromFavourites({ productId: product.id });
+            await customerStore.removeFromFavourites(product);
             onToggle(false);
             setToast({
                message: "Продукт успешно удален из избранного",

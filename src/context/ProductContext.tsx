@@ -8,17 +8,26 @@ import {
    getProductsByProducerIdApi,
    searchProductsApi,
    addReviewApi,
+   searchOnlyProductsApi,
 } from "@/api/productApi";
 import {
    GetProductByIdRequest,
    SearchProductsRequest,
    AddReviewRequest,
 } from "../types/requests/ProductRequests";
-import { addProducerReviewApi, getAllProducersApi, getProducerByIdApi } from "@/api/producerApi";
+import {
+   addProducerReviewApi,
+   getAllProducersApi,
+   getProducerByIdApi,
+} from "@/api/producerApi";
 import { IProducerCard } from "../types/entities/User";
 import { IReview } from "../types/entities/Review";
-import { AddProducerReviewRequest, GetProducerByIdRequest } from "../types/requests/ProducerRequests";
+import {
+   AddProducerReviewRequest,
+   GetProducerByIdRequest,
+} from "../types/requests/ProducerRequests";
 import { ProducerByIdResponse } from "../types/responses/ProducerResponses";
+import { IDisplayCard } from "@/types/entities/Display";
 
 interface ProductContextType {
    categories: ICategory[];
@@ -31,14 +40,21 @@ interface ProductContextType {
    setSearchedProducts: (products: IProductCard[]) => void;
    getProductsByProducerId: (producerId: string) => Promise<{
       success: boolean;
-      products: IProductCard[];
+      products: IDisplayCard[];
       message?: string;
    }>;
    searchProducts: (payload: SearchProductsRequest) => Promise<{
       success: boolean;
+      products: IDisplayCard[];
+      message?: string;
+   }>;
+
+   searchOnlyProducts: (payload: SearchProductsRequest) => Promise<{
+      success: boolean;
       products: IProductCard[];
       message?: string;
    }>;
+
    getProductById: (payload: GetProductByIdRequest) => Promise<{
       success: boolean;
       product: IProduct | null;
@@ -57,7 +73,6 @@ interface ProductContextType {
       message?: string;
    }>;
 
-
    addReview: (payload: AddReviewRequest) => Promise<{
       success: boolean;
       review: IReview | null;
@@ -69,9 +84,7 @@ interface ProductContextType {
       review: IReview | null;
       message?: string;
    }>;
-
 }
-
 
 const ProductContext = createContext<ProductContextType | undefined>(undefined);
 
@@ -95,11 +108,19 @@ export const ProductContextProvider = ({
             setCategories(response.data);
             return { success: true, categories: response.data };
          } else {
-            return { success: false, categories: [], message: response.error.message };
+            return {
+               success: false,
+               categories: [],
+               message: response.error.message,
+            };
          }
       } catch (error) {
          console.log(error);
-         return { success: false, categories: [], message: "Ошибка при получении категорий" };
+         return {
+            success: false,
+            categories: [],
+            message: "Ошибка при получении категорий",
+         };
       }
    };
 
@@ -107,7 +128,7 @@ export const ProductContextProvider = ({
       producerId: string
    ): Promise<{
       success: boolean;
-      products: IProductCard[];
+      products: IDisplayCard[];
       message?: string;
    }> => {
       try {
@@ -135,12 +156,39 @@ export const ProductContextProvider = ({
       payload: SearchProductsRequest
    ): Promise<{
       success: boolean;
+      products: IDisplayCard[];
+      message?: string;
+   }> => {
+      try {
+         const response = await searchProductsApi(payload);
+         if (response.successful) {
+            return { success: true, products: response.data };
+         } else {
+            return {
+               success: false,
+               products: [],
+               message: response.error.message,
+            };
+         }
+      } catch (error) {
+         console.log(error);
+         return {
+            success: false,
+            products: [],
+            message: "Ошибка при получении продуктов",
+         };
+      }
+   };
+
+   const searchOnlyProducts = async (
+      payload: SearchProductsRequest
+   ): Promise<{
+      success: boolean;
       products: IProductCard[];
       message?: string;
    }> => {
       try {
-
-         const response = await searchProductsApi(payload);
+         const response = await searchOnlyProductsApi(payload);
          if (response.successful) {
             return { success: true, products: response.data };
          } else {
@@ -214,25 +262,37 @@ export const ProductContextProvider = ({
       }
    };
 
-   const getProducerById = async (payload: GetProducerByIdRequest): Promise<{
+   const getProducerById = async (
+      payload: GetProducerByIdRequest
+   ): Promise<{
       success: boolean;
-         data: ProducerByIdResponse | null;
+      data: ProducerByIdResponse | null;
       message?: string;
    }> => {
       try {
-         const response = await getProducerByIdApi(payload);      
+         const response = await getProducerByIdApi(payload);
          if (response.successful) {
             return { success: true, data: response.data };
          } else {
-            return { success: false, data: null, message: response.error.message };
+            return {
+               success: false,
+               data: null,
+               message: response.error.message,
+            };
          }
       } catch (error) {
-         console.log(error);     
-         return { success: false, data: null, message: "Ошибка при получении производителя" };
+         console.log(error);
+         return {
+            success: false,
+            data: null,
+            message: "Ошибка при получении производителя",
+         };
       }
    };
 
-   const addReview = async (payload: AddReviewRequest): Promise<{
+   const addReview = async (
+      payload: AddReviewRequest
+   ): Promise<{
       success: boolean;
       review: IReview | null;
       message?: string;
@@ -242,15 +302,25 @@ export const ProductContextProvider = ({
          if (response.successful) {
             return { success: true, review: response.data };
          } else {
-            return { success: false, review: null, message: response.error.message };
+            return {
+               success: false,
+               review: null,
+               message: response.error.message,
+            };
          }
       } catch (error) {
          console.log(error);
-         return { success: false, review: null, message: "Ошибка при добавлении отзыва" };
+         return {
+            success: false,
+            review: null,
+            message: "Ошибка при добавлении отзыва",
+         };
       }
    };
 
-   const addProducerReview = async (payload: AddProducerReviewRequest): Promise<{
+   const addProducerReview = async (
+      payload: AddProducerReviewRequest
+   ): Promise<{
       success: boolean;
       review: IReview | null;
       message?: string;
@@ -260,11 +330,19 @@ export const ProductContextProvider = ({
          if (response.successful) {
             return { success: true, review: response.data };
          } else {
-            return { success: false, review: null, message: response.error.message };
+            return {
+               success: false,
+               review: null,
+               message: response.error.message,
+            };
          }
       } catch (error) {
          console.log(error);
-         return { success: false, review: null, message: "Ошибка при добавлении отзыва" };
+         return {
+            success: false,
+            review: null,
+            message: "Ошибка при добавлении отзыва",
+         };
       }
    };
 
@@ -292,7 +370,8 @@ export const ProductContextProvider = ({
             getProducerById,
             addProducerReview,
             getCategories,
-            }}
+            searchOnlyProducts,
+         }}
       >
          {children}
       </ProductContext.Provider>

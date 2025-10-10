@@ -46,7 +46,7 @@ const CatalogPage: FC<CatalogPageProps> = ({ categories }) => {
             </p>
          </div>
          <Hr />
-         <div className="flex md:pr-12 mb-5">
+         <div className="flex flex-col md:flex-row p-3 md:p-0 md:pr-12">
             <Title title="Каталог" />
                <Search isCatalogPage={true} />
             </div>

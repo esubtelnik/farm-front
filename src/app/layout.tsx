@@ -7,6 +7,7 @@ import { getAccountApi } from "@/api/userApi";
 import { AuthContextProvider } from "@/context/AuthProvider";
 import { cookies } from "next/headers";
 import { ProductContextProvider } from "@/context/ProductContext";
+import Script from "next/script";
 
 //import { getCookie } from "cookies-next/server";
 
@@ -66,10 +67,18 @@ export const metadata: Metadata = {
 
    icons: {
       icon: [
-         { url: "/icons/favicon-1.ico", sizes: "128x128", type: "image/x-icon" },
+         {
+            url: "/icons/favicon-1.ico",
+            sizes: "128x128",
+            type: "image/x-icon",
+         },
       ],
       apple: [
-         { url: "/icons/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
+         {
+            url: "/icons/apple-touch-icon.png",
+            sizes: "180x180",
+            type: "image/png",
+         },
       ],
       other: [
          {
@@ -79,7 +88,6 @@ export const metadata: Metadata = {
          },
       ],
    },
-
 
    authors: [{ name: "FARM-BASKET", url: "https://farmbasket.by" }],
    creator: "FARM-BASKET",
@@ -129,8 +137,6 @@ export const metadata: Metadata = {
       },
    },
 
-   
-
    // // Манифест
    // manifest: "/manifest.json",
 
@@ -139,21 +145,19 @@ export const metadata: Metadata = {
       canonical: "https://farmbasket.by",
       languages: {
          "ru-RU": "https://farmbasket.by",
-         "en-US": "https://farmbasket.by/en",
       },
    },
 
    // Категория контента
    category: "food",
 
+   verification: {
+      yandex: "f211772599a51c6b",
+      google: "GM-TS_g1xSWrwatll7ciETT3M1H5owlS2bUXoNXNTVo",
+   },
+
    // Дополнительные метатеги
    other: {
-      // Для Google
-      "google-site-verification": "your-google-verification-code",
-
-      // Для Yandex
-      "yandex-verification": "your-yandex-verification-code",
-
       // Тематика сайта
       "theme-color": "#91bc46",
       "color-scheme": "light",
@@ -228,6 +232,42 @@ export default async function RootLayout({
          <body
             className={`${geistSans.variable} ${geistMono.variable} ${roboto.variable} antialiased`}
          >
+            <Script
+               id="yandex-metrika"
+               strategy="afterInteractive"
+               dangerouslySetInnerHTML={{
+                  __html: `
+              (function(m,e,t,r,i,k,a){
+                  m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+                  m[i].l=1*new Date();
+                  for (var j = 0; j < document.scripts.length; j++) {
+                    if (document.scripts[j].src === r) { return; }
+                  }
+                  k=e.createElement(t),a=e.getElementsByTagName(t)[0],
+                  k.async=1,k.src=r,a.parentNode.insertBefore(k,a)
+              })(window, document, 'script', 'https://mc.yandex.ru/metrika/tag.js?id=104363217', 'ym');
+
+              ym(104363217, 'init', {
+                  ssr:true,
+                  webvisor:true,
+                  clickmap:true,
+                  ecommerce:"dataLayer",
+                  accurateTrackBounce:true,
+                  trackLinks:true
+              });
+            `,
+               }}
+            />
+
+            <noscript>
+               <div>
+                  <img
+                     src="https://mc.yandex.ru/watch/104363217"
+                     style={{ position: "absolute", left: "-9999px" }}
+                     alt=""
+                  />
+               </div>
+            </noscript>
             <AuthContextProvider initialUserType={userType}>
                <ProductContextProvider>{children}</ProductContextProvider>
             </AuthContextProvider>

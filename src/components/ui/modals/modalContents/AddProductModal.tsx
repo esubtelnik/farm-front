@@ -98,6 +98,7 @@ interface FormState {
       saleVolume: number | null;
       unit: string;
       delivery: number;
+      inaccuracy: number;
    };
    errors: {
       title: string | null;
@@ -113,6 +114,7 @@ interface FormState {
       saleVolume: string | null;
       unit: string | null;
       delivery: string | null;
+      inaccuracy: string | null;
    };
 }
 
@@ -188,6 +190,7 @@ const AddProductModal: FC<AddProductModalProps> = ({ handleAddProduct }) => {
          saleVolume: 0,
          unit: "",
          delivery: 1,
+         inaccuracy: 0,
       },
       errors: {
          title: null,
@@ -203,6 +206,7 @@ const AddProductModal: FC<AddProductModalProps> = ({ handleAddProduct }) => {
          saleVolume: null,
          unit: null,
          delivery: null,
+         inaccuracy: null,
       },
    });
 
@@ -238,6 +242,7 @@ const AddProductModal: FC<AddProductModalProps> = ({ handleAddProduct }) => {
          saleVolume: null,
          unit: null,
          delivery: null,
+         inaccuracy: null,
       };
 
       if (!form.values.title) {
@@ -319,6 +324,9 @@ const AddProductModal: FC<AddProductModalProps> = ({ handleAddProduct }) => {
          form.values.package = "-";
       }
 
+      if (!form.values.inaccuracy) {
+         form.values.inaccuracy = 0;
+      }
 
       await handleAddProduct(form.values as CreateProductRequest);
    };
@@ -326,13 +334,15 @@ const AddProductModal: FC<AddProductModalProps> = ({ handleAddProduct }) => {
    return (
       <div className="bg-white w-full overflow-y-hidden p-8 gap-y-8 flex flex-col font-geist">
          <div className="flex flex-col items-center lg:items-start lg:flex-row gap-y-5 gap-x-5">
-            <AddPhotoInput
-               images={form.values.images}
-               error={form.errors.images}
-               onChange={(files) => handleChange("images", files)}
-               isEditable
-            />
-            <div className="flex flex-col items-center gap-y-2 lg:w-1/3 w-full">
+            <div className="w-60">
+               <AddPhotoInput
+                  images={form.values.images}
+                  error={form.errors.images}
+                  onChange={(files) => handleChange("images", files)}
+                  isEditable
+               />
+            </div>
+            <div className="flex flex-col items-center gap-y-2 lg:w-32 w-full">
                <div
                   className={`w-full flex items-center gap-x-2 px-2 outline-none border-2 rounded-md ${
                      form.errors.title
@@ -580,12 +590,16 @@ const AddProductModal: FC<AddProductModalProps> = ({ handleAddProduct }) => {
                </div>
                <div
                   className={`border-2 w-full flex flex-col justify-between md:flex-row items-center gap-x-4 rounded-xl p-2 ${
-                     form.errors.saleVolume ? "border-red-500" : "border-main-gray"
+                     form.errors.saleVolume
+                        ? "border-red-500"
+                        : "border-main-gray"
                   }`}
                >
                   <span
                      className={`font-semibold md:text-lg text-sm text-left w-full ${
-                        form.errors.saleVolume ? "text-red-500" : "text-main-gray"
+                        form.errors.saleVolume
+                           ? "text-red-500"
+                           : "text-main-gray"
                      }`}
                   >
                      Размер одной продажи
@@ -639,6 +653,76 @@ const AddProductModal: FC<AddProductModalProps> = ({ handleAddProduct }) => {
                            }
                         }}
                      />
+                     <span className="text-main-gray font-semibold md:text-lg text-sm text-center w-10">
+                        {selectedMeasure ? selectedMeasure : "..."}
+                     </span>
+                  </div>
+               </div>
+               <div
+                  className={`border-2 w-full flex flex-col justify-between md:flex-row items-center gap-x-4 rounded-xl p-2 ${
+                     form.errors.inaccuracy
+                        ? "border-red-500"
+                        : "border-main-gray"
+                  }`}
+               >
+                  <span
+                     className={`font-semibold md:text-lg text-sm text-left w-full ${
+                        form.errors.inaccuracy
+                           ? "text-red-500"
+                           : "text-main-gray"
+                     }`}
+                  >
+                     Введите погрешность, если она есть
+                  </span>
+                  <div className="flex w-full justify-between items-center gap-x-2 md:w-fit">
+                     <input
+                        type="text"
+                        className={`outline-none w-20 text-main-gray font-medium rounded-md text-center ${
+                           form.errors.inaccuracy
+                              ? "placeholder:text-red-500 bg-red-500/10"
+                              : "placeholder:text-main-gray bg-main-gray/10"
+                        }`}
+                        placeholder={
+                           form.errors.inaccuracy ? form.errors.inaccuracy : ""
+                        }
+                        value={form.values.inaccuracy ?? ""}
+                        onKeyPress={(e) => {
+                           if (!/[0-9]/.test(e.key)) {
+                              e.preventDefault();
+                           }
+                        }}
+                        onChange={(e) => {
+                           if (!selectedMeasure) {
+                              setForm((prev) => ({
+                                 ...prev,
+                                 errors: {
+                                    ...prev.errors,
+                                    unit: "Выберите единицу измерения",
+                                    inaccuracy: " ",
+                                 },
+                              }));
+                              return;
+                           }
+
+                           let value = e.target.value;
+
+
+                           value = value.replace(/[^0-9]/g, "");
+
+                           handleChange(
+                              "inaccuracy",
+                            parseInt(value)
+                           );
+                        }}
+                        onBlur={(e) => {
+                           const value = e.target.value.trim();
+                         
+                           if (value === "") {
+                              handleChange("inaccuracy", 0);
+                           }
+                        }}
+                     />
+
                      <span className="text-main-gray font-semibold md:text-lg text-sm text-center w-10">
                         {selectedMeasure ? selectedMeasure : "..."}
                      </span>

@@ -30,34 +30,34 @@ export const Modal: React.FC<ModalProps> = ({
 }) => {
    useEffect(() => {
       const onKeyDown = (e: KeyboardEvent) => {
-        if (e.key === "Escape") onClose();
+         if (e.key === "Escape") onClose();
       };
-    
+
       const handleOpen = () => {
-        
-        const scrollBarWidth = window.innerWidth - document.documentElement.clientWidth;
-        document.body.style.overflow = "hidden";
-        document.body.style.paddingRight = scrollBarWidth + "px";
+         const scrollBarWidth =
+            window.innerWidth - document.documentElement.clientWidth;
+         document.body.style.overflow = "hidden";
+         document.body.style.paddingRight = scrollBarWidth + "px";
       };
-    
+
       const handleClose = () => {
-        document.body.style.overflow = "";
-        document.body.style.paddingRight = "";
+         document.body.style.overflow = "";
+         document.body.style.paddingRight = "";
       };
-    
+
       if (isOpen) {
-        document.addEventListener("keydown", onKeyDown);
-        handleOpen();
+         document.addEventListener("keydown", onKeyDown);
+         handleOpen();
       } else {
-        handleClose();
+         handleClose();
       }
-    
+
       return () => {
-        document.removeEventListener("keydown", onKeyDown);
-        handleClose();
+         document.removeEventListener("keydown", onKeyDown);
+         handleClose();
       };
-    }, [isOpen, onClose]);
-    
+   }, [isOpen, onClose]);
+
    return (
       <AnimatePresence>
          {isOpen && (
@@ -106,8 +106,8 @@ export const Modal: React.FC<ModalProps> = ({
                            {title}
                         </h2>
                      )}
-                     <div className="overflow-y-auto rounded-2xl">
-                        {children}
+                     <div className="flex-1 overflow-auto">
+                        <div className="flex flex-col h-full">{children}</div>
                      </div>
                   </motion.div>
                </motion.div>

@@ -7,7 +7,7 @@ import {
    AddToFavouritesRequest,
    RemoveFromCartRequest,
    RemoveFromFavouritesRequest,
-} from "@/types/requests/ProductRequests";
+} from "@/types/requests/CustomerRequests";
 import { CustomerResponse } from "@/types/responses/UserResponses";
 import { ApiClient } from "@/lib/apiClient";
 import { ApiResponse } from "@/types/ApiResponse";

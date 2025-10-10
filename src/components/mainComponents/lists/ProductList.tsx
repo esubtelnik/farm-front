@@ -2,13 +2,13 @@
 import { FC, useEffect, useState, useCallback } from "react";
 import { observer } from "mobx-react-lite";
 import ProductItem from "../items/ProductItem";
-import { IProductCard } from "../../../types/entities/Product";
 import { useStores } from "@/hooks/useStores";
 import { useAuthContext } from "@/context/AuthContext";
 import { UserType } from "@/constants/UserTypeEnum";
+import { IDisplayCard } from "@/types/entities/Display";
 
 interface ProductListProps {
-   products: IProductCard[];
+   products: IDisplayCard[];
    isEditable?: boolean;
    isLoading?: boolean;
    isError?: boolean;
@@ -26,7 +26,7 @@ const ProductList: FC<ProductListProps> = observer(
       const { customerStore } = useStores();
       const { userType } = useAuthContext();
       const [syncedProducts, setSyncedProducts] =
-         useState<IProductCard[]>(initialProducts);
+         useState<IDisplayCard[]>(initialProducts);
       const [isInitialized, setIsInitialized] = useState(false);
 
       const syncProducts = useCallback(() => {

@@ -13,7 +13,7 @@ import { IProducer } from "@/types/entities/User";
 import { fetchApi } from "@/lib/fetchApi";
 import { addReviewApi } from "@/api/productApi";
 import { getCookie } from "cookies-next";
-import { mapProductToCard } from "@/utils/MappingTypes";
+import { mapToDisplayCard } from "@/utils/MappingTypes";
 import PhotoViewer from "@/components/ui/PhotoViewer";
 import Link from "next/link";
 import routes from "@/constants/routes";
@@ -118,7 +118,7 @@ const ProductPage: FC<ProductPageProps> = ({
                <div className="hidden md:block absolute z-10 top-0 right-0 p-5">
                   <AddToFavourite
                      isInFavourites={isInFavourites}
-                     product={mapProductToCard(product)}
+                     product={mapToDisplayCard(product)}
                      onToggle={(newState: boolean) => {
                         setIsInFavourites(newState);
                      }}
@@ -135,7 +135,7 @@ const ProductPage: FC<ProductPageProps> = ({
                      <div className="">
                         <AddToFavourite
                            isInFavourites={isInFavourites}
-                           product={mapProductToCard(product)}
+                           product={mapToDisplayCard(product)}
                            onToggle={(newState: boolean) => {
                               setIsInFavourites(newState);
                            }}
@@ -144,7 +144,7 @@ const ProductPage: FC<ProductPageProps> = ({
                      <div className="">
                         <AddToCart
                            isInCart={isInCart}
-                           product={mapProductToCard(product)}
+                           product={mapToDisplayCard(product)}
                            onToggle={(newState: boolean) => {
                               setIsInCart(newState);
                            }}
@@ -264,7 +264,7 @@ const ProductPage: FC<ProductPageProps> = ({
 
             <AddToCart
                isInCart={isInCart}
-               product={mapProductToCard(product)}
+               product={mapToDisplayCard(product)}
                onToggle={(newState: boolean) => {
                   setIsInCart(newState);
                }}

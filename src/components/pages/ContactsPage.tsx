@@ -7,7 +7,7 @@ const ContactsPage: FC = () => {
       <div>
          <div className="relative w-full aspect-[3/1] md:aspect-[4/1]">  
          <Image
-            src="/MainImage.jpg"
+            src="/MainImage.png"
     fill
             alt="Баннер"
             loading="lazy"

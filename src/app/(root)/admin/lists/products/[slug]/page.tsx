@@ -16,7 +16,7 @@
 
 //    return <ProductsFromAdminListPage products={resProducts.data || []} />;
 // }
-import ProductsFromAdminListPage from "@/components/pages/adminPages/ProductsFromAdminListPage";
+import ProductsFromAdminListPage from "@/components/pages/adminPages/listsPages/ProductsFromAdminListPage";
 
 export default async function ProductsFromAdmin() {
    return <ProductsFromAdminListPage />;

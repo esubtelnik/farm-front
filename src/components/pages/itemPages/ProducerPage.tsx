@@ -7,7 +7,7 @@ import ReviewList from "@/components/mainComponents/lists/ReviewList";
 import GalleryList from "@/components/mainComponents/lists/GalleryList";
 import ProducerInfoCustomerView from "@/components/profileComponents/ProducerInfoCustomerView";
 import { IProducer } from "@/types/entities/User";
-import { IProductCard } from "@/types/entities/Product";
+import { IDisplayCard } from "@/types/entities/Display";
 import { IReview } from "@/types/entities/Review";
 import { AddProducerReviewRequest } from "@/types/requests/ProducerRequests";
 import { getCookie } from "cookies-next";
@@ -16,7 +16,7 @@ import { fetchApi } from "@/lib/fetchApi";
 
 interface ProducerPageProps {
    producer: IProducer;
-   products: IProductCard[];
+      products: IDisplayCard[];
    gallery: string[];
    certificates: string[];
    isLoading?: boolean;

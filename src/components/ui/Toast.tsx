@@ -5,7 +5,7 @@ interface ToastProps {
    message: string;
    type: "success" | "error" | "warning" | "info";
    onClose?: () => void;
-   duration?: number;
+   duration?: number | false;
 }
 
 const getIcon = (type: "success" | "error" | "warning" | "info") => {
@@ -98,11 +98,13 @@ const Toast: FC<ToastProps> = ({ message, type, onClose, duration = 3000 }) => {
    useEffect(() => {
       if (!onClose) return;
 
-      const timer = setTimeout(() => {
-         onClose();
-      }, duration);
+      if (duration) {
+         const timer = setTimeout(() => {
+            onClose();
+         }, duration);
+         return () => clearTimeout(timer);
+      }
 
-      return () => clearTimeout(timer);
    }, [onClose, duration]);
    return (
       <Portal>

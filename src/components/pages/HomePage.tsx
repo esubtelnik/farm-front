@@ -60,13 +60,13 @@ const HomePage: FC<HomePageProps> = ({ categories, producers }) => {
          <div className="relative w-full aspect-[3/1] md:aspect-[4/1]">
             <Image
                className="object-cover"
-               src="/MainImage.jpg"
+               src="/MainImage.png"
                alt="Баннер"
                loading="eager"
                fill
                priority={true}
             />
-            <div className="md:hidden absolute w-full h-full z-10 top-0 left-0 bg-main-green/45 flex justify-center items-center" />
+            {/* <div className="md:hidden absolute w-full h-full z-10 top-0 left-0 bg-main-green/45 flex justify-center items-center" /> */}
          </div>
          <p className="md:text-sm text-xxs font-normal text-main-gray md:px-32 px-4 py-10">
             Онлайн-магазин <span className="font-bold">FARM-BASKET</span> — это
@@ -85,10 +85,7 @@ const HomePage: FC<HomePageProps> = ({ categories, producers }) => {
             Питание с FARM-BASKET - залог крепкого здоровья !
          </p>
          <div className="flex items-center justify-center md:gap-x-12 gap-x-4 md:py-10 py-5 md:px-0 px-4 w-full ">
-            <Link className="md:w-[70px] w-[35px]"
-                  
-href={routes.home.root}
-            >
+            <Link className="md:w-[70px] w-[35px]" href={routes.home.root}>
                <Image
                   src="/LogoColor.svg"
                   alt="Logo"
@@ -98,7 +95,7 @@ href={routes.home.root}
                />
             </Link>
             <div className="md:w-3/5 w-full">
-             <Search />
+               <Search />
             </div>
          </div>
          <Hr />

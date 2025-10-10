@@ -45,6 +45,7 @@ const routes = {
       // profile: (id: string | number) => `/users/${id}`,
    },
    items: {
+      readyBasket: (basketId: string | number) => `/ready-basket/${basketId}`,
       product: (productId: string | number) => `/product/${productId}`,
       category: (categoryTitle: string) => `/category/${categoryTitle}`,
       producer: (producerId: string | number) => `/producer/${producerId}`,
@@ -52,15 +53,20 @@ const routes = {
    admin: {
       root: "/admin",
       login: "/auth/login/admin",
-      readyCarts: "/admin/ready-carts",
+    
       lists: {
          customers: "/admin/lists/customers",
          producers: "/admin/lists/producers",
          products: (prodicerId: string | number) =>
             `/admin/lists/products/${prodicerId}`,
          couriers: "/admin/lists/couriers",
+         readyBaskets: "admin/lists/ready-baskets",
          orders: "/admin/lists/orders",
          // products: "/admin/lists/products",
+      },
+      items : {
+         readyBasket: (basketId: string | number) => `/admin/items/ready-basket/${basketId}`,
+         addReadyBasket: "/admin/items/ready-basket/add",
       },
       edit: "/admin/edit",
 

@@ -2,7 +2,6 @@
 import { FC } from "react";
 import AddToCart from "@/components/ui/buttons/AddToCart";
 import AddToFavourite from "@/components/ui/buttons/AddToFavourite";
-import { IProductCard } from "@/types/entities/Product";
 
 import { observer } from "mobx-react-lite";
 //import EditProduct from "../../buttons/EditProduct";
@@ -12,9 +11,10 @@ import ReviewStars from "@/components/ui/ReviewStars";
 import routes from "@/constants/routes";
 import EditProduct from "@/components/ui/buttons/EditProduct";
 import DeleteProduct from "@/components/ui/buttons/DeleteProduct";
+import { IDisplayCard } from "@/types/entities/Display";
 
 interface ProductItemProps {
-   product: IProductCard;
+   product: IDisplayCard;
    isEditable?: boolean;
 }
 
@@ -30,7 +30,13 @@ const ProductItem: FC<ProductItemProps> = observer(
          const target = e.target as HTMLElement;
          if (target.closest("[data-ignore-click]")) return;
 
-         router.push(routes.items.product(product.id));
+         if (product.type === "basket") {
+            router.push(routes.items.readyBasket(product.id));
+         } else {
+            router.push(routes.items.product(product.id));
+         }
+
+        
       };
 
       return (
@@ -42,7 +48,7 @@ const ProductItem: FC<ProductItemProps> = observer(
                <div className="lg:w-96 lg:h-64 md:w-64 md:h-48 w-36 h-48">
                   <Image
                      fill
-                     src={`${process.env.NEXT_PUBLIC_IMAGE_URL}${product.images}`}
+                     src={`${process.env.NEXT_PUBLIC_IMAGE_URL}${product.image}`}
                      alt={product.title}
                      className="object-cover rounded-t-2xl border-2 border-main-green"
                      unoptimized
@@ -78,10 +84,16 @@ const ProductItem: FC<ProductItemProps> = observer(
                >
                   {product.title}
                </span>
-               <span className="text-main-gray/70 lg:text-base md:text-sm text-xs truncate block w-full my-1">
-                  От <span className="hidden md:inline">фермера: </span>{" "}
-                  {product.producerName}
-               </span>
+               {product.producerName ? (
+                  <span className="text-main-gray/70 lg:text-base md:text-sm text-xs truncate block w-full my-1">
+                     От <span className="hidden md:inline">фермера: </span>{" "}
+                     {product.producerName}
+                  </span>
+               ) : (
+                  <span className="text-main-gray/70 lg:text-base md:text-sm text-xs truncate block w-full my-1">
+                     Готовая корзина
+                  </span>
+               )}
                <div className="flex md:gap-x-4 gap-x-2">
                   <ReviewStars rating={product.feedbackAv} size="small" />
                   {/* <span className="hidden md:flex text-main-gray lg:text-sm md:text-xs text-xs items-center">

@@ -4,12 +4,12 @@ import LogoColor from "@/assets/logos/LogoColor.svg";
 import Search from "@/components/features/Search";
 import Hr from "@/components/ui/Hr";
 import ProductList from "@/components/mainComponents/lists/ProductList";
-import { IProductCard } from "@/types/entities/Product";
+import { IDisplayCard } from "@/types/entities/Display";
 import routes from "@/constants/routes";
 import Link from "next/link";
 
 interface SearchPageProps {
-   products: IProductCard[];
+   products: IDisplayCard[];
 }
 
 const SearchPage: FC<SearchPageProps> = ({ products }) => {

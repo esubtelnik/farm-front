@@ -2,20 +2,14 @@
    import { FC, useEffect, useRef, useState } from "react";
    import FilterModal from "@/components/ui/modals/modalContents/FilterModal";
    import { AnimatePresence } from "motion/react";
-   import { useProductContext } from "@/context/ProductContext";
    import { useRouter, useSearchParams } from "next/navigation";
    import routes from "@/constants/routes";
-   import { buildSearchParams } from "@/utils/BuildSearchParams";
+   // import { buildSearchParams } from "@/utils/BuildSearchParams";
 
    interface SearchProps {
       isCategoryPage?: boolean;
       categoryTitle?: string;
-      isCatalogPage?: boolean;
-      // setProducts?: (products: IProductCard[]) => void;
-      // isCategoryPage?: boolean;
-      // isCatalogPage?: boolean;
-      // categoryTitle?: string;
-      // setIsLoading?: (isLoading: boolean) => void;
+      isCatalogPage?: boolean
    }
 
    const Search: FC<SearchProps> = ({ isCategoryPage = false, categoryTitle, isCatalogPage = false }) => {
@@ -25,7 +19,6 @@
 
       const [showFilter, setShowFilter] = useState(false);
       const buttonRef = useRef<HTMLButtonElement | null>(null);
-      const { searchProducts, setSearchedProducts } = useProductContext();
 
       const [title, setTitle] = useState<string>("");
       const [priceTo, setPriceTo] = useState<number>(0);
@@ -75,18 +68,13 @@
         
          if (isCategoryPage && !hasFilters) return;
        
-         const params = buildSearchParams({
-           title,
-           priceTo,
-           deliveryTimeTo,
-           category,
-           categoryTitle,
-         });
-
-         console.log(params);
-       
-
-       
+         // const params = buildSearchParams({
+         //   title,
+         //   priceTo,
+         //   deliveryTimeTo,
+         //   category,
+         //   categoryTitle,
+         // });
         
            if (isCategoryPage) {
              const currentParams = new URLSearchParams(window.location.search); 

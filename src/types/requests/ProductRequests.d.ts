@@ -37,6 +37,7 @@ export interface CreateProductRequest {
     saleVolume: number;
     unit: string;
     delivery: number;
+    inaccuracy: number;
 }
 
 export interface UpdateProductRequest {
@@ -49,38 +50,66 @@ export interface UpdateProductRequest {
     images?: File[];
     package?: string;
     expirationDate?: number;
-    volume?: number;
+    dailyVolume?: number;
     saleVolume?: number;
     unit?: string;
     delivery?: number;
+    inaccuracy?: number;
 }
 
 export interface DeleteProductRequest {
     productId: string;
 }
 
-
-export interface AddToFavouritesRequest {
-    productId: string;
+export interface DeleteReadyBasketRequest {
+    basketId: string;
 }
 
-export interface AddToCartRequest {
-    productId: string;
-}
 
-export interface RemoveFromFavouritesRequest {
-    productId: string;
-}
-
-export interface RemoveFromCartRequest {
-    productId: string;
-}
 
 export interface AddReviewRequest {
     value: number;
     productId: string;
     content: string;
 }
+
+
+export interface GetReadyBasketByIdRequest {
+    id: string;
+}
+
+export interface CreateReadyBasketRequest {
+    title: string;
+    overprice: number;
+    products: {
+        productId: string;
+        amount: number;
+    }[];
+    images: File[];
+    storageConditions: string;
+    package: string;
+    description: string;
+    composition: string;
+    delivery: number;
+}
+
+export interface UpdateReadyBasketRequest {
+    id: string;
+    title?: string;
+    overprice?: number;
+    products: {
+        productId: string;
+        amount: number;
+    }[];
+    images?: File[];
+    storageConditions?: string;
+    package?: string;
+    description?: string;
+    composition?: string;
+    delivery?: number;
+}
+
+
 
 
 

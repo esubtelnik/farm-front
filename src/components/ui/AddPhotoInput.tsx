@@ -65,7 +65,7 @@ const AddPhotoInput: React.FC<AddPhotoInputProps> = ({
    };
 
    return (
-      <div className="relative size-60 flex items-center justify-center bg-white border-2 border-main-gray rounded-lg shadow-md overflow-hidden">
+      <div className="relative h-60 w-60 flex items-center justify-center bg-white border-2 border-main-gray rounded-lg shadow-md overflow-hidden">
          {hasImages ? (
             <>
                <Image

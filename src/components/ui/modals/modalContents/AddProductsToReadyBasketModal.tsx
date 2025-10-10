@@ -67,7 +67,7 @@ const AddProductsToReadyBasketModal: FC<AddProductsToReadyBasketModalProps> = ({
               <div className="flex gap-x-2">
                 <div className="relative w-32 h-32">
                   <Image
-                    src={`${process.env.NEXT_PUBLIC_IMAGE_URL}${product.images[0]}`}
+                    src={`${process.env.NEXT_PUBLIC_IMAGE_URL}${product.images}`}
                     alt={product.title}
                     fill
                     className="w-full h-full object-cover rounded-lg"

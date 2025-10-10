@@ -119,7 +119,6 @@ const ReadyBasketPage: FC<ReadyBasketPageProps> = ({
                   alt={product.title}
                   fill
                   className="object-cover md:rounded-2xl"
-                  unoptimized
                /> */}
                <PhotoViewer images={product.images} />
 

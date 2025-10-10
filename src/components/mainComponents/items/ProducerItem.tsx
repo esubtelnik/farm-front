@@ -6,6 +6,7 @@ import NextArrow from "@/components/ui/NextArrow";
 import { IProducer, IProducerCard } from "@/types/entities/User";
 import routes from "@/constants/routes";
 import Link from "next/link";
+import Skeleton from "@/components/ui/Skeleton";
 
 interface ProducerItemProps {
    producer: IProducerCard | IProducer;
@@ -34,19 +35,21 @@ const ProducerItem: FC<ProducerItemProps> = ({
    return (
       <Link
          className={`${styles[styleType].card} bg-white rounded-xl md:shadow-lg/20 shadow-sm/20 border border-main-gray/20 overflow-hidden cursor-pointer relative`}
-      href={`${routes.items.producer(producer.id)}`}
+         href={`${routes.items.producer(producer.id)}`}
       >
-      
          <div
             className={`relative ${styles[styleType].image} overflow-hidden rounded-xl`}
          >
-            <Image
-               src={`${process.env.NEXT_PUBLIC_IMAGE_URL}${producer.image}`}
-               alt="Фермер"
-               fill
-               className="w-full h-full object-cover"
-               unoptimized
-            />
+            {producer.image ? (
+               <Image
+                  src={`${process.env.NEXT_PUBLIC_IMAGE_URL}${producer.image}`}
+                  alt="Фермер"
+                  fill
+                  className="w-full h-full object-cover"
+               />
+            ) : (
+               <Skeleton className="w-full h-full object-cover" />
+            )}
          </div>
 
          <div
@@ -80,8 +83,7 @@ const ProducerItem: FC<ProducerItemProps> = ({
                <NextArrow route={`${routes.items.producer(producer.id)}`} />
             </div>
          </div>
-         </Link>
-
+      </Link>
    );
 };
 

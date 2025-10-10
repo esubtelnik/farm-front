@@ -984,7 +984,7 @@ const EditProductModal: FC<EditProductModalProps> = ({
                </span>
             </div>
 
-            <div
+            {/* <div
                className={`border-2 flex items-center md:gap-x-4 justify-between md:justify-start rounded-xl p-2 ${
                   form.errors.price ? "border-red-500" : "border-main-gray"
                }`}
@@ -1008,7 +1008,7 @@ const EditProductModal: FC<EditProductModalProps> = ({
                   <br />
                   необходимо указать что он в наличии
                </div>
-            )}
+            )} */}
          </div>
          <div className="flex flex-col md:flex-row gap-y-6 md:gap-x-5 md:items-end justify-between w-full">
             <div className="flex flex-col md:w-fit w-full items-start md:items-center gap-y-2">

@@ -27,8 +27,7 @@ const CategoryItem: FC<CategoryItemProps> = ({ category }) => {
             src={`${process.env.NEXT_PUBLIC_IMAGE_URL}${category.paths[0]}`}
             alt={category.title}
             fill
-            className="object-cover rounded-[20px] "
-            unoptimized
+            className="object-cover rounded-b-[30px] rounded-t-[25px]"
          />
 
          {/* <motion.span

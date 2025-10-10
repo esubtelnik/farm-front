@@ -31,12 +31,13 @@ const CategoryPage: FC<CategoryPageProps> = ({
 
    return (
       <div className="font-geist">
-         <div className="bg-gradient-to-r from-dark-green to-main-green">
+         <div className="bg-gradient-to-r from-dark-green to-main-green rounded-[26px]">
             <Image
                src={`${process.env.NEXT_PUBLIC_IMAGE_URL}${category.paths[1]}`}
                alt="Баннер"
                width={1600}
                height={400}
+               className="object-cover rounded-[26px]"
             />
          </div>
 

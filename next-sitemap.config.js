@@ -1,6 +1,4 @@
-import type { IConfig } from 'next-sitemap';
-
-const config: IConfig = {
+const config = {
   siteUrl: 'https://farmbasket.by', 
   generateRobotsTxt: true,         
   changefreq: 'weekly',               

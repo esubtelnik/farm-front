@@ -1,3 +1,4 @@
+/** @type {import('next-sitemap').IConfig} */
 const config = {
   siteUrl: 'https://farmbasket.by', 
   generateRobotsTxt: true,         
@@ -20,4 +21,4 @@ const config = {
 
 };
 
-export default config;
+module.exports = config;

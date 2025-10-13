@@ -49,6 +49,7 @@ export const createProductApi = async (
    token?: string
 ): Promise<ApiResponse<CreateProductResponse>> => {
    const formData = new FormData();
+   console.log(payload);
 
    formData.append("title", payload.title);
    formData.append("price", String(payload.price));
@@ -62,6 +63,7 @@ export const createProductApi = async (
    formData.append("saleVolume", String(payload.saleVolume));
    formData.append("unit", payload.unit);
    formData.append("delivery", String(payload.delivery));
+   formData.append("inaccuracy", String(payload.inaccuracy));
 
    if (payload.images && payload.images.length > 0) {
       payload.images.forEach((file) => {

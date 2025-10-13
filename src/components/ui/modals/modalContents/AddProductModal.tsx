@@ -4,7 +4,7 @@ import AddPhotoInput from "@/components/ui/AddPhotoInput";
 import { useProductContext } from "@/context/ProductContext";
 import Textarea from "@/components/ui/Textarea";
 import { CreateProductRequest } from "@/types/requests/ProductRequests";
-import { measures } from "@/constants/constants";
+import { measures, readyBasketType } from "@/constants/constants";
 
 const DeliveryTimeFilter = ({
    setValue,
@@ -342,7 +342,7 @@ const AddProductModal: FC<AddProductModalProps> = ({ handleAddProduct }) => {
                   isEditable
                />
             </div>
-            <div className="flex flex-col items-center gap-y-2 lg:w-32 w-full">
+            <div className="flex flex-col items-center gap-y-2  w-full lg:w-80">
                <div
                   className={`w-full flex items-center gap-x-2 px-2 outline-none border-2 rounded-md ${
                      form.errors.title
@@ -425,28 +425,32 @@ const AddProductModal: FC<AddProductModalProps> = ({ handleAddProduct }) => {
                   </button>
                   {isCategoryDropdownOpen && (
                      <div className="absolute top-full left-0 mt-1 p-1 md:w-[400px] w-full max-h-[200px] overflow-y-auto border-2 border-main-gray bg-white flex flex-col gap-y-1 shadow-lg/30 z-[100] rounded-md">
-                        {categories.map((category) => {
-                           const isChecked = selectedCategories.includes(
-                              category.title
-                           );
+                        {categories
+                           .filter(
+                              (category) => category.title !== readyBasketType
+                           )
+                           .map((category) => {
+                              const isChecked = selectedCategories.includes(
+                                 category.title
+                              );
 
-                           return (
-                              <button
-                                 type="button"
-                                 key={category.title}
-                                 onClick={() =>
-                                    handleCategoryToggle(category.title)
-                                 }
-                                 className={`w-full outline-none font-medium text-[13px] px-2 py-1 text-left rounded-sm transition-all duration-300 ${
-                                    isChecked
-                                       ? "bg-main-gray text-white"
-                                       : "bg-white text-main-gray"
-                                 }`}
-                              >
-                                 {category.title}
-                              </button>
-                           );
-                        })}
+                              return (
+                                 <button
+                                    type="button"
+                                    key={category.title}
+                                    onClick={() =>
+                                       handleCategoryToggle(category.title)
+                                    }
+                                    className={`w-full outline-none font-medium text-[13px] px-2 py-1 text-left rounded-sm transition-all duration-300 ${
+                                       isChecked
+                                          ? "bg-main-gray text-white"
+                                          : "bg-white text-main-gray"
+                                    }`}
+                                 >
+                                    {category.title}
+                                 </button>
+                              );
+                           })}
                      </div>
                   )}
                </div>
@@ -706,17 +710,13 @@ const AddProductModal: FC<AddProductModalProps> = ({ handleAddProduct }) => {
 
                            let value = e.target.value;
 
-
                            value = value.replace(/[^0-9]/g, "");
 
-                           handleChange(
-                              "inaccuracy",
-                            parseInt(value)
-                           );
+                           handleChange("inaccuracy", parseInt(value));
                         }}
                         onBlur={(e) => {
                            const value = e.target.value.trim();
-                         
+
                            if (value === "") {
                               handleChange("inaccuracy", 0);
                            }

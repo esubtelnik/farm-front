@@ -4,7 +4,7 @@ import { FC, useEffect, useRef, useState } from "react";
 import { useProductContext } from "@/context/ProductContext";
 import Textarea from "@/components/ui/Textarea";
 import { UpdateProductRequest } from "@/types/requests/ProductRequests";
-import { measures } from "@/constants/constants";
+import { measures, readyBasketType } from "@/constants/constants";
 import { IProduct } from "@/types/entities/Product";
 import Switcher from "@/components/ui/Switcher";
 
@@ -517,7 +517,11 @@ const EditProductModal: FC<EditProductModalProps> = ({
                   </button>
                   {isCategoryDropdownOpen && (
                      <div className="absolute top-full left-0 mt-1 p-1 md:w-[400px] w-full max-h-[200px] overflow-y-auto border-2 border-main-gray bg-white flex flex-col gap-y-1 shadow-lg/30 z-100 rounded-md">
-                        {categories.map((category) => {
+                        {categories
+                           .filter(
+                              (category) => category.title !== readyBasketType
+                           )
+                           .map((category) => {
                            const isChecked = selectedCategories.includes(
                               category.title
                            );

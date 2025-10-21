@@ -49,8 +49,6 @@ export const createProductApi = async (
    token?: string
 ): Promise<ApiResponse<CreateProductResponse>> => {
    const formData = new FormData();
-   console.log(payload);
-
    formData.append("title", payload.title);
    formData.append("price", String(payload.price));
    formData.append("productType", payload.productType);

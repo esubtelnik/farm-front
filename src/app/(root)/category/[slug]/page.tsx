@@ -34,13 +34,6 @@ export default async function Category({
          token
       )
    );
-
-   if (res.success) {
-      console.log("Категории:", res.data);
-   } else {
-      console.error("Ошибка:", res.message);
-   }
-
    return (
       <CategoryPage
          category={resCategory.data}

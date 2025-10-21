@@ -379,7 +379,6 @@ const ReadyBasketEditPage: FC = () => {
       //      })),
       //   };
 
-      console.log(changedFields);
       try {
         setIsLoading(true);
      

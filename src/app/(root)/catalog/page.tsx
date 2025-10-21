@@ -8,11 +8,5 @@ export default async function Catalog() {
 
     const res = await fetchApi(getCategoriesApi(token));
   
-    if (res.success) {
-      console.log("Категории:", res.data);
-    } else {
-      console.error("Ошибка:", res.message);
-    }
-  
    return <CatalogPage categories={res.data} />;
 }   

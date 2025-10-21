@@ -119,8 +119,6 @@ const ProducerInfo: FC<ProducerInfoProps> = observer(({ goToReviews }) => {
          activityType?: string;
       } = {};
 
-      console.log("field", field);
-
       if (field === "title" || (!field && isTitleEditable)) {
          setIsTitleEditable(false);
          setIsTitleLoading(true);

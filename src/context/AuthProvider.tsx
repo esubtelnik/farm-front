@@ -187,7 +187,6 @@ export const AuthContextProvider = ({
    ): Promise<{ success: boolean; message?: string }> => {
       const response = await fetchApi(loginCustomerApi(loginData));
       if (response.success) {
-         console.log("Успешный вход!", response.data);
          setCookie("token", response.data.token, {
             expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
             secure: true,

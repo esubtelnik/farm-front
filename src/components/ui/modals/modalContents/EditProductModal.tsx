@@ -88,7 +88,7 @@ const DeliveryTimeFilter = ({
 interface FormState {
    values: {
       title?: string;
-      price?: number | null;
+      price?: string | number;
       productType?: string;
       description?: string;
       composition?: string;
@@ -100,7 +100,7 @@ interface FormState {
       saleVolume?: number | null;
       unit?: string;
       delivery?: number;
-      inaccuracy?: number | string;
+      inaccuracy?: string | number;
    };
    errors: {
       title: string | null;
@@ -190,10 +190,12 @@ const EditProductModal: FC<EditProductModalProps> = ({
       setIsMeasureDropdownOpen(false);
    };
 
+
+
    const [form, setForm] = useState<FormState>({
       values: {
          title: product.title ?? "",
-         price: product.price ?? null,
+         price: product.price ?? 0,
          productType: product.productType ?? "",
          description:
             product.description === "-" ? "" : product.description || "",
@@ -248,6 +250,15 @@ const EditProductModal: FC<EditProductModalProps> = ({
          },
       }));
    };
+
+   
+   function normalize(value: string | number) {
+      if (!value) return 0;
+      value = value.toString().replace(",", ".");
+      if (value.endsWith(".")) value = value.slice(0, -1);
+      const num = parseFloat(value);
+      return isNaN(num) ? 0 : num;
+    }
 
    const validateForm = () => {
       const newErrors: FormState["errors"] = {
@@ -327,7 +338,8 @@ const EditProductModal: FC<EditProductModalProps> = ({
          if (!form.values.inaccuracy || form.values.inaccuracy === 0) {
             changedFields.inaccuracy = 0;
          } else {
-            changedFields.inaccuracy = form.values.inaccuracy as number;
+            changedFields.inaccuracy = normalize(form.values.inaccuracy as string);
+            ;
          }
       }
 
@@ -336,7 +348,7 @@ const EditProductModal: FC<EditProductModalProps> = ({
       }
 
       if (form.values.price !== product.price) {
-         changedFields.price = form.values.price as number;
+         changedFields.price = normalize(form.values.price as string);
       }
 
       if (form.values.productType !== product.productType) {
@@ -680,7 +692,6 @@ const EditProductModal: FC<EditProductModalProps> = ({
                                     .replace(/[^0-9]/g, "")
                                     .replace(/^0+/, "");
                               }
-                              handleChange("dailyVolume", parseInt(value));
                            }}
                            onBlur={(e) => {
                               const value = parseInt(e.target.value);
@@ -788,37 +799,35 @@ const EditProductModal: FC<EditProductModalProps> = ({
                         placeholder={
                            form.errors.inaccuracy ? form.errors.inaccuracy : ""
                         }
-                        value={form.values.inaccuracy ?? ""}
-                        onKeyPress={(e) => {
-                           if (!/[0-9]/.test(e.key)) {
-                              e.preventDefault();
-                           }
-                        }}
+                        value={form.values.inaccuracy}
                         onChange={(e) => {
-                           if (!selectedMeasure) {
-                              setForm((prev) => ({
-                                 ...prev,
-                                 errors: {
-                                    ...prev.errors,
-                                    unit: "Выберите единицу измерения",
-                                    inaccuracy: " ",
-                                 },
-                              }));
-                              return;
+                           const inputValue = e.target.value;
+                           const formattedValue = inputValue.replace(",", ".");
+
+                           if (/^(?!\.)[0-9]*\.?[0-9]*$/.test(formattedValue)) {
+                              if (!selectedMeasure) {
+                                 setForm((prev) => ({
+                                    ...prev,
+                                    errors: {
+                                       ...prev.errors,
+                                       unit: "Выберите единицу измерения",
+                                       inaccuracy: " ",
+                                    },
+                                 }));
+                                 return;
+                              }
+
+                              handleChange("inaccuracy", formattedValue);
                            }
-
-                           let value = e.target.value;
-
-
-                           value = value.replace(/[^0-9]/g, "");
-
-                           handleChange("inaccuracy", value === "" ? "" : parseInt(value));
                         }}
                         onBlur={(e) => {
                            const value = e.target.value.trim();
-                         
+
                            if (value === "") {
                               handleChange("inaccuracy", 0);
+                           } else {
+                              const num = parseFloat(value);
+                              handleChange("inaccuracy", isNaN(num) ? 0 : num);
                            }
                         }}
                      />
@@ -952,32 +961,16 @@ const EditProductModal: FC<EditProductModalProps> = ({
                         : "placeholder:text-main-gray bg-main-gray/10"
                   }`}
                   placeholder={form.errors.price ? form.errors.price : ""}
-                  value={form.values.price || ""}
-                  onKeyPress={(e) => {
-                     if (!/[0-9]/.test(e.key)) {
-                        e.preventDefault();
-                     }
-                  }}
+                  value={form.values.price ?? ""}
                   onChange={(e) => {
-                     const value = e.target.value;
-                     if (
-                        value === "" ||
-                        (parseInt(value) > 0 && /^\d+$/.test(value))
-                     ) {
-                        e.target.value = value;
-                     } else {
-                        e.target.value = value
-                           .replace(/[^0-9]/g, "")
-                           .replace(/^0+/, "");
-                     }
-                     handleChange("price", parseInt(value));
-                  }}
-                  onBlur={(e) => {
-                     const value = parseInt(e.target.value);
-                     if (value <= 0 || isNaN(value)) {
-                        e.target.value = "";
+                     const inputValue = e.target.value;
+                     const formattedValue = inputValue.replace(",", ".");
+
+                     if (/^(?!\.)[0-9]*\.?[0-9]*$/.test(formattedValue)) {
+                        handleChange("price", formattedValue);
                      }
                   }}
+            
                />
                <span
                   className={`text-main-gray font-semibold md:text-lg text-sm ${

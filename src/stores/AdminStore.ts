@@ -179,8 +179,6 @@ class AdminStore {
       const countedProducts: ICountedProduct[] = basket.products.map(p => {
          const fullProduct = allProducts.find(prod => prod.id === p.id);
 
-         console.log(p.volume, p.saleVolume);
-         console.log(fullProduct?.saleVolume);
        
          if (!fullProduct) {
            throw new Error(`Продукт с id=${p.id} не найден в общем списке`);

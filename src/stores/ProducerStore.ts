@@ -46,12 +46,10 @@ class ProducerStore {
       data: ProducerUpdateRequest
    ): Promise<{ success: boolean; message?: string }> {
       try {
-         console.log("data", data);
          const token = getCookie("token")?.toString();
          const response = await fetchApi(updateProducerApi(data, token));
          if (response.success) {
-            console.log("Успешно!", response.data);
-
+   
             runInAction(() => {
                this.profile = response.data;
             });

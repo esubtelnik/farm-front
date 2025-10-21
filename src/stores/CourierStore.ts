@@ -34,8 +34,6 @@ class CourierStore {
          const token = getCookie("token")?.toString();
          const response = await fetchApi(updateCourierApi(data, token));
          if (response.success) {
-            console.log("Успешно!", response.data);
-
             runInAction(() => {
                this.profile = response.data;
             });

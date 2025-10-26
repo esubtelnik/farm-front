@@ -1,30 +1,56 @@
 "use client";
 import { observer } from "mobx-react-lite";
 import { useStores } from "../../hooks/useStores";
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import Skeleton from "@/components/ui/Skeleton";
 import { useRouter } from "next/navigation";
 import routes from "@/constants/routes";
 import { Modal } from "@/components/ui/modals/Modal";
-// import CreateOrderModal from "@/components/modals/CreateOrderModal";
+import CreateOrderModal from "@/components/ui/modals/modalContents/CreateOrderModal";
+import WarningPreOrederModal from "@/components/ui/modals/modalContents/WarningPreOrederModal";
+import { CreateOrderRequest } from "@/types/requests/CustomerRequests";
+import Toast from "@/components/ui/Toast";
+import { paymentMethodsValues } from "@/constants/constants";
 
 interface CustomerInfoProps {
    isCart?: boolean;
+   setIsLoadingPayment?: (isLoading: boolean) => void;
 }
 
-const CustomerInfo: FC<CustomerInfoProps> = observer(({ isCart = false }) => {
+const CustomerInfo: FC<CustomerInfoProps> = observer(({ isCart = false, setIsLoadingPayment }) => {
    const { customerStore } = useStores();
 
    const [isCreateOrderModalOpen, setIsCreateOrderModalOpen] = useState(false);
-   const [cartItems, setCartItems] = useState(async () => await customerStore.getCartItems());
+   const [isWarningPreOrderModalOpen, setIsWarningPreOrderModalOpen] =
+      useState(false);
+   const [isWarningNoCartItemsModalOpen, setIsWarningNoCartItemsModalOpen] =
+      useState(false);
+   const [cartItems, setCartItems] = useState(0);
+
+   const [toast, setToast] = useState<{
+      message: string;
+      type: "success" | "error" | "warning";
+   } | null>(null);
    const profile = customerStore.profile;
    const isLoading = !profile;
 
    const router = useRouter();
 
+   const loadCartItems = async () => {
+      const items = await customerStore.getCartItems();
+      setCartItems(items);
+   };
+
+   useEffect(() => {
+      if (isCart) {
+         loadCartItems();
+      }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+   }, [isCart, customerStore, customerStore.cart.length]);
+
    const handleClearCart = async () => {
       await customerStore.removeAllFromCart();
-      setCartItems(customerStore.getCartItems());
+      setCartItems(await customerStore.getCartItems());
    };
 
    const handleLogout = async () => {
@@ -32,9 +58,43 @@ const CustomerInfo: FC<CustomerInfoProps> = observer(({ isCart = false }) => {
       router.push(routes.auth.login);
    };
 
-   const handleCreateOrder = async () => {
-      setIsCreateOrderModalOpen(true);
+   const handleOpenCreateOrderModal = async () => {
+      await loadCartItems();
+      await customerStore.fetchCustomerCart();
+      if (customerStore.cart.length === 0) {
+         setIsWarningNoCartItemsModalOpen(true);
+         return;
+      }
+      if (!profile?.address || !profile.phoneNumber) {
+         setIsWarningPreOrderModalOpen(true);
+      } else {
+         setIsCreateOrderModalOpen(true);
+      }
    };
+
+   const handleCreateOrder = async (
+      payload: CreateOrderRequest
+   ): Promise<{ success: boolean; message?: string }> => {
+      const result = await customerStore.createOrder(payload);
+      if (result.success) {
+         if (payload.paymentMethod === paymentMethodsValues.EPOS && result.data) {
+            setIsLoadingPayment?.(true);
+            window.location.href = result.data;
+
+          }
+         setIsCreateOrderModalOpen(false);
+         setToast({ message: "Заказ успешно оформлен", type: "success" });
+ 
+      } else {
+         setToast({
+            message: result.message || "Ошибка при оформлении заказа",
+            type: "error",
+         });
+      }
+      return result;
+   };
+
+   
 
    return (
       <div className="flex flex-col md:flex-row md:gap-x-8 gap-y-4 md:p-8 p-4 mb-8 md:mb-0 justify-between">
@@ -63,7 +123,7 @@ const CustomerInfo: FC<CustomerInfoProps> = observer(({ isCart = false }) => {
             {isCart ? (
                <>
                   <button
-                     onClick={handleCreateOrder}
+                     onClick={handleOpenCreateOrderModal}
                      className="flex items-center justify-center text-sm md:text-base gap-x-2 border-2 border-main-green text-main-green px-4 rounded-full py-2 h-fit hover:scale-105 transition-all duration-100 cursor-pointer"
                   >
                      Оформить заказ ({cartItems})
@@ -76,12 +136,44 @@ const CustomerInfo: FC<CustomerInfoProps> = observer(({ isCart = false }) => {
                   </button>
                   {isCreateOrderModalOpen && (
                      <Modal
+                        size="w-full md:w-fit"
                         isOpen={isCreateOrderModalOpen}
                         onClose={() => setIsCreateOrderModalOpen(false)}
-                        showCloseButton={false}
+                        showCloseButton={true}
                      >
-                        {/* <CreateOrderModal /> */}
-                        <div>В разработке</div>
+                        <CreateOrderModal
+                           handleCreateOrder={handleCreateOrder}
+                           userInfo={profile!}
+                           products={customerStore.cart.filter(
+                              (p) => p.isAvailable
+                           )}
+                        />
+                     </Modal>
+                  )}
+                  {isWarningNoCartItemsModalOpen && (
+                     <Modal
+                        isOpen={isWarningNoCartItemsModalOpen}
+                        onClose={() => setIsWarningNoCartItemsModalOpen(false)}
+                        showCloseButton={true}
+                     >
+                        <WarningPreOrederModal
+                           message="В корзине нет товаров, перейдите в каталог и выберите товары"
+                           route={routes.home.catalog}
+                           buttonText="Перейти в каталог"
+                        />
+                     </Modal>
+                  )}
+                  {isWarningPreOrderModalOpen && (
+                     <Modal
+                        isOpen={isWarningPreOrderModalOpen}
+                        onClose={() => setIsWarningPreOrderModalOpen(false)}
+                        showCloseButton={true}
+                     >
+                        <WarningPreOrederModal
+                           message="Перед оформлением заказа необходимо закочить оформление профиля"
+                           route={routes.users.profile + "?edit=true"}
+                           buttonText="Профиль"
+                        />
                      </Modal>
                   )}
                </>
@@ -132,6 +224,7 @@ const CustomerInfo: FC<CustomerInfoProps> = observer(({ isCart = false }) => {
                </>
             )}
          </div>
+         {toast && <Toast message={toast.message} type={toast.type} />}
       </div>
    );
 });

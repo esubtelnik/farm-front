@@ -5,6 +5,8 @@ import {
    getCustomerApi,
    getCustomerCartApi,
    getCustomerFavouritesApi,
+   getUncompletedOrders,
+   getCompletedOrders,
 } from "@/api/customerApi";
 import {
    addToCartApi,
@@ -22,16 +24,21 @@ import {
    RemoveFromCartRequest,
    AddToFavouritesRequest,
    RemoveFromFavouritesRequest,
+   CreateOrderRequest,
 } from "@/types/requests/CustomerRequests";
 import { CustomerUpdateRequest } from "@/types/requests/UserRequests";
 import { getCookie, deleteCookie } from "cookies-next";
 import { fetchApi } from "@/lib/fetchApi";
-import { IDisplayCard } from "@/types/entities/Display";
+import { IDisplayCard, IDisplayOrderCard } from "@/types/entities/Display";
+import { mapOrderToOrderCard, mapToDisplayCard } from "@/utils/MappingTypes";
+import { CreateOrderApi } from "@/api/productApi";
 
 class CustomerStore {
    profile: ICustomer | null = null;
    favourites: IDisplayCard[] = [];
    cart: IDisplayCard[] = [];
+   uncompletedOrders: IDisplayOrderCard[] = [];
+   completedOrders: IDisplayOrderCard[] = [];
 
    constructor() {
       makeAutoObservable(this);
@@ -53,13 +60,17 @@ class CustomerStore {
 
    async fetchCustomerCart() {
       try {
+         console.log("fetchCustomerCart");
          const token = getCookie("token")?.toString();
          const res = await fetchApi(getCustomerCartApi(token));
          if (res.success) {
             runInAction(() => {
                const products = res.data.products ?? [];
                const readyBaskets = res.data.readyBaskets ?? [];
-               this.cart = [...products, ...readyBaskets];
+               this.cart = [
+                  ...products.map((p) => mapToDisplayCard(p)),
+                  ...readyBaskets.map((b) => mapToDisplayCard(b)),
+               ];
             });
          } else {
             this.cart = [];
@@ -77,7 +88,10 @@ class CustomerStore {
             runInAction(() => {
                const products = res.data.products ?? [];
                const readyBaskets = res.data.readyBaskets ?? [];
-               this.favourites = [...products, ...readyBaskets];
+               this.favourites = [
+                  ...products.map((p) => mapToDisplayCard(p)),
+                  ...readyBaskets.map((b) => mapToDisplayCard(b)),
+               ];
             });
          } else {
             this.favourites = [];
@@ -127,7 +141,7 @@ class CustomerStore {
             isBasket: product.type === "basket",
          };
          const token = getCookie("token")?.toString();
-         const res = await fetchApi(removeFromFavouritesApi(payload, token)); 
+         const res = await fetchApi(removeFromFavouritesApi(payload, token));
          if (res.success) {
             runInAction(() => {
                this.favourites = this.favourites.filter(
@@ -211,13 +225,9 @@ class CustomerStore {
 
          if (res.success) {
             runInAction(() => {
-               this.cart = this.cart.filter(
-                  (item) => item.id !== product.id
-               );
+               this.cart = this.cart.filter((item) => item.id !== product.id);
                this.favourites = this.favourites.map((item) =>
-                  item.id === product.id
-                     ? { ...item, isInCart: false }
-                     : item
+                  item.id === product.id ? { ...item, isInCart: false } : item
                );
             });
             return { success: true };
@@ -278,7 +288,52 @@ class CustomerStore {
    }
 
    async getCartItems() {
-      return this.cart.length;
+      return this.cart.filter((p) => p.isAvailable).length;
+   }
+
+   async createOrder(
+      payload: CreateOrderRequest
+   ): Promise<{ success: boolean; message?: string; data?: string }> {
+      try {
+         const token = getCookie("token")?.toString();
+         const res = await fetchApi(CreateOrderApi(payload, token));
+         if (res.success) {
+            return { success: true, data: res.data };
+         } else {
+            return { success: false, message: res.message };
+         }
+      } catch (e) {
+         console.error("Ошибка при создании заказа", e);
+         return { success: false, message: "Ошибка при создании заказа" };
+      }
+   }
+
+   async getOrders(type: "completed" | "uncompleted"): Promise<{
+      success: boolean;
+      message?: string;
+   }> {
+      const token = getCookie("token")?.toString();
+      const response = await fetchApi(
+         type === "completed"
+            ? getCompletedOrders(token)
+            : getUncompletedOrders(token)
+      );
+      console.log(response);
+
+      if (response.success && response.data) {
+         runInAction(() => {
+            if (type === "completed") {
+               this.completedOrders = response.data.map((order) => mapOrderToOrderCard(order));
+            } else {
+               this.uncompletedOrders = response.data.map((order) => mapOrderToOrderCard(order));
+            }
+         });
+         return {
+            success: true,
+         };
+      }
+
+      return { success: false, message: response.message };
    }
 
    syncProductsWithUserData(products: IDisplayCard[]): IDisplayCard[] {

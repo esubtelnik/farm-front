@@ -1,5 +1,5 @@
-import { ICourierFromAdmin, IProducerFromAdmin } from "../entities/User";
-
+import { ICourierFromAdmin, IProducerFromAdmin } from "@/types/entities/User";
+import { IOrder } from "@/types/entities/Product";
 
 export interface SaveProducerCodeResponse {
     id: string;
@@ -18,5 +18,7 @@ export interface SaveProducerCodeResponse {
 
 export type ProducersFromAdminResponse = IProducerFromAdmin[];
 export type CouriersFromAdminResponse = ICourierFromAdmin[];
+export type OrdersFromAdminResponse = IOrder[];
+
  
  

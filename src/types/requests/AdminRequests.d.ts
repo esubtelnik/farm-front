@@ -21,6 +21,13 @@ export interface ChangeProducerOverpriceRequest {
 }
 
 
+export interface ChangeOrderStatusRequest {
+   orderId: string;
+   status: string;
+}
+
+
+
 export interface ChangeProductOverpriceRequest {
    productId: string;
    overprice: number;

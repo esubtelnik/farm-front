@@ -5,6 +5,8 @@ import CustomerInfo from "@/components/profileComponents/CustomerInfo";
 import Tabs from "@/components/ui/Tabs";
 import { useStores } from "@/hooks/useStores";
 import { observer } from "mobx-react-lite";
+import { IDisplayCard } from "@/types/entities/Display";
+import Loader from "@/components/ui/Loader";
 
 type SectionError = {
    isError: boolean;
@@ -16,6 +18,40 @@ type Errors = {
    favourites: SectionError;
 };
 
+const createTabItems = (
+   cart: IDisplayCard[],
+   favourites: IDisplayCard[],
+   isLoading: boolean,
+   errors: Errors
+) => [
+   {
+      label: "Корзина",
+      render: () => (
+         <div className="py-5">
+            <ProductList
+               products={cart}
+               isLoading={isLoading}
+               isError={errors.cart.isError}
+               errorMessage={errors.cart.message}
+            />
+         </div>
+      ),
+   },
+   {
+      label: "Избранное",
+      render: () => (
+         <div className="py-5">
+            <ProductList
+               products={favourites}
+               isLoading={isLoading}
+               isError={errors.favourites.isError}
+               errorMessage={errors.favourites.message}
+            />
+         </div>
+      ),
+   },
+];
+
 const CustomerCartPage = observer(() => {
    const { customerStore } = useStores();
 
@@ -24,8 +60,9 @@ const CustomerCartPage = observer(() => {
       favourites: { isError: false, message: "" },
    });
    const [isLoading, setIsLoading] = useState(true);
+   const [isLoadingPayment, setIsLoadingPayment] = useState(false);
 
-  useEffect(() => {
+   useEffect(() => {
       const fetchData = async () => {
          setIsLoading(true);
          try {
@@ -83,8 +120,7 @@ const CustomerCartPage = observer(() => {
 
       fetchData();
       // eslint-disable-next-line react-hooks/exhaustive-deps
-   }, []); 
-
+   }, []);
 
    useEffect(() => {
       if (customerStore.cart.length === 0) {
@@ -114,39 +150,30 @@ const CustomerCartPage = observer(() => {
       }
    }, [customerStore.favourites.length]);
 
-   const tabItems = [
-      {
-         label: "Корзина",
-         render: () => (
-            <div className="py-5">
-               <ProductList
-                  products={customerStore.cart}
-                  isLoading={isLoading}
-                  isError={errors.cart.isError}
-                  errorMessage={errors.cart.message}
-                 />
-            </div>
-         ),
-      },
-      {
-         label: "Избранное",
-         render: () => (
-            <div className="py-5">
-               <ProductList
-                  products={customerStore.favourites}
-                  isLoading={isLoading}
-                  isError={errors.favourites.isError}
-                  errorMessage={errors.favourites.message}
-                />
-            </div>
-         ),
-      },
-   ];
+   const tabItems = createTabItems(
+      customerStore.cart,
+      customerStore.favourites,
+      isLoading,
+      errors
+   );
+
    return (
-      <div className="min-h-screen font-geist">
-         <CustomerInfo isCart={true} />
-         <Tabs tabs={tabItems} />
-      </div>
+      <>
+         {" "}
+         {isLoadingPayment ? (
+            <div className="flex justify-center items-center py-20 w-full h-full">
+               <Loader />
+            </div>
+         ) : (
+            <div className="min-h-screen font-geist">
+               <CustomerInfo
+                  isCart={true}
+                  setIsLoadingPayment={setIsLoadingPayment}
+               />
+               <Tabs tabs={tabItems} />
+            </div>
+         )}
+      </>
    );
 });
 

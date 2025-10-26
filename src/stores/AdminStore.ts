@@ -9,7 +9,9 @@ import {
    changeProductOverpriceApi,
    createReadyBasketApi,
    updateReadyBasketApi,
-   DeleteReadyBasketApi
+   DeleteReadyBasketApi,
+   getOrdersFromAdminApi,
+   closeOrderApi,
 } from "@/api/adminApi";
 import {
    CreateRegistrationCourierCodeRequest,
@@ -20,15 +22,26 @@ import {
 import { deleteCookie, getCookie } from "cookies-next/client";
 import { fetchApi } from "@/lib/fetchApi";
 import { ICourierFromAdmin, IProducerFromAdmin } from "@/types/entities/User";
-import { ICountedProduct, IProductCard, IReadyBasket, IReadyBasketFromAdmin } from "@/types/entities/Product";
+import {
+   ICountedProduct,
+   IProductCard,
+   IReadyBasket,
+   IReadyBasketFromAdmin,
+} from "@/types/entities/Product";
 import {
    getAllReadyBasketsApi,
    getProductsByProducerIdApi,
    getReadyBasketByIdApi,
    searchOnlyProductsApi,
 } from "@/api/productApi";
-import { CreateReadyBasketRequest, DeleteReadyBasketRequest, UpdateReadyBasketRequest } from "@/types/requests/ProductRequests";
-import { IDisplayCard } from "@/types/entities/Display";
+import {
+   CreateReadyBasketRequest,
+   DeleteReadyBasketRequest,
+   UpdateReadyBasketRequest,
+} from "@/types/requests/ProductRequests";
+import { IDisplayCard, IDisplayOrderCard } from "@/types/entities/Display";
+import { mapOrderToOrderCard } from "@/utils/MappingTypes";
+import { OrderStatuses } from "@/constants/constants";
 
 class AdminStore {
    constructor() {
@@ -153,7 +166,9 @@ class AdminStore {
       basketId: string
    ): Promise<{ success: boolean; message?: string }> {
       const token = getCookie("token")?.toString();
-      const res = await fetchApi(updateReadyBasketApi(payload, basketId, token));
+      const res = await fetchApi(
+         updateReadyBasketApi(payload, basketId, token)
+      );
       if (res.success) {
          // await this.getAllReadyBaskets();
          return { success: true };
@@ -161,7 +176,6 @@ class AdminStore {
          return { success: false, message: res.message };
       }
    }
-
 
    async getReadyBasketById(id: string): Promise<{
       success: boolean;
@@ -172,36 +186,68 @@ class AdminStore {
       const basketRes = await fetchApi(getReadyBasketByIdApi({ id }, token));
       const basket: IReadyBasket = basketRes.data;
 
-      // Получаем все продукты
       const productsRes = await fetchApi(searchOnlyProductsApi({}, token));
       const allProducts: IProductCard[] = productsRes.data;
 
-      const countedProducts: ICountedProduct[] = basket.products.map(p => {
-         const fullProduct = allProducts.find(prod => prod.id === p.id);
+      const countedProducts: ICountedProduct[] = basket.products.map((p) => {
+         const fullProduct = allProducts.find((prod) => prod.id === p.id);
 
-       
          if (!fullProduct) {
-           throw new Error(`Продукт с id=${p.id} не найден в общем списке`);
+            throw new Error(`Продукт с id=${p.id} не найден в общем списке`);
          }
-       
+
          return {
-           ...fullProduct,
-           amount: p.saleVolume / fullProduct.saleVolume,
-           saleVolume: fullProduct.saleVolume,
-           price: fullProduct.price,
+            ...fullProduct,
+            amount: p.saleVolume / fullProduct.saleVolume,
+            saleVolume: fullProduct.saleVolume,
+            price: fullProduct.price,
          };
-       });
- 
-       const readyBasketFromAdmin: IReadyBasketFromAdmin = {
+      });
+
+      const readyBasketFromAdmin: IReadyBasketFromAdmin = {
          ...basket,
          products: countedProducts,
-       };
+      };
 
-       return { success: true, data: readyBasketFromAdmin };
+      return { success: true, data: readyBasketFromAdmin };
    }
 
+   async getOrdersFromAdmin(): Promise<{
+      success: boolean;
+      message?: string;
+      data?: IDisplayOrderCard[];
+   }> {
+      const token = getCookie("token")?.toString();
+      const response = await fetchApi(getOrdersFromAdminApi(token));
+      console.log(response);
 
-   async deleteReadyBasket(payload: DeleteReadyBasketRequest): Promise<{ success: boolean; message?: string }> {
+      if (response.success && response.data) {
+         return {
+            success: true,
+            data: response.data.map((order) => mapOrderToOrderCard(order)),
+         };
+      }
+
+      return { success: false, message: response.message };
+   }
+
+   async closeOrder(
+      orderId: string
+   ): Promise<{ success: boolean; message?: string }> {
+      const token = getCookie("token")?.toString();
+      const res = await fetchApi(
+         closeOrderApi({ orderId, status: OrderStatuses.COMPLETED }, token)
+      );
+      if (res.success) {
+         return { success: true };
+      } else {
+         return { success: false, message: res.message };
+      }
+   }
+
+   async deleteReadyBasket(
+      payload: DeleteReadyBasketRequest
+   ): Promise<{ success: boolean; message?: string }> {
       const token = getCookie("token")?.toString();
       const res = await fetchApi(DeleteReadyBasketApi(payload, token));
       if (res.success) {
@@ -211,7 +257,6 @@ class AdminStore {
          return { success: false, message: res.message };
       }
    }
-
 
    async logout() {
       deleteCookie("token");

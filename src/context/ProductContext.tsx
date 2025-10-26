@@ -9,6 +9,7 @@ import {
    searchProductsApi,
    addReviewApi,
    searchOnlyProductsApi,
+   CheckPromoCodeApi,
 } from "@/api/productApi";
 import {
    GetProductByIdRequest,
@@ -28,6 +29,9 @@ import {
 } from "../types/requests/ProducerRequests";
 import { ProducerByIdResponse } from "../types/responses/ProducerResponses";
 import { IDisplayCard } from "@/types/entities/Display";
+import { CheckPromoCodeResponse } from "@/types/responses/CustomerResponses";
+import { getCookie } from "cookies-next/client";
+import axios from "axios";
 
 interface ProductContextType {
    categories: ICategory[];
@@ -82,6 +86,12 @@ interface ProductContextType {
    addProducerReview: (payload: AddProducerReviewRequest) => Promise<{
       success: boolean;
       review: IReview | null;
+      message?: string;
+   }>;
+
+   checkPromoCode: (code: string) => Promise<{
+      success: boolean;
+      data: CheckPromoCodeResponse | null;
       message?: string;
    }>;
 }
@@ -299,6 +309,7 @@ export const ProductContextProvider = ({
    }> => {
       try {
          const response = await addReviewApi(payload);
+
          if (response.successful) {
             return { success: true, review: response.data };
          } else {
@@ -346,6 +357,53 @@ export const ProductContextProvider = ({
       }
    };
 
+   const checkPromoCode = async (
+      code: string
+   ): Promise<{
+      success: boolean;
+      data: CheckPromoCodeResponse | null;
+      message?: string;
+   }> => {
+      try {
+         const token = await getCookie("token");
+         const response = await CheckPromoCodeApi({ promocode: code }, token);
+         console.log(response);
+         if (response.successful) {
+            return { success: true, data: response.data };
+         } else {
+            return {
+               success: false,
+               data: null,
+               message:
+                  response.error.message || "Ошибка при проверке промокода",
+            };
+         }
+      } catch (error) {
+         if (axios.isAxiosError(error)) {
+            const serverMessage =
+               error.response?.data?.error?.message ||
+               error.response?.data?.message ||
+               error.message ||
+               "Неизвестная ошибка при проверке промокода";
+      
+      
+            return {
+               success: false,
+               data: null,
+               message: serverMessage,
+            };
+         } else {
+            console.error("Непредвиденная ошибка:", error);
+            return {
+               success: false,
+               data: null,
+               message: "Произошла непредвиденная ошибка",
+            };
+         }
+      }
+      
+   };
+
    // useEffect(() => {
    //    const fetchCategories = async () => {
    //       const { success, message } = await getCategories();
@@ -371,6 +429,7 @@ export const ProductContextProvider = ({
             addProducerReview,
             getCategories,
             searchOnlyProducts,
+            checkPromoCode,
          }}
       >
          {children}

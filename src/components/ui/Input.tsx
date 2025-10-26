@@ -30,7 +30,7 @@ const Input: FC<InputProps> = ({ width = "w-full", size = "normal", placeholder,
    return (
       <div className={width}>
       <input
-         className={`w-full ${sizeClasses[size]} md:text-base text-sm border-2 ${error ? "border-red-600 placeholder:text-red-600" : "border-main-gray hover:shadow-[0_0_0_1px_#646464] focus:shadow-[0_0_0_1px_#646464]"} outline-0 rounded-full font-normal caret-main-green`}
+         className={`w-full ${sizeClasses[size]} md:text-lg text-base border-2 ${error ? "border-red-600 placeholder:text-red-600" : "border-main-gray hover:shadow-[0_0_0_1px_#646464] focus:shadow-[0_0_0_1px_#646464]"} outline-0 rounded-full font-normal caret-main-green`}
          placeholder={error ? error : placeholder}
          value={error ? "" : value}
          type={type}

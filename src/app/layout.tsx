@@ -4,10 +4,9 @@ import "./globals.css";
 import { fetchApi } from "@/lib/fetchApi";
 import { getAccountApi } from "@/api/userApi";
 // import MainLayout from "@/components/layouts/MainLayout";
-import { AuthContextProvider } from "@/context/AuthProvider";
 import { cookies } from "next/headers";
-import { ProductContextProvider } from "@/context/ProductContext";
 import Script from "next/script";
+import { Providers } from "./providers";
 
 //import { getCookie } from "cookies-next/server";
 
@@ -212,7 +211,7 @@ export default async function RootLayout({
    children: React.ReactNode;
 }>) {
    const token = (await cookies()).get("token")?.value;
-   let userType = "guest";
+   let userType:string = "guest"; 
 
    if (token) {
       try {
@@ -226,6 +225,8 @@ export default async function RootLayout({
          console.error("Ошибка получения аккаунта:", e);
       }
    }
+
+   console.log("Layout", userType);
 
    return (
       <html lang="ru">
@@ -268,9 +269,7 @@ export default async function RootLayout({
                   />
                </div>
             </noscript>
-            <AuthContextProvider initialUserType={userType}>
-               <ProductContextProvider>{children}</ProductContextProvider>
-            </AuthContextProvider>
+            <Providers initialUserType={userType}>{children}</Providers>
          </body>
       </html>
    );

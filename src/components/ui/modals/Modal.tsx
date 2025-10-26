@@ -83,7 +83,7 @@ export const Modal: React.FC<ModalProps> = ({
                      {showCloseButton && (
                         <button
                            onClick={onClose}
-                           className="absolute top-4 right-4 text-main-gray cursor-pointer hover:scale-110 transition-all duration-100"
+                           className="absolute bg-white rounded-full top-4 right-4 text-main-gray cursor-pointer hover:scale-110 transition-all duration-100"
                         >
                            <svg
                               xmlns="http://www.w3.org/2000/svg"
@@ -91,7 +91,7 @@ export const Modal: React.FC<ModalProps> = ({
                               viewBox="0 0 24 24"
                               strokeWidth={1.5}
                               stroke="currentColor"
-                              className="size-6"
+                              className="md:size-6 size-5 "
                            >
                               <path
                                  strokeLinecap="round"
@@ -106,7 +106,7 @@ export const Modal: React.FC<ModalProps> = ({
                            {title}
                         </h2>
                      )}
-                     <div className="flex-1 overflow-auto">
+                     <div className="flex-1 overflow-y-auto">
                         <div className="flex flex-col h-full">{children}</div>
                      </div>
                   </motion.div>

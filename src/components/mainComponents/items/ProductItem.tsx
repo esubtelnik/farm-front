@@ -50,8 +50,9 @@ const ProductItem: FC<ProductItemProps> = observer(
                      fill
                      src={`${process.env.NEXT_PUBLIC_IMAGE_URL}${product.image}`}
                      alt={product.title}
-                     className="object-cover rounded-t-2xl border-2 border-main-green"
+                     className={`object-cover rounded-t-2xl border-2 ${product.isAvailable ? "border-main-green" : "border-main-gray grayscale-50"}`}
                   />
+                 {!product.isAvailable && <span className="text-main-gray bg-main-green/20 px-2 py-1 md:text-base text-[10px] absolute bottom-0 right-0">{product.volume === 0 ? 'На сегодня продукт закончился' : 'Нет в наличии'}</span>}
                </div>
                <div className="absolute z-10 top-0 right-0 md:p-5 sm:p-3 p-1">
                   {!isEditable && (
@@ -69,10 +70,10 @@ const ProductItem: FC<ProductItemProps> = observer(
                   )}
                </div>
             </div>
-            <div className="flex flex-col w-full border-main-green border-b-2 border-r-2 border-l-2 rounded-bl-2xl rounded-br-2xl p-3 gap-y-1 relative">
+            <div className={`flex flex-col w-full border-b-2 border-r-2 border-l-2 rounded-bl-2xl rounded-br-2xl p-3 gap-y-1 relative ${product.isAvailable ? "border-main-green" : "border-main-gray"}`}>
                <span
-                  className="text-main-green font-semibold md:font-bold lg:text-xl md:text-base  text-sm
-                 leading-tight h-[3.6rem] md:h-[4.2rem] lg:h-[4.8rem]"
+                  className={`${product.isAvailable ? "text-main-green" : "text-main-gray"} font-semibold md:font-bold lg:text-xl md:text-base  text-sm
+                 leading-tight h-[3.6rem] md:h-[4.2rem] lg:h-[4.8rem]`}
                   style={{
                      display: "-webkit-box",
                      WebkitLineClamp: 3,

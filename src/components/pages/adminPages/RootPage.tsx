@@ -23,6 +23,10 @@ const RootPage: FC = () => {
             />
             {isRegistrationCodeFormOpen && <RegistrationCodeForm />}
             <AdminActionButton
+               label="Список заказов"
+               path={routes.admin.lists.orders}
+            />
+            <AdminActionButton
                label="Готовые корзины"
                path={routes.admin.lists.readyBaskets}
             />
@@ -38,6 +42,7 @@ const RootPage: FC = () => {
                label="Список курьеров"
                path={routes.admin.lists.couriers}
             />
+             
          </div>
       </div>
    );

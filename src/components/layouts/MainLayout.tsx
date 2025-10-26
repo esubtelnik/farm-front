@@ -19,14 +19,17 @@ interface LayoutProps {
 const MainLayout: FC<LayoutProps> = ({ children }) => {
    const { userType } = useAuthContext();
    const { customerStore, producerStore, courierStore } = useStores();
+   console.log("MainLayout");
 
 
       useEffect(() => {
+         console.log("useEffect");
          if (!userType) return;
 
          switch (userType) {
             case UserType.CUSTOMER:
                customerStore.fetchCustomerData();
+               console.log("fetchCustomerData");
                break;
             case UserType.PRODUCER:
                producerStore.fetchProducerData();
@@ -37,7 +40,7 @@ const MainLayout: FC<LayoutProps> = ({ children }) => {
          }
 
          // eslint-disable-next-line react-hooks/exhaustive-deps
-      }, [userType]);
+      }, []);
 
    
    // useEffect(() => {

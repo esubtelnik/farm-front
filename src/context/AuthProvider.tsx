@@ -95,6 +95,8 @@ export const AuthContextProvider = ({
       return found || UserType.GUEST;
    });
 
+   
+
    // useEffect(() => {
    //    switch (userType.type) {
    //       case UserType.CUSTOMER.type:
@@ -141,6 +143,8 @@ export const AuthContextProvider = ({
    // //       getUserType();
 
    // // }, [token]);
+   console.log("AuthContext render", userType);
+
 
    const getUserType = async (): Promise<{
       success: boolean;

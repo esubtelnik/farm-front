@@ -24,6 +24,9 @@ import { ApiClient } from "@/lib/apiClient";
 import { ApiResponse } from "@/types/ApiResponse";
 import { IDisplayCard } from "@/types/entities/Display";
 import { mapToDisplayCard } from "@/utils/MappingTypes";
+import { CheckPromoCodeRequest, CreateOrderRequest } from "@/types/requests/CustomerRequests";
+import { CheckPromoCodeResponse } from "@/types/responses/CustomerResponses";
+import { OrdersFromAdminResponse } from "@/types/responses/AdminResponses";
 
 export const getCategoriesApi = async (
    token?: string
@@ -214,3 +217,30 @@ export const getReadyBasketByIdApi = async (
       token
    );
 };
+
+
+export const CreateOrderApi = async (
+   paylod: CreateOrderRequest,
+   token?: string
+): Promise<ApiResponse<string>> => {
+   return await ApiClient.post<CreateOrderRequest, ApiResponse<string>>(
+      '/api/product/order',
+      paylod,
+      token,
+
+   );
+}
+   
+export const CheckPromoCodeApi = async (
+   paylod: CheckPromoCodeRequest,
+   token?: string
+): Promise<ApiResponse<CheckPromoCodeResponse>> => {
+   return await ApiClient.post<CheckPromoCodeRequest, ApiResponse<CheckPromoCodeResponse>>(
+      '/api/promocode/check',
+      paylod,
+      token,
+
+   );
+}
+
+

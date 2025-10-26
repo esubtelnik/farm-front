@@ -1,6 +1,7 @@
 import { TokenResponse } from "@/types/responses/UserResponses";
 import {
    AdminLoginRequest,
+   ChangeOrderStatusRequest,
    ChangeProducerOverpriceRequest,
    ChangeProductOverpriceRequest,
    CreateRegistrationCourierCodeRequest,
@@ -9,6 +10,7 @@ import {
 import {
    CouriersFromAdminResponse,
    CreateRegistrationCourierCodeResponse,
+   OrdersFromAdminResponse,
    ProducersFromAdminResponse,
    SaveProducerCodeResponse,
 } from "@/types/responses/AdminResponses";
@@ -169,4 +171,24 @@ export const DeleteReadyBasketApi = async (
       payload,
       token
    );
+};
+
+export const getOrdersFromAdminApi = async (
+   token?: string
+): Promise<ApiResponse<OrdersFromAdminResponse>> => {
+   return await ApiClient.get<ApiResponse<OrdersFromAdminResponse>>(
+      "/api/order/all",
+      token
+   );
+};
+
+
+export const closeOrderApi = async (
+   payload: ChangeOrderStatusRequest,
+   token?: string
+): Promise<ApiResponse<string>> => {
+   return await ApiClient.patch<
+      ChangeOrderStatusRequest,
+      ApiResponse<string>
+   >("/api/order/status", payload, token);
 };

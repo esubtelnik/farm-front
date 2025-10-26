@@ -1,6 +1,7 @@
 import {
    CustomerCartResponse,
    CustomerFavouritesResponse,
+   OrdersResponse,
 } from "@/types/responses/CustomerResponses";
 import {
    AddToCartRequest,
@@ -12,6 +13,7 @@ import { CustomerResponse } from "@/types/responses/UserResponses";
 import { ApiClient } from "@/lib/apiClient";
 import { ApiResponse } from "@/types/ApiResponse";
 import { IProductCard } from "@/types/entities/Product";
+import { OrdersFromAdminResponse } from "@/types/responses/AdminResponses";
 
 export const getCustomerApi = async (
    token?: string
@@ -87,6 +89,24 @@ export const removeAllFromCartApi = async (
    return await ApiClient.delete<void, ApiResponse<IProductCard[]>>(
       "/api/customer/cart/all",
       undefined,
+      token
+   );
+};
+
+export const getUncompletedOrders = async (
+   token?: string
+): Promise<ApiResponse<OrdersResponse>> => {
+   return await ApiClient.get<ApiResponse<OrdersResponse>>(
+      "/api/order/uncompleted",
+      token
+   );
+};
+
+export const getCompletedOrders = async (
+   token?: string
+): Promise<ApiResponse<OrdersResponse>> => {
+   return await ApiClient.get<ApiResponse<OrdersResponse>>(
+      "/api/order/completed",
       token
    );
 };

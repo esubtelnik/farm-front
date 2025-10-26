@@ -17,3 +17,12 @@ export interface CustomerCartResponse {
     datetimeInserted: string,
     datetimeUpdated: string,
 }
+
+export interface CheckPromoCodeResponse {
+    id: string;
+    promocode: string;
+    discount: number;
+    expiresAt: string;
+}
+
+export type OrdersResponse = IOrder[];

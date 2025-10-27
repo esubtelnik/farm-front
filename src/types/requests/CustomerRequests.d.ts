@@ -27,6 +27,7 @@ export interface CreateOrderRequest {
    }[];
    paymentMethod: string;
    deliveryTo: string;
+   deliveryPrice: number;
    address: string;
    phoneNumber: string;
    promocode?: string;

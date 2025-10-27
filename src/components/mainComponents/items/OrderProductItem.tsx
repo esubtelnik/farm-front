@@ -36,7 +36,7 @@ const OrderProductItem: FC<OrderProductItemProps> = ({ product, updateProductAmo
             
             </div>
             <div className={`w-full flex items-center justify-between  font-semibold md:text-base text-xs ${product.isAvailable ? "text-dark-gray" : "text-main-gray"}`}>
-               {amount * product.price} р.
+               {(amount * product.price).toFixed(2)} р.
                <span className="text-main-gray md:text-base text-[10px]">{product.isAvailable ? "" : "Нет в наличии"}</span>
 
                {/* <span className="text-main-gray/70 md:text-base text-[10px]">

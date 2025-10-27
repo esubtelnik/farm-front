@@ -318,7 +318,6 @@ class CustomerStore {
             ? getCompletedOrders(token)
             : getUncompletedOrders(token)
       );
-      console.log(response);
 
       if (response.success && response.data) {
          runInAction(() => {

@@ -25,3 +25,5 @@ export const OrderStatuses = {
    NOT_PAID: "Не оплачен",
    COMPLETED: "Завершён",
 };
+
+export const DELIVERY_FEE = 5;

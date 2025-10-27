@@ -30,6 +30,7 @@ interface FormState {
       deliveryTo: string;
       address: string;
       phoneNumber: string;
+      deliveryPrice: number;
       promocode: string;
       customerFio: string;
    };
@@ -64,6 +65,8 @@ const CreateOrderModal: FC<CreateOrderModalProps> = ({
          isAvailable: p.isAvailable,
       }))
    );
+   const { total, deliveryFee } = calculateTotal(productsForOrder, 50);
+
 
    const [form, setForm] = useState<FormState>({
       values: {
@@ -78,6 +81,7 @@ const CreateOrderModal: FC<CreateOrderModalProps> = ({
          address: userInfo.address,
          phoneNumber: userInfo.phoneNumber,
          promocode: "",
+         deliveryPrice: deliveryFee,
          customerFio: `${userInfo.name} ${userInfo.surname}`,
       },
       errors: {
@@ -94,6 +98,7 @@ const CreateOrderModal: FC<CreateOrderModalProps> = ({
       field: K,
       value: FormState["values"][K]
    ) => {
+      setCreateOrderErrorMessage("");
       setForm((prev) => ({
          ...prev,
          values: {
@@ -126,7 +131,6 @@ const CreateOrderModal: FC<CreateOrderModalProps> = ({
    const [createOrderErrorMessage, setCreateOrderErrorMessage] = useState<string | null>(null);
    
 
-   const { total, deliveryFee } = calculateTotal(productsForOrder, 50);
 
 
    const handleCheckPromoCode = async () => {
@@ -182,13 +186,20 @@ const CreateOrderModal: FC<CreateOrderModalProps> = ({
 
       if (!form.values.deliveryTo) {
          newErrors.deliveryTo = "Выберите дату";
+         setCreateOrderErrorMessage("Выберите дату доставки");
       }
 
       if (!form.values.address) {
          newErrors.address = "Введите адрес доставки";
+         setCreateOrderErrorMessage("Проверьте все ли поля заполнены");
       }
 
+
+
       newErrors.phoneNumber = validatePhoneNumber(form.values.phoneNumber  );
+      if (newErrors.phoneNumber) {
+         setCreateOrderErrorMessage("Проверьте все ли поля заполнены");
+      }
 
       if (promoValid === false) {
          newErrors.promocode = "Промокод недействителен";

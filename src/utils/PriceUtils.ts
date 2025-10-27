@@ -1,4 +1,5 @@
 import { IProductForOrder } from "@/types/entities/Product";
+import { DELIVERY_FEE } from "@/constants/constants";
 
 export interface ICalculatePriceReadyBasket {
    objects: {
@@ -44,13 +45,13 @@ export function calculateTotal(
    let message = "";
 
    if (total < minDeliveryPrice) {
-      deliveryFee = 10;
-      message = "К заказу добавлена доставка 10 р., так как сумма меньше 50 р.";
+      deliveryFee = DELIVERY_FEE;
+      message = `К заказу добавлена доставка ${DELIVERY_FEE} р., так как сумма меньше ${minDeliveryPrice} р.`;
    }
 
    total += deliveryFee;
 
-   return { total, deliveryFee, message };
+   return { total: Number(total.toFixed(2)), deliveryFee, message };
 }
 
 

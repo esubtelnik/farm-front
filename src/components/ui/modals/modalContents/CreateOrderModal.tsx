@@ -7,7 +7,9 @@ import Dropdown from "@/components/ui/Dropdown";
 import { ICustomer } from "@/types/entities/User";
 import { calculateTotal, getAvailableDeliveryDates } from "@/utils/PriceUtils";
 import { useProductContext } from "@/context/ProductContext";
-import { ChevronLeftIcon } from "@heroicons/react/24/outline";
+import {
+   ChevronLeftIcon,
+} from "@heroicons/react/24/outline";
 import { formatDeliveryOptions } from "@/utils/MappingTypes";
 import { validatePhoneNumber } from "@/utils/ValidateUtils";
 import { paymentMethods } from "@/constants/constants";
@@ -15,8 +17,10 @@ import { paymentMethods } from "@/constants/constants";
 interface CreateOrderModalProps {
    products: IDisplayCard[];
    userInfo: ICustomer;
-   handleCreateOrder: (payload: CreateOrderRequest) => Promise<{ success: boolean; message?: string }>;
-   }
+   handleCreateOrder: (
+      payload: CreateOrderRequest
+   ) => Promise<{ success: boolean; message?: string }>;
+}
 
 interface FormState {
    values: {
@@ -66,7 +70,6 @@ const CreateOrderModal: FC<CreateOrderModalProps> = ({
       }))
    );
    const { total, deliveryFee } = calculateTotal(productsForOrder, 50);
-
 
    const [form, setForm] = useState<FormState>({
       values: {
@@ -128,10 +131,9 @@ const CreateOrderModal: FC<CreateOrderModalProps> = ({
       );
    };
 
-   const [createOrderErrorMessage, setCreateOrderErrorMessage] = useState<string | null>(null);
-   
-
-
+   const [createOrderErrorMessage, setCreateOrderErrorMessage] = useState<
+      string | null
+   >(null);
 
    const handleCheckPromoCode = async () => {
       const response = await checkPromoCode(form.values.promocode.trim());
@@ -158,7 +160,7 @@ const CreateOrderModal: FC<CreateOrderModalProps> = ({
       } else {
          setPromoValid(null);
       }
-     // eslint-disable-next-line react-hooks/exhaustive-deps
+      // eslint-disable-next-line react-hooks/exhaustive-deps
    }, [form.values.promocode]);
 
    useEffect(() => {
@@ -194,9 +196,7 @@ const CreateOrderModal: FC<CreateOrderModalProps> = ({
          setCreateOrderErrorMessage("Проверьте все ли поля заполнены");
       }
 
-
-
-      newErrors.phoneNumber = validatePhoneNumber(form.values.phoneNumber  );
+      newErrors.phoneNumber = validatePhoneNumber(form.values.phoneNumber);
       if (newErrors.phoneNumber) {
          setCreateOrderErrorMessage("Проверьте все ли поля заполнены");
       }
@@ -212,9 +212,7 @@ const CreateOrderModal: FC<CreateOrderModalProps> = ({
       return Object.values(newErrors).some((error) => error !== null);
    };
 
-   
    const handleSubmitCreateOrder = async () => {
-
       setCreateOrderErrorMessage("");
 
       const hasErrors = validateForm();
@@ -223,13 +221,13 @@ const CreateOrderModal: FC<CreateOrderModalProps> = ({
          const { promocode, ...rest } = form.values;
 
          const payload: CreateOrderRequest = {
-           ...rest,
-           ...(promocode?.trim() ? { promocode } : {}),
+            ...rest,
+            ...(promocode?.trim() ? { promocode } : {}),
          };
          const result = await handleCreateOrder(payload);
-        if (result.message) {
+         if (result.message) {
             setCreateOrderErrorMessage(result.message);
-        }
+         }
       }
    };
 
@@ -243,8 +241,12 @@ const CreateOrderModal: FC<CreateOrderModalProps> = ({
                />
                <div className="flex md:flex-row flex-col justify-between text-dark-gray gap-y-3">
                   <div className="flex items-center gap-x-2 ">
-                     <span className="text-sm md:text-base font-medium">Сумма заказа:</span>
-                     <span className="text-sm md:text-lg font-semibold">{total} р.</span>
+                     <span className="text-sm md:text-base font-medium">
+                        Сумма заказа:
+                     </span>
+                     <span className="text-sm md:text-lg font-semibold">
+                        {total} р.
+                     </span>
                      {deliveryFee > 0 && (
                         <sup className="text-xs md:text-sm  text-main-green">
                            доставка {deliveryFee} р.
@@ -315,27 +317,40 @@ const CreateOrderModal: FC<CreateOrderModalProps> = ({
                   </div>
 
                   <div className="flex flex-col">
-                     <label className="text-sm font-medium mb-1">
-                        Адрес доставки
+                     <label className="text-sm flex font-medium mb-1">
+                        Адрес доставки (в пределах Гродно)
                      </label>
                      <input
-                     
-                        className={`border border-main-gray/50 rounded-lg md:px-3 px-2 py-2 text-sm md:text-base focus:outline-none focus:border-beige transition ${form.errors.address ? "border-red-600" : "border-main-gray/50"}`}
+                        className={`border border-main-gray/50 rounded-lg md:px-3 px-2 py-2 text-sm md:text-base focus:outline-none focus:border-beige transition ${
+                           form.errors.address
+                              ? "border-red-600"
+                              : "border-main-gray/50"
+                        }`}
                         value={form.values.address}
-                        onChange={(e) => handleChange("address", e.target.value)}
+                        onChange={(e) =>
+                           handleChange("address", e.target.value)
+                        }
                         placeholder={form.errors.address || "Введите ваш адрес"}
                      />
                   </div>
-
                   <div className="flex flex-col">
                      <label className="text-sm font-medium mb-1">
                         Номер телефона
                      </label>
                      <input
-                        className={`border border-main-gray/50 rounded-lg md:px-3 px-2 py-2 text-sm md:text-base focus:outline-none focus:border-beige transition ${form.errors.phoneNumber ? "border-red-600" : "border-main-gray/50"}`}
+                        className={`border border-main-gray/50 rounded-lg md:px-3 px-2 py-2 text-sm md:text-base focus:outline-none focus:border-beige transition ${
+                           form.errors.phoneNumber
+                              ? "border-red-600"
+                              : "border-main-gray/50"
+                        }`}
                         value={form.values.phoneNumber}
-                        onChange={(e) => handleChange("phoneNumber", e.target.value)}
-                        placeholder={form.errors.phoneNumber || "Введите ваш номер телефона"}
+                        onChange={(e) =>
+                           handleChange("phoneNumber", e.target.value)
+                        }
+                        placeholder={
+                           form.errors.phoneNumber ||
+                           "Введите ваш номер телефона"
+                        }
                      />
                   </div>
 
@@ -344,10 +359,18 @@ const CreateOrderModal: FC<CreateOrderModalProps> = ({
                         Промокод
                      </label>
                      <input
-                        className={`border  border-main-gray/50 rounded-lg md:px-3 px-2 py-2 text-sm md:text-base focus:outline-none focus:border-beige transition ${form.errors.promocode ? "border-red-600" : "border-main-gray/50"}`}
+                        className={`border  border-main-gray/50 rounded-lg md:px-3 px-2 py-2 text-sm md:text-base focus:outline-none focus:border-beige transition ${
+                           form.errors.promocode
+                              ? "border-red-600"
+                              : "border-main-gray/50"
+                        }`}
                         value={form.values.promocode}
-                        onChange={(e) => handleChange("promocode", e.target.value)}
-                        placeholder={form.errors.promocode || "Введите промокод"}
+                        onChange={(e) =>
+                           handleChange("promocode", e.target.value)
+                        }
+                        placeholder={
+                           form.errors.promocode || "Введите промокод"
+                        }
                      />
                      <div className="text-sm min-h-5">
                         {form.values.promocode.length > 5 &&
@@ -375,15 +398,21 @@ const CreateOrderModal: FC<CreateOrderModalProps> = ({
                         width="w-full"
                         options={paymentMethods}
                         value={form.values.paymentMethod}
-                        onChange={(value) => handleChange("paymentMethod", value)}
+                        onChange={(value) =>
+                           handleChange("paymentMethod", value)
+                        }
                      />
                   </div>
 
-              
-                     <div className={`${createOrderErrorMessage ? "text-red-600" : "text-transparent"} w-full text-center min-h-5 text-sm`}>
-                        {createOrderErrorMessage}
-                     </div>
-             
+                  <div
+                     className={`${
+                        createOrderErrorMessage
+                           ? "text-red-600"
+                           : "text-transparent"
+                     } w-full text-center min-h-5 text-sm`}
+                  >
+                     {createOrderErrorMessage}
+                  </div>
 
                   <button
                      onClick={handleSubmitCreateOrder}

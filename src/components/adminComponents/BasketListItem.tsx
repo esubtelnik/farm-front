@@ -40,7 +40,7 @@ const BasketListItem: FC<BasketListItemProps> = ({ basket, refetch }) => {
          <div className="grid grid-cols-5 w-full gap-2 items-center justify-items-center">
             <h3>{basket.title}</h3>
             <p>{basket.price}</p>
-            <p>{basket.overprice}</p>
+            <p>{basket.overprice === 1001 ? "У продуктов базовые наценки" : basket.overprice}</p>
             <Link
                className="flex items-center gap-3"
                href={routes.admin.items.readyBasket(basket.id)}

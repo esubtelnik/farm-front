@@ -127,28 +127,28 @@ const ReadyBasketEditPage: FC = () => {
    const [isLoading, setIsLoading] = useState<boolean>(true);
 
    const [form, setForm] = useState<FormState>({
-    values: {
-       title: "",
-       overprice: null,
-       description: "",
-       composition: "",
-       storageConditions: "",
-       //  images: [],
-       package: "",
-       delivery: 0,
-    },
-    errors: {
-       title: null,
-       products: null,
-       overprice: null,
-       description: null,
-       composition: null,
-       storageConditions: null,
-       images: null,
-       package: null,
-       delivery: null,
-    },
- });
+      values: {
+         title: "",
+         overprice: null,
+         description: "",
+         composition: "",
+         storageConditions: "",
+         //  images: [],
+         package: "",
+         delivery: 0,
+      },
+      errors: {
+         title: null,
+         products: null,
+         overprice: null,
+         description: null,
+         composition: null,
+         storageConditions: null,
+         images: null,
+         package: null,
+         delivery: null,
+      },
+   });
 
    const params = useParams();
 
@@ -227,8 +227,6 @@ const ReadyBasketEditPage: FC = () => {
    } | null>(null);
 
    //    const [isInStock, setIsInStock] = useState(false);
-
-   
 
    const handleChange = <K extends keyof FormState["values"]>(
       field: K,
@@ -312,10 +310,7 @@ const ReadyBasketEditPage: FC = () => {
       }
 
       if (Number(form.values.overprice) !== Number(readyBasket?.overprice)) {
-         changedFields.overprice =
-            form.values.overprice && form.values.overprice > 0
-               ? form.values.overprice
-               : 1001;
+         changedFields.overprice = Number(form.values.overprice);
       }
 
       const newDescription = form.values.description?.trim() || "-";
@@ -380,41 +375,40 @@ const ReadyBasketEditPage: FC = () => {
       //   };
 
       try {
-        setIsLoading(true);
-     
-        const result = await adminStore.updateReadyBasket(
-           changedFields as UpdateReadyBasketRequest,
-           readyBasket?.id || ""
-        );
-     
-        if (result.success) {
-           const res = await adminStore.getReadyBasketById(readyBasket?.id || "");
-           if (res.success && res.data) {
-              setReadyBasket(res.data);
-           }
-     
-           setToast({
-              message: "Готовая корзина успешно обновлена",
-              type: "success",
-           });
-        } else {
-           setToast({
-   
-              message: result.message || "Ошибка при обновлении корзины",
-              type: "error",
-           });
-        }
-     } catch (err) {
-        console.error(err);
-        setToast({
+         setIsLoading(true);
 
-           message: "Произошла непредвиденная ошибка",
-           type: "error",
-        });
-     } finally {
-        setIsLoading(false);
-     }
-           
+         const result = await adminStore.updateReadyBasket(
+            changedFields as UpdateReadyBasketRequest,
+            readyBasket?.id || ""
+         );
+
+         if (result.success) {
+            const res = await adminStore.getReadyBasketById(
+               readyBasket?.id || ""
+            );
+            if (res.success && res.data) {
+               setReadyBasket(res.data);
+            }
+
+            setToast({
+               message: "Готовая корзина успешно обновлена",
+               type: "success",
+            });
+         } else {
+            setToast({
+               message: result.message || "Ошибка при обновлении корзины",
+               type: "error",
+            });
+         }
+      } catch (err) {
+         console.error(err);
+         setToast({
+            message: "Произошла непредвиденная ошибка",
+            type: "error",
+         });
+      } finally {
+         setIsLoading(false);
+      }
    };
 
    useEffect(() => {
@@ -545,28 +539,21 @@ const ReadyBasketEditPage: FC = () => {
                            ? ""
                            : form.values.overprice ?? ""
                      }
-                     onKeyPress={(e) => {
-                        if (!/[0-9]/.test(e.key)) {
-                           e.preventDefault();
-                        }
-                     }}
                      onChange={(e) => {
                         const value = e.target.value;
-                        if (
-                           value === "" ||
-                           (/^\d+$/.test(value) && parseInt(value) >= 0)
+
+                        if (value === "") {
+                           handleChange("overprice", 1001);
+                        } else if (
+                           /^\d+$/.test(value) &&
+                           parseInt(value) >= 0
                         ) {
-                           handleChange(
-                              "overprice",
-                              value === "" ? null : parseInt(value)
-                           );
+                           handleChange("overprice", parseInt(value));
                         }
                      }}
                      onBlur={(e) => {
-                        const value = parseInt(e.target.value);
-                        if (isNaN(value)) {
-                           e.target.value = "";
-                           handleChange("overprice", null);
+                        if (e.target.value === "") {
+                           handleChange("overprice", 1001);
                         }
                      }}
                   />

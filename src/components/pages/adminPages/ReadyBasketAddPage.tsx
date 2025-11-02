@@ -7,7 +7,7 @@ import AddProductsToReadyBasketModal from "@/components/ui/modals/modalContents/
 import { ICountedProduct } from "@/types/entities/Product";
 import Image from "next/image";
 import { MinusIcon, PlusIcon, XMarkIcon } from "@heroicons/react/24/solid";
-   import { calculatePriceReadyBasket } from "@/utils/PriceUtils";
+import { calculatePriceReadyBasket } from "@/utils/PriceUtils";
 import { useStores } from "@/hooks/useStores";
 import { CreateReadyBasketRequest } from "@/types/requests/ProductRequests";
 
@@ -113,7 +113,7 @@ interface FormState {
 }
 
 const ReadyBasketAddPage: FC = () => {
-    const {adminStore} = useStores();
+   const { adminStore } = useStores();
    const [isProductsModalOpen, setIsProductsModalOpen] = useState(false);
    const [selectedProducts, setSelectedProducts] = useState<ICountedProduct[]>(
       []
@@ -191,7 +191,6 @@ const ReadyBasketAddPage: FC = () => {
       //   if (!form.values.overprice) {
       //      newErrors.overprice = "Введите надбавку";
       //   }
-    
 
       setForm((prev) => ({
          ...prev,
@@ -204,29 +203,25 @@ const ReadyBasketAddPage: FC = () => {
    const handleSubmit = async (e: React.FormEvent) => {
       e.preventDefault();
       const hasErrors = validateForm();
-      
 
       if (hasErrors) return;
 
       const payload = {
-        ...form.values,
-        overprice: form.values.overprice && form.values.overprice > 0 ? form.values.overprice : 1001,
-        description: form.values.description || "-",
-        composition: form.values.composition || "-",
-        storageConditions: form.values.storageConditions || "-",
-        package: form.values.package || "-",
-        products: selectedProducts.map((product) => ({
+         ...form.values,
+         description: form.values.description || "-",
+         composition: form.values.composition || "-",
+         storageConditions: form.values.storageConditions || "-",
+         package: form.values.package || "-",
+         products: selectedProducts.map((product) => ({
             productId: product.id,
             amount: product.amount,
-        })),
-    };
+         })),
+      };
 
       await adminStore.createReadyBasket(payload as CreateReadyBasketRequest);
    };
 
    useEffect(() => {
-   
-
       setTotalPrice(
          calculatePriceReadyBasket({
             objects: selectedProducts.map((product) => ({
@@ -241,18 +236,16 @@ const ReadyBasketAddPage: FC = () => {
       );
    }, [form.values.overprice, selectedProducts]);
 
-
-
    return (
       <div className="bg-white w-full overflow-y-hidden p-8 gap-y-8 flex flex-col font-geist">
          <div className="flex flex-col w-full md:flex-row items-center lg:items-start gap-y-5 gap-x-5">
-           <div className="w-60">
-            <AddPhotoInput
-               images={form.values.images}
-               error={form.errors.images}
-               onChange={(files) => handleChange("images", files)}
-               isEditable
-            />
+            <div className="w-60">
+               <AddPhotoInput
+                  images={form.values.images}
+                  error={form.errors.images}
+                  onChange={(files) => handleChange("images", files)}
+                  isEditable
+               />
             </div>
             <div className="flex w-full md:w-1/3 flex-col justify-center items-between gap-y-2">
                <div
@@ -296,9 +289,7 @@ const ReadyBasketAddPage: FC = () => {
 
                <button
                   className={`w-full text-start p-2 border-2 border-transparent rounded-md text-main-gray font-semibold md:text-lg text-sm ${
-                     form.errors.products
-                        ? "text-red-500"
-                        : "text-main-gray"
+                     form.errors.products ? "text-red-500" : "text-main-gray"
                   }`}
                   onClick={() => setIsProductsModalOpen(true)}
                >
@@ -338,31 +329,23 @@ const ReadyBasketAddPage: FC = () => {
                            ? ""
                            : form.values.overprice ?? ""
                      }
-                     onKeyPress={(e) => {
-                        if (!/[0-9]/.test(e.key)) {
-                           e.preventDefault();
-                        }
-                     }}
                      onChange={(e) => {
                         const value = e.target.value;
-                     
-                        if (
-                           value === "" ||
-                           (/^\d+$/.test(value) && parseInt(value) >= 0)
+
+                        if (value === "") {
+                           handleChange("overprice", 1001);
+                        } else if (
+                           /^\d+$/.test(value) &&
+                           parseInt(value) >= 0
                         ) {
-                           handleChange(
-                              "overprice",
-                              value === "" ? null : parseInt(value)
-                           );
+                           handleChange("overprice", parseInt(value));
                         }
                      }}
                      onBlur={(e) => {
-                        const value = parseInt(e.target.value);
-                        if (isNaN(value)) {
-                           e.target.value = "";
-                           handleChange("overprice", null);
+                        if (e.target.value === "") {
+                          handleChange("overprice", 1001);
                         }
-                     }}
+                      }}
                   />
 
                   <span
@@ -426,7 +409,7 @@ const ReadyBasketAddPage: FC = () => {
                            <PlusIcon className="size-4 stroke-2" />
                         </button>
                         <span className="text-dark-gray truncate font-semibold md:text-lg text-sm">
-                           {product.saleVolume*product.amount} {product.unit }
+                           {product.saleVolume * product.amount} {product.unit}
                         </span>
                         <button
                            className="text-white bg-main-green rounded-full p-1 font-semibold md:text-lg text-sm"
@@ -434,7 +417,11 @@ const ReadyBasketAddPage: FC = () => {
                               setSelectedProducts(
                                  selectedProducts.map((p) =>
                                     p.id === product.id
-                                       ? { ...p, amount:  p.amount >1 ? p.amount - 1 : 1 }
+                                       ? {
+                                            ...p,
+                                            amount:
+                                               p.amount > 1 ? p.amount - 1 : 1,
+                                         }
                                        : p
                                  )
                               )

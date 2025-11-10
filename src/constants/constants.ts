@@ -13,11 +13,13 @@ export const measures = [
 export const paymentMethods = [
    { label: "НАЛИЧНЫE ПРИ ПОЛУЧЕНИИ", value: "НАЛИЧНЫЕ" },
    { label: "БЕЗНАЛИЧНЫЙ ПО EPOS", value: "КАРТА" },
+   { label: "БЕЗНАЛИЧНЫЙ ПРИ ПОЛУЧЕНИИ", value: "БЕЗНАЛИЧНЫЕ ПРИ ПОЛУЧЕНИИ" },
 ];
 
 export const paymentMethodsValues = {
    CASH: "НАЛИЧНЫЕ",
    EPOS: "КАРТА",
+   CASH_ON_DELIVERY: "БЕЗНАЛИЧНЫЕ ПРИ ПОЛУЧЕНИИ",
 };
 
 export const OrderStatuses = {

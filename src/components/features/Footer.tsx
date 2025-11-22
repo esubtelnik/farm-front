@@ -80,6 +80,7 @@ const DesktopFooter = () => {
             </div> */}
 
             <div className="footer-section">
+               
                <div className="flex gap-4">
                   {(() => {
                      const icons = FooterPaymentLinks.items.filter(
@@ -94,7 +95,7 @@ const DesktopFooter = () => {
                               item.type === "image" && item.image ? (
                                  <li
                                     key={item.text}
-                                    className="flex justify-center items-center h-12 w-24"
+                                    className="flex justify-center items-center h-12 w-18"
                                  >
                                     <div className="relative w-full h-full">
                                        <Image
@@ -272,7 +273,7 @@ const MobileFooter = () => {
                                     item.type === "image" && item.image ? (
                                        <li
                                           key={item.text}
-                                          className="flex justify-center items-center h-12 w-24"
+                                          className="flex justify-center items-center h-8 w-10"
                                        >
                                           <div className="relative w-full h-full">
                                              <Image

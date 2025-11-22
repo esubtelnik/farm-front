@@ -9,7 +9,7 @@ import {
 import Link from "next/link";
 import { FooterSectionType } from "@/content/FooterContent";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
-
+import Image from "next/image";
 
 const DesktopFooter = () => {
    return (
@@ -47,8 +47,9 @@ const DesktopFooter = () => {
                   </ul>
                </div>
             </div>
-            <div className="footer-section">
-               {/* <h4>{FooterPaymentLinks.title}</h4> */}
+
+            {/* <div className="footer-section">
+               <h4>{FooterPaymentLinks.title}</h4>
                <div className="flex gap-4">
                   {(() => {
                      const icons = FooterPaymentLinks.items.filter(
@@ -70,6 +71,44 @@ const DesktopFooter = () => {
                                  </li>
                               ) : (
                                  <li key={item.text}>{item.text}</li>
+                              )
+                           )}
+                        </ul>
+                     ));
+                  })()}
+               </div>
+            </div> */}
+
+            <div className="footer-section">
+               <div className="flex gap-4">
+                  {(() => {
+                     const icons = FooterPaymentLinks.items.filter(
+                        (item) => item.type === "image" && item.image
+                     );
+                     const mid = Math.ceil(icons.length / 2);
+                     const firstColumn = icons.slice(0, mid);
+                     const secondColumn = icons.slice(mid);
+                     return [firstColumn, secondColumn].map((column, idx) => (
+                        <ul key={idx} className="flex flex-col xl:gap-5 gap-3">
+                           {column.map((item) =>
+                              item.type === "image" && item.image ? (
+                                 <li
+                                    key={item.text}
+                                    className="flex justify-center items-center h-12 w-24"
+                                 >
+                                    <div className="relative w-full h-full">
+                                       <Image
+                                          src={item.image}
+                                          alt={item.text}
+                                          fill
+                                          className="object-contain"
+                                       />
+                                    </div>
+                                 </li>
+                              ) : (
+                                 <li key={item.text} className="py-2">
+                                    {item.text}
+                                 </li>
                               )
                            )}
                         </ul>
@@ -186,7 +225,7 @@ const MobileFooter = () => {
                <li>{FooterContactsLinks.items[1].text}</li>
             </ul>
             <ul className="flex flex-col items-start gap-y-3 text-sm text-white">
-               <div className="flex gap-3">
+               {/* <div className="flex gap-3">
                   {(() => {
                      const icons = FooterPaymentLinks.items.filter(
                         (item) => item.type === "icon" && item.icon
@@ -212,6 +251,49 @@ const MobileFooter = () => {
                         </ul>
                      ));
                   })()}
+               </div> */}
+
+               <div className="footer-section">
+                  <div className="flex gap-4">
+                     {(() => {
+                        const icons = FooterPaymentLinks.items.filter(
+                           (item) => item.type === "image" && item.image
+                        );
+                        const mid = Math.ceil(icons.length / 2);
+                        const firstColumn = icons.slice(0, mid);
+                        const secondColumn = icons.slice(mid);
+                        return [firstColumn, secondColumn].map(
+                           (column, idx) => (
+                              <ul
+                                 key={idx}
+                                 className="flex flex-col xl:gap-5 gap-3"
+                              >
+                                 {column.map((item) =>
+                                    item.type === "image" && item.image ? (
+                                       <li
+                                          key={item.text}
+                                          className="flex justify-center items-center h-12 w-24"
+                                       >
+                                          <div className="relative w-full h-full">
+                                             <Image
+                                                src={item.image}
+                                                alt={item.text}
+                                                fill
+                                                className="object-contain"
+                                             />
+                                          </div>
+                                       </li>
+                                    ) : (
+                                       <li key={item.text} className="py-2">
+                                          {item.text}
+                                       </li>
+                                    )
+                                 )}
+                              </ul>
+                           )
+                        );
+                     })()}
+                  </div>
                </div>
             </ul>
          </div>

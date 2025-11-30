@@ -76,7 +76,7 @@ export const FooterContactsLinks: FooterSectionType = {
          type: "link",
          link: routes.home.contacts,
       },
-      { text: "ИП Лещёва З.М. УНП 291887836", type: "link", link: routes.home.contacts },
+      { text: "ИП Лещёва З.М. УНП 291887836, свидетельство выдано Администрацией Московского района г. Бреста, 09.12.2024", type: "link", link: routes.home.contacts },
       { text: "Время работы: 09:00 - 21:00", type: "link", link: routes.home.contacts },
       { text: "Адрес: г. Брест, ул. Молодогвардейская, 12/2", type: "link", link: routes.home.contacts },
 

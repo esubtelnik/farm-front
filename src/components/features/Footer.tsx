@@ -121,9 +121,9 @@ const DesktopFooter = () => {
             <div className="footer-section">
                <div className="text-left">
                   <h4>{FooterContactsLinks.title}</h4>
-                  <ul>
+                  <ul >
                      {FooterContactsLinks.items.map((item) => (
-                        <li key={item.text}>{item.text}</li>
+                        <li className="leading-4 mb-2" key={item.text}>{item.text}</li>
                      ))}
                   </ul>
                </div>

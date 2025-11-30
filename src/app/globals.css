@@ -52,8 +52,24 @@ button {
   @apply md:px-10 px-2 pb-5 md:text-base leading-5 text-xs/4 text-main-gray;
 }
 
+.legal p,
+.legal ul {
+  @apply mt-2;
+}
+
+
+/* 
+.legal p {
+  @apply indent-2;
+} */
+
+.legal li {
+  @apply ml-4 mb-1;
+}
+
+
 .legal h2 {
-  @apply mt-4
+  @apply mt-4 uppercase;
 }
 
 .legal-title {

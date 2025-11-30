@@ -39,8 +39,11 @@ export const FooterCustomerLinks: FooterSectionType = {
    items: [
       { text: "Каталог", type: "link", link: routes.home.catalog },
       { text: "FAQ", type: "link", link: `${routes.home.root}#faq` },
-      { text: "Возврат продукции", type: "link", link: routes.legal.offer },
-      { text: "Доставка", type: "link", link: routes.home.root },
+      // { text: "Возврат продукции", type: "link", link: routes.legal.offer },
+      // { text: "Доставка", type: "link", link: routes.home.root },
+      { text: "Описание процедуры оплаты", type: "link", link: routes.legal.refund },
+      { text: "Возврат денежных средств", type: "link", link: routes.legal.payment },
+
    ],
 };
 

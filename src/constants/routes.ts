@@ -76,6 +76,8 @@ const routes = {
       privacyPolice: "/legal/privacy-police",
       terms: "/legal/terms",
       offer: "/legal/offer",
+      refund: "/legal/refund",
+      payment: "/legal/payment",
    },
 
    social: {

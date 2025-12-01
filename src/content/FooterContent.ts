@@ -4,9 +4,12 @@
 // import MasterCard from "@/assets/icons/MasterCard.svg";
 // import BelCard from "@/assets/icons/BelCard.svg";
 import Instagram from "@/assets/icons/Instagram.svg";
+import Visa from "@/assets/icons/Visa.png";
 import VisaSecure from "@/assets/icons/VisaSecure.png";
+import MasterCard from "@/assets/icons/MasterCard.png";
 import MastercardIdCheck from "@/assets/icons/MastercardIdCheck.png";
-import Belcart from "@/assets/icons/Belcart.png";
+import Belcard from "@/assets/icons/Belcard.png";
+import BelcardInternetPassword from "@/assets/icons/BelcardInternetPassword.png";
 
 import routes from "@/constants/routes";
 import { FC, SVGProps } from "react";
@@ -41,9 +44,16 @@ export const FooterCustomerLinks: FooterSectionType = {
       { text: "FAQ", type: "link", link: `${routes.home.root}#faq` },
       // { text: "Возврат продукции", type: "link", link: routes.legal.offer },
       // { text: "Доставка", type: "link", link: routes.home.root },
-      { text: "Описание процедуры оплаты", type: "link", link: routes.legal.refund },
-      { text: "Возврат денежных средств", type: "link", link: routes.legal.payment },
-
+      {
+         text: "Описание процедуры оплаты",
+         type: "link",
+         link: routes.legal.refund,
+      },
+      {
+         text: "Возврат денежных средств",
+         type: "link",
+         link: routes.legal.payment,
+      },
    ],
 };
 
@@ -61,10 +71,19 @@ export const FooterCustomerLinks: FooterSectionType = {
 export const FooterPaymentLinks: FooterSectionType = {
    title: "ПЛАТЕЖИ",
    items: [
-      { text: "Visa", type: "image", image: VisaSecure },
-      { text: "MasterCard", type: "image", image: MastercardIdCheck },
-      { text: "BelCard", type: "image", image: Belcart },
-   ]
+      { text: "Visa", type: "image", image: Visa },
+      { text: "MasterCard", type: "image", image: MasterCard },
+      { text: "BelCard", type: "image", image: Belcard },
+
+      { text: "Visa Secure", type: "image", image: VisaSecure },
+      { text: "MasterCard Id Check", type: "image", image: MastercardIdCheck },
+
+      {
+         text: "BelCard Internet Password",
+         type: "image",
+         image: BelcardInternetPassword,
+      },
+   ],
 };
 
 export const FooterContactsLinks: FooterSectionType = {
@@ -76,10 +95,21 @@ export const FooterContactsLinks: FooterSectionType = {
          type: "link",
          link: routes.home.contacts,
       },
-      { text: "ИП Лещёва З.М. УНП 291887836, свидетельство выдано Администрацией Московского района г. Бреста, 09.12.2024", type: "link", link: routes.home.contacts },
-      { text: "Время работы: 09:00 - 21:00", type: "link", link: routes.home.contacts },
-      { text: "Адрес: г. Брест, ул. Молодогвардейская, 12/2", type: "link", link: routes.home.contacts },
-
+      {
+         text: "ИП Лещёва З.М. УНП 291887836, свидетельство выдано Администрацией Московского района г. Бреста, 09.12.2024",
+         type: "link",
+         link: routes.home.contacts,
+      },
+      {
+         text: "Время работы: 09:00 - 21:00",
+         type: "link",
+         link: routes.home.contacts,
+      },
+      {
+         text: "Адрес: г. Брест, ул. Молодогвардейская, 12/2",
+         type: "link",
+         link: routes.home.contacts,
+      },
    ],
 };
 
@@ -87,14 +117,24 @@ export const FooterLegalLinks: FooterSectionType = {
    title: "ПРАВОВАЯ ИНФОРМАЦИЯ",
    items: [
       { text: "Оферта", type: "link", link: routes.legal.offer },
-      { text: "Политика конфиденциальности", type: "link", link: routes.legal.privacyPolice },
+      {
+         text: "Политика конфиденциальности",
+         type: "link",
+         link: routes.legal.privacyPolice,
+      },
    ],
 };
 
 export const FooterSocialLinks: FooterSectionType = {
    title: "СОЦИАЛЬНЫЕ СЕТИ",
    items: [
-      { text: "Instagram", tag: "@farmbasket_belarus", type: "icon", icon: Instagram, link: routes.social.instagram },
+      {
+         text: "Instagram",
+         tag: "@farmbasket_belarus",
+         type: "icon",
+         icon: Instagram,
+         link: routes.social.instagram,
+      },
    ],
 };
 

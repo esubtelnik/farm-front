@@ -80,7 +80,6 @@ const DesktopFooter = () => {
             </div> */}
 
             <div className="footer-section">
-               
                <div className="flex gap-4">
                   {(() => {
                      const icons = FooterPaymentLinks.items.filter(
@@ -121,9 +120,11 @@ const DesktopFooter = () => {
             <div className="footer-section">
                <div className="text-left">
                   <h4>{FooterContactsLinks.title}</h4>
-                  <ul >
+                  <ul>
                      {FooterContactsLinks.items.map((item) => (
-                        <li className="leading-4 mb-2" key={item.text}>{item.text}</li>
+                        <li className="leading-4 mb-2" key={item.text}>
+                           {item.text}
+                        </li>
                      ))}
                   </ul>
                </div>
@@ -220,7 +221,7 @@ const MobileFooter = () => {
                setOpenSection={setOpenSection}
             />
          </div>
-         <div className="flex justify-between">
+         <div className="flex flex-col md:flex-row gap-y-4 justify-between">
             <ul className="flex flex-col items-start gap-y-3 text-sm text-white">
                <li>{FooterContactsLinks.items[0].text}</li>
                <li>{FooterContactsLinks.items[1].text}</li>
@@ -255,43 +256,48 @@ const MobileFooter = () => {
                </div> */}
 
                <div className="footer-section">
-                  <div className="flex gap-4">
+                  <div className="grid grid-cols-2 gap-4">
                      {(() => {
                         const icons = FooterPaymentLinks.items.filter(
                            (item) => item.type === "image" && item.image
                         );
                         const mid = Math.ceil(icons.length / 2);
-                        const firstColumn = icons.slice(0, mid);
-                        const secondColumn = icons.slice(mid);
-                        return [firstColumn, secondColumn].map(
-                           (column, idx) => (
-                              <ul
-                                 key={idx}
-                                 className="flex flex-col xl:gap-5 gap-3"
-                              >
-                                 {column.map((item) =>
-                                    item.type === "image" && item.image ? (
-                                       <li
-                                          key={item.text}
-                                          className="flex justify-center items-center h-8 w-10"
-                                       >
-                                          <div className="relative w-full h-full">
-                                             <Image
-                                                src={item.image}
-                                                alt={item.text}
-                                                fill
-                                                className="object-contain"
-                                             />
-                                          </div>
-                                       </li>
-                                    ) : (
-                                       <li key={item.text} className="py-2">
-                                          {item.text}
-                                       </li>
-                                    )
-                                 )}
-                              </ul>
-                           )
+                        const firstRow = icons.slice(0, mid);
+                        const secondRow = icons.slice(mid);
+
+                        return (
+                           <div className="flex flex-col gap-3">
+                              <div className="flex gap-3">
+                                 {firstRow.map((item) => (
+                                    <div
+                                       key={item.text}
+                                       className="relative w-12 h-12"
+                                    >
+                                       <Image
+                                          src={item.image || ""}
+                                          alt={item.text}
+                                          fill
+                                          className="object-contain"
+                                       />
+                                    </div>
+                                 ))}
+                              </div>
+                              <div className="flex gap-4">
+                                 {secondRow.map((item) => (
+                                    <div
+                                       key={item.text}
+                                       className="relative w-12 h-12"
+                                    >
+                                       <Image
+                                          src={item.image || ""}
+                                          alt={item.text}
+                                          fill
+                                          className="object-contain"
+                                       />
+                                    </div>
+                                 ))}
+                              </div>
+                           </div>
                         );
                      })()}
                   </div>

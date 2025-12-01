@@ -7,7 +7,7 @@ import Instagram from "@/assets/icons/Instagram.svg";
 import Visa from "@/assets/icons/Visa.png";
 import VisaSecure from "@/assets/icons/VisaSecure.png";
 import MasterCard from "@/assets/icons/Mastercard.png";
-import MastercardIdCheck from "@/assets/icons/MastercardIDCheck.png";
+import MastercardIdCheck from "@/assets/icons/MastercardCheckId.png";
 import Belcard from "@/assets/icons/Belcard.png";
 import BelcardInternetPassword from "@/assets/icons/BelcardInternetPassword.png";
 

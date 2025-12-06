@@ -18,10 +18,10 @@
     "mobx": "^6.13.7",
     "mobx-react-lite": "^4.1.0",
     "motion": "^12.23.12",
-    "next": "15.4.5",
+    "next": "^15.4.8",
     "next-sitemap": "^4.2.3",
-    "react": "19.1.0",
-    "react-dom": "19.1.0",
+    "react": "^19.1.2",
+    "react-dom": "^19.1.2",
     "react-scroll": "^1.9.3"
   },
   "devDependencies": {

@@ -1,5 +1,6 @@
 @import "tailwindcss";
 
+
 @theme {
    --color-main-green: #91bc46;
    --color-dark-green: #048737;
@@ -9,6 +10,10 @@
    --font-geist: "Geist", sans-serif;
    --font-roboto: "Roboto", sans-serif;
    --text-xxs: 10px;
+}
+
+body {
+  background-color: #ffffff;
 }
 
 button {

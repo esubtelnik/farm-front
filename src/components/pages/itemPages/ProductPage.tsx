@@ -230,16 +230,16 @@ const ProductPage: FC<ProductPageProps> = ({
                </p> */}
                   <p>
                      <span className="font-bold">Срок годности: </span>
-                     {product.expirationDate}
+                     {product.expirationDate} дней
                   </p>
                   <p>
                      <span className="font-bold">Условия хранения: </span>
                      {product.storageConditions}
                   </p>
-                  <p>
+                  {/* <p>
                      <span className="font-bold">Объем: </span>
                      {product.volume} {product.unit}
-                  </p>
+                  </p> */}
                   <p>
                      <span className="font-bold">Упаковка: </span>
                      {product.package}

@@ -53,7 +53,6 @@ const Navbar: FC<{
 
    useEffect(() => {
       if (isMenuOpen) {
-         // Блокируем скролл только для body, но не для самого меню
          document.body.style.overflow = "hidden";
       } else {
          document.body.style.overflow = "";
@@ -165,14 +164,13 @@ const Navbar: FC<{
                   </button>
                )}
                <button
-                  className="w-full h-full cursor-pointer"
+                  className="w-12 h-full cursor-pointer"
                   onClick={handleLogo}
                >
-                  <LogoWhite className="w-full h-full" />
+                  <LogoWhite className="w-full h-full block" />
                </button>
             </div>
 
-            {/* Десктопное меню */}
             <>
                <div className="hidden lg:flex gap-x-5 items-center">
                   {userType.type !== UserType.PRODUCER.type &&

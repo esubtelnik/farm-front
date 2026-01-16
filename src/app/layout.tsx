@@ -31,6 +31,10 @@ const roboto = RobotoFont({
 
 export const metadata: Metadata = {
    title: "Фермерские продукты с доставкой в Гродно | farmbasket.by ",
+   // title: {
+   //    default: "Фермерские продукты с доставкой в Гродно",
+   //    template: "%s | FARM-BASKET",
+   //  },
    description:
       "Органические фермерские продукты высокого качества с оперативной доставкой в Гродно | первый маркетплейс здоровой еды от местных производителей | заказывайте на сайте",
 
@@ -86,6 +90,7 @@ export const metadata: Metadata = {
       type: "website",
       locale: "ru_RU",
       url: "https://farmbasket.by",
+      
       siteName: "FARM-BASKET",
       title: "FARM-BASKET - Фермерские продукты с доставкой в Гродно",
       description:
@@ -128,6 +133,8 @@ export const metadata: Metadata = {
 
    // // Манифест
    manifest: "/manifest.json",
+
+   metadataBase: new URL("https://farmbasket.by"),
 
    // Альтернативные ссылки
    alternates: {
@@ -186,13 +193,13 @@ export const metadata: Metadata = {
    referrer: "origin-when-cross-origin",
 
    // Viewport (обычно в HTML, но можно и здесь)
-   viewport: {
-      width: "device-width",
-      initialScale: 1,
-      maximumScale: 1,
-      userScalable: false,
-      interactiveWidget: "resizes-content",
-   },
+   // viewport: {
+   //    width: "device-width",
+   //    initialScale: 1,
+   //    maximumScale: 1,
+   //    userScalable: false,
+   //    interactiveWidget: "resizes-content",
+   // },
 };
 
 export default async function RootLayout({

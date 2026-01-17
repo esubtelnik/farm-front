@@ -68,7 +68,7 @@ const HomePage: FC<HomePageProps> = ({ categories, producers }) => {
             />
             {/* <div className="md:hidden absolute w-full h-full z-10 top-0 left-0 bg-main-green/45 flex justify-center items-center" /> */}
          </div>
-         <h2 className="md:text-2xl/10 text-sm/4 font-bold text-main-green text-center md:pt-6 pt-4">Доставка фермерских продуктов в Гродно</h2>
+         <h1 className="md:text-2xl/10 text-sm/4 font-bold text-main-green text-center md:pt-6 pt-4">Доставка фермерских продуктов в Гродно</h1>
          <p className="md:text-sm text-xxs font-normal text-main-gray md:px-32 px-4 md:py-6 py-4 ">
             Онлайн-магазин <span className="font-bold">FARM-BASKET</span> — это
             удобная платформа для покупки натуральных и экологически чистых

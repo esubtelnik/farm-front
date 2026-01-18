@@ -572,11 +572,7 @@ const AddProductModal: FC<AddProductModalProps> = ({ handleAddProduct }) => {
                            form.errors.volume ? form.errors.volume : ""
                         }
                         value={form.values.volume || ""}
-                        onKeyPress={(e) => {
-                           if (!/[0-9]/.test(e.key)) {
-                              e.preventDefault();
-                           }
-                        }}
+      
                         onChange={(e) => {
                            if (!selectedMeasure) {
                               setForm((prev) => ({
@@ -589,18 +585,9 @@ const AddProductModal: FC<AddProductModalProps> = ({ handleAddProduct }) => {
                               }));
                               return;
                            }
-                           const value = e.target.value;
-                           if (
-                              value === "" ||
-                              (parseInt(value) > 0 && /^\d+$/.test(value))
-                           ) {
-                              e.target.value = value;
-                           } else {
-                              e.target.value = value
-                                 .replace(/[^0-9]/g, "")
-                                 .replace(/^0+/, "");
-                           }
-                           handleChange("volume", parseInt(value));
+                           const value = e.target.value.replace(/[^0-9]/g, "");
+
+                           handleChange("volume", value ? parseInt(value) : null);
                         }}
                         onBlur={(e) => {
                            const value = parseInt(e.target.value);
@@ -642,11 +629,6 @@ const AddProductModal: FC<AddProductModalProps> = ({ handleAddProduct }) => {
                            form.errors.saleVolume ? form.errors.saleVolume : ""
                         }
                         value={form.values.saleVolume || ""}
-                        onKeyPress={(e) => {
-                           if (!/[0-9]/.test(e.key)) {
-                              e.preventDefault();
-                           }
-                        }}
                         onChange={(e) => {
                            if (!selectedMeasure) {
                               setForm((prev) => ({
@@ -659,18 +641,9 @@ const AddProductModal: FC<AddProductModalProps> = ({ handleAddProduct }) => {
                               }));
                               return;
                            }
-                           const value = e.target.value;
-                           if (
-                              value === "" ||
-                              (parseInt(value) > 0 && /^\d+$/.test(value))
-                           ) {
-                              e.target.value = value;
-                           } else {
-                              e.target.value = value
-                                 .replace(/[^0-9]/g, "")
-                                 .replace(/^0+/, "");
-                           }
-                           handleChange("saleVolume", parseInt(value));
+                           const value = e.target.value.replace(/[^0-9]/g, "");
+
+                           handleChange("saleVolume", value ? parseInt(value) : null);
                         }}
                         onBlur={(e) => {
                            const value = parseInt(e.target.value);

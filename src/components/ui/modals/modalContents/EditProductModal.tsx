@@ -38,9 +38,8 @@ const DeliveryTimeFilter = ({
       <div className="flex w-full justify-center items-center space-x-3">
          <button
             onClick={handleDecrement}
-            className={`size-7 font-bold flex items-center justify-center text-sm text-main-gray border-2 border-transparent hover:border-main-green box-border rounded-sm transition-all duration-300 ${
-               isMin ? "hover:bg-main-green hover:text-white" : ""
-            }`}
+            className={`size-7 font-bold flex items-center justify-center text-sm text-main-gray border-2 border-transparent hover:border-main-green box-border rounded-sm transition-all duration-300 ${isMin ? "hover:bg-main-green hover:text-white" : ""
+               }`}
          >
             <svg
                xmlns="http://www.w3.org/2000/svg"
@@ -62,9 +61,8 @@ const DeliveryTimeFilter = ({
          </div>
          <button
             onClick={handleIncrement}
-            className={`size-7 font-bold flex items-center justify-center text-sm text-main-gray border-2 border-transparent hover:border-main-green box-border rounded-sm transition-all duration-300 ${
-               isMax ? "hover:bg-main-green hover:text-white" : ""
-            }`}
+            className={`size-7 font-bold flex items-center justify-center text-sm text-main-gray border-2 border-transparent hover:border-main-green box-border rounded-sm transition-all duration-300 ${isMax ? "hover:bg-main-green hover:text-white" : ""
+               }`}
          >
             <svg
                xmlns="http://www.w3.org/2000/svg"
@@ -251,14 +249,14 @@ const EditProductModal: FC<EditProductModalProps> = ({
       }));
    };
 
-   
+
    function normalize(value: string | number) {
       if (!value) return 0;
       value = value.toString().replace(",", ".");
       if (value.endsWith(".")) value = value.slice(0, -1);
       const num = parseFloat(value);
       return isNaN(num) ? 0 : num;
-    }
+   }
 
    const validateForm = () => {
       const newErrors: FormState["errors"] = {
@@ -448,18 +446,16 @@ const EditProductModal: FC<EditProductModalProps> = ({
             <div>Редактирование фото в разработке</div>
             <div className="flex flex-col items-center gap-y-2 lg:w-1/3 w-full">
                <div
-                  className={`w-full flex items-center gap-x-2 px-2 outline-none border-2 rounded-md ${
-                     form.errors.title
+                  className={`w-full flex items-center gap-x-2 px-2 outline-none border-2 rounded-md ${form.errors.title
                         ? "border-red-500"
                         : "border-transparent focus-within:border-main-gray"
-                  }`}
+                     }`}
                >
                   <input
-                     className={`outline-none grow py-2 text-main-green font-semibold md:text-lg text-sm ${
-                        form.errors.title
+                     className={`outline-none grow py-2 text-main-green font-semibold md:text-lg text-sm ${form.errors.title
                            ? "placeholder:text-red-500"
                            : "placeholder:text-main-gray "
-                     }`}
+                        }`}
                      placeholder={
                         form.errors.title
                            ? form.errors.title
@@ -474,9 +470,8 @@ const EditProductModal: FC<EditProductModalProps> = ({
                      viewBox="0 0 24 24"
                      strokeWidth={1.5}
                      stroke="currentColor"
-                     className={`size-6 ${
-                        form.errors.title ? "text-red-500" : "text-main-gray"
-                     }`}
+                     className={`size-6 ${form.errors.title ? "text-red-500" : "text-main-gray"
+                        }`}
                   >
                      <path
                         strokeLinecap="round"
@@ -487,38 +482,35 @@ const EditProductModal: FC<EditProductModalProps> = ({
                </div>
                <div
                   ref={categoryDropdownRef}
-                  className={`relative w-full flex items-center gap-x-2 p-2 outline-none border-2 rounded-md ${
-                     form.errors.productType
+                  className={`relative w-full flex items-center gap-x-2 p-2 outline-none border-2 rounded-md ${form.errors.productType
                         ? "border-red-500"
                         : "border-transparent focus-within:border-main-gray"
-                  }`}
+                     }`}
                >
                   <button
                      onClick={() =>
                         setIsCategoryDropdownOpen(!isCategoryDropdownOpen)
                      }
-                     className={`text-main-gray truncate font-semibold md:text-lg text-sm flex justify-between items-center w-full gap-x-2 ${
-                        form.errors.productType
+                     className={`text-main-gray truncate font-semibold md:text-lg text-sm flex justify-between items-center w-full gap-x-2 ${form.errors.productType
                            ? "text-red-500"
                            : "text-main-gray"
-                     }`}
+                        }`}
                   >
                      {selectedCategories
                         ? selectedCategories
                         : form.errors.productType
-                        ? form.errors.productType
-                        : "Категория:"}
+                           ? form.errors.productType
+                           : "Категория:"}
                      <svg
                         xmlns="http://www.w3.org/2000/svg"
                         fill="none"
                         viewBox="0 0 24 24"
                         strokeWidth={1.5}
                         stroke="currentColor"
-                        className={`size-6 ${
-                           form.errors.productType
+                        className={`size-6 ${form.errors.productType
                               ? "text-red-500"
                               : "text-main-gray"
-                        }`}
+                           }`}
                      >
                         <path
                            strokeLinecap="round"
@@ -534,55 +526,51 @@ const EditProductModal: FC<EditProductModalProps> = ({
                               (category) => category.title !== readyBasketType
                            )
                            .map((category) => {
-                           const isChecked = selectedCategories.includes(
-                              category.title
-                           );
+                              const isChecked = selectedCategories.includes(
+                                 category.title
+                              );
 
-                           return (
-                              <button
-                                 type="button"
-                                 key={category.title}
-                                 onClick={() =>
-                                    handleCategoryToggle(category.title)
-                                 }
-                                 className={`w-full outline-none font-medium text-[13px] px-2 py-1 text-left rounded-sm transition-all duration-300 ${
-                                    isChecked
-                                       ? "bg-main-gray text-white"
-                                       : "bg-white text-main-gray"
-                                 }`}
-                              >
-                                 {category.title}
-                              </button>
-                           );
-                        })}
+                              return (
+                                 <button
+                                    type="button"
+                                    key={category.title}
+                                    onClick={() =>
+                                       handleCategoryToggle(category.title)
+                                    }
+                                    className={`w-full outline-none font-medium text-[13px] px-2 py-1 text-left rounded-sm transition-all duration-300 ${isChecked
+                                          ? "bg-main-gray text-white"
+                                          : "bg-white text-main-gray"
+                                       }`}
+                                 >
+                                    {category.title}
+                                 </button>
+                              );
+                           })}
                      </div>
                   )}
                </div>
                <div
                   ref={measureDropdownRef}
-                  className={`relative w-full flex items-center gap-x-2 p-2 outline-none border-2 rounded-md ${
-                     form.errors.unit
+                  className={`relative w-full flex items-center gap-x-2 p-2 outline-none border-2 rounded-md ${form.errors.unit
                         ? "border-red-500"
                         : "border-transparent focus-within:border-main-gray"
-                  }`}
+                     }`}
                >
                   <button
                      onClick={() =>
                         setIsMeasureDropdownOpen(!isMeasureDropdownOpen)
                      }
-                     className={`text-main-gray truncate font-semibold md:text-lg text-sm flex justify-between items-center w-full gap-x-2 ${
-                        form.errors.unit ? "text-red-500" : "text-main-gray"
-                     }`}
+                     className={`text-main-gray truncate font-semibold md:text-lg text-sm flex justify-between items-center w-full gap-x-2 ${form.errors.unit ? "text-red-500" : "text-main-gray"
+                        }`}
                   >
                      {form.errors.unit
                         ? form.errors.unit
                         : "Единица измерения:"}
                      <span
-                        className={` text-main-gray font-md w-10 rounded-md text-center ${
-                           form.errors.unit
+                        className={` text-main-gray font-md w-10 rounded-md text-center ${form.errors.unit
                               ? "text-red-500 bg-red-500/10"
                               : "bg-main-gray/10"
-                        }`}
+                           }`}
                      >
                         {selectedMeasure ? selectedMeasure : "..."}
                      </span>
@@ -592,9 +580,8 @@ const EditProductModal: FC<EditProductModalProps> = ({
                         viewBox="0 0 24 24"
                         strokeWidth={1.5}
                         stroke="currentColor"
-                        className={`size-6 ${
-                           form.errors.unit ? "text-red-500" : "text-main-gray"
-                        }`}
+                        className={`size-6 ${form.errors.unit ? "text-red-500" : "text-main-gray"
+                           }`}
                      >
                         <path
                            strokeLinecap="round"
@@ -615,11 +602,10 @@ const EditProductModal: FC<EditProductModalProps> = ({
                                  onClick={() =>
                                     handleMeasureToggle(measure.title)
                                  }
-                                 className={`w-full outline-none font-medium text-[13px] px-2 py-1 text-left rounded-sm transition-all duration-300 ${
-                                    isChecked
+                                 className={`w-full outline-none font-medium text-[13px] px-2 py-1 text-left rounded-sm transition-all duration-300 ${isChecked
                                        ? "bg-main-gray text-white"
                                        : "bg-white text-main-gray"
-                                 }`}
+                                    }`}
                               >
                                  {measure.title}
                               </button>
@@ -631,14 +617,12 @@ const EditProductModal: FC<EditProductModalProps> = ({
             </div>
             <div className="flex flex-col items-center gap-y-4 w-full ">
                <div
-                  className={`border-2 flex w-full flex-col justify-between md:flex-row items-center gap-x-4 rounded-xl p-2 ${
-                     form.errors.dailyVolume ? "border-red-500" : "border-main-gray"
-                  }`}
+                  className={`border-2 flex w-full flex-col justify-between md:flex-row items-center gap-x-4 rounded-xl p-2 ${form.errors.dailyVolume ? "border-red-500" : "border-main-gray"
+                     }`}
                >
                   <span
-                     className={`font-semibold md:text-lg text-sm text-left ${
-                        form.errors.dailyVolume ? "text-red-500" : "text-main-gray"
-                     }`}
+                     className={`font-semibold md:text-lg text-sm text-left ${form.errors.dailyVolume ? "text-red-500" : "text-main-gray"
+                        }`}
                   >
                      Сколько продукта вы можете поставить в день
                   </span>
@@ -647,15 +631,13 @@ const EditProductModal: FC<EditProductModalProps> = ({
                         <input
                            type="text"
                            disabled={form.values.dailyVolume === 0}
-                           className={`outline-none w-20 text-main-gray font-medium rounded-md text-center ${
-                              form.errors.dailyVolume
+                           className={`outline-none w-20 text-main-gray font-medium rounded-md text-center ${form.errors.dailyVolume
                                  ? "placeholder:text-red-500 bg-red-500/10"
                                  : "placeholder:text-main-gray bg-main-gray/10"
-                           } ${
-                              form.values.dailyVolume === 0
+                              } ${form.values.dailyVolume === 0
                                  ? "opacity-50 cursor-not-allowed"
                                  : ""
-                           }`}
+                              }`}
                            placeholder={
                               form.errors.dailyVolume ? form.errors.dailyVolume : ""
                            }
@@ -664,11 +646,6 @@ const EditProductModal: FC<EditProductModalProps> = ({
                                  ? "0"
                                  : form.values.dailyVolume || ""
                            }
-                           onKeyPress={(e) => {
-                              if (!/[0-9]/.test(e.key)) {
-                                 e.preventDefault();
-                              }
-                           }}
                            onChange={(e) => {
                               if (!selectedMeasure) {
                                  setForm((prev) => ({
@@ -681,17 +658,8 @@ const EditProductModal: FC<EditProductModalProps> = ({
                                  }));
                                  return;
                               }
-                              const value = e.target.value;
-                              if (
-                                 value === "" ||
-                                 (parseInt(value) > 0 && /^\d+$/.test(value))
-                              ) {
-                                 e.target.value = value;
-                              } else {
-                                 e.target.value = value
-                                    .replace(/[^0-9]/g, "")
-                                    .replace(/^0+/, "");
-                              }
+                              const value = e.target.value.replace(/[^0-9]/g, "");
+                              handleChange("dailyVolume", value ? parseInt(value) : null);
                            }}
                            onBlur={(e) => {
                               const value = parseInt(e.target.value);
@@ -707,34 +675,26 @@ const EditProductModal: FC<EditProductModalProps> = ({
                   </div>
                </div>
                <div
-                  className={`border-2 flex w-full flex-col justify-between md:flex-row items-center gap-x-4 rounded-xl p-2 ${
-                     form.errors.saleVolume ? "border-red-500" : "border-main-gray"
-                  }`}
+                  className={`border-2 flex w-full flex-col justify-between md:flex-row items-center gap-x-4 rounded-xl p-2 ${form.errors.saleVolume ? "border-red-500" : "border-main-gray"
+                     }`}
                >
                   <span
-                     className={`font-semibold md:text-lg text-sm text-left w-full ${
-                        form.errors.saleVolume ? "text-red-500" : "text-main-gray"
-                     }`}
+                     className={`font-semibold md:text-lg text-sm text-left w-full ${form.errors.saleVolume ? "text-red-500" : "text-main-gray"
+                        }`}
                   >
                      Размер одной продажи
                   </span>
                   <div className="flex w-full justify-between items-center gap-x-2 md:w-fit">
                      <input
                         type="text"
-                        className={`outline-none  w-20 text-main-gray font-medium rounded-md text-center ${
-                           form.errors.saleVolume
+                        className={`outline-none  w-20 text-main-gray font-medium rounded-md text-center ${form.errors.saleVolume
                               ? "placeholder:text-red-500 bg-red-500/10"
                               : "placeholder:text-main-gray bg-main-gray/10"
-                        }`}
+                           }`}
                         placeholder={
                            form.errors.saleVolume ? form.errors.saleVolume : ""
                         }
                         value={form.values.saleVolume || ""}
-                        onKeyPress={(e) => {
-                           if (!/[0-9]/.test(e.key)) {
-                              e.preventDefault();
-                           }
-                        }}
                         onChange={(e) => {
                            if (!selectedMeasure) {
                               setForm((prev) => ({
@@ -747,18 +707,9 @@ const EditProductModal: FC<EditProductModalProps> = ({
                               }));
                               return;
                            }
-                           const value = e.target.value;
-                           if (
-                              value === "" ||
-                              (parseInt(value) > 0 && /^\d+$/.test(value))
-                           ) {
-                              e.target.value = value;
-                           } else {
-                              e.target.value = value
-                                 .replace(/[^0-9]/g, "")
-                                 .replace(/^0+/, "");
-                           }
-                           handleChange("saleVolume", parseInt(value));
+                           const value = e.target.value.replace(/[^0-9]/g, "");
+
+                           handleChange("saleVolume", value ? parseInt(value) : null);
                         }}
                         onBlur={(e) => {
                            const value = parseInt(e.target.value);
@@ -773,29 +724,26 @@ const EditProductModal: FC<EditProductModalProps> = ({
                   </div>
                </div>
                <div
-                  className={`border-2 w-full flex flex-col justify-between md:flex-row items-center gap-x-4 rounded-xl p-2 ${
-                     form.errors.inaccuracy
+                  className={`border-2 w-full flex flex-col justify-between md:flex-row items-center gap-x-4 rounded-xl p-2 ${form.errors.inaccuracy
                         ? "border-red-500"
                         : "border-main-gray"
-                  }`}
+                     }`}
                >
                   <span
-                     className={`font-semibold md:text-lg text-sm text-left w-full ${
-                        form.errors.inaccuracy
+                     className={`font-semibold md:text-lg text-sm text-left w-full ${form.errors.inaccuracy
                            ? "text-red-500"
                            : "text-main-gray"
-                     }`}
+                        }`}
                   >
                      Введите погрешность, если она есть
                   </span>
                   <div className="flex w-full justify-between items-center gap-x-2 md:w-fit">
                      <input
                         type="text"
-                        className={`outline-none w-20 text-main-gray font-medium rounded-md text-center ${
-                           form.errors.inaccuracy
+                        className={`outline-none w-20 text-main-gray font-medium rounded-md text-center ${form.errors.inaccuracy
                               ? "placeholder:text-red-500 bg-red-500/10"
                               : "placeholder:text-main-gray bg-main-gray/10"
-                        }`}
+                           }`}
                         placeholder={
                            form.errors.inaccuracy ? form.errors.inaccuracy : ""
                         }
@@ -837,7 +785,7 @@ const EditProductModal: FC<EditProductModalProps> = ({
                      </span>
                   </div>
                </div>
-            
+
             </div>
          </div>
          <div className="grid md:grid-cols-2 grid-cols-1 md:gap-5 gap-y-4">
@@ -876,28 +824,25 @@ const EditProductModal: FC<EditProductModalProps> = ({
          </div>
          <div className="flex flex-col md:flex-row gap-y-4 md:gap-x-5">
             <div
-               className={`border-2 flex items-center md:gap-x-4 justify-between md:justify-start rounded-xl p-2 ${
-                  form.errors.expirationDate
+               className={`border-2 flex items-center md:gap-x-4 justify-between md:justify-start rounded-xl p-2 ${form.errors.expirationDate
                      ? "border-red-500"
                      : "border-main-gray"
-               }`}
+                  }`}
             >
                <span
-                  className={`font-semibold md:text-lg text-sm  ${
-                     form.errors.expirationDate
+                  className={`font-semibold md:text-lg text-sm  ${form.errors.expirationDate
                         ? "text-red-500"
                         : "text-main-gray"
-                  }`}
+                     }`}
                >
                   Срок годности
                </span>
                <input
                   type="text"
-                  className={`outline-none w-20 text-main-gray font-medium rounded-md text-center ${
-                     form.errors.expirationDate
+                  className={`outline-none w-20 text-main-gray font-medium rounded-md text-center ${form.errors.expirationDate
                         ? "placeholder:text-red-500 bg-red-500/10"
                         : "placeholder:text-main-gray bg-main-gray/10"
-                  }`}
+                     }`}
                   placeholder={
                      form.errors.expirationDate
                         ? form.errors.expirationDate
@@ -931,35 +876,31 @@ const EditProductModal: FC<EditProductModalProps> = ({
                   }}
                />
                <span
-                  className={`text-main-gray font-semibold md:text-lg text-sm ${
-                     form.errors.expirationDate
+                  className={`text-main-gray font-semibold md:text-lg text-sm ${form.errors.expirationDate
                         ? "text-red-500"
                         : "text-main-gray"
-                  }`}
+                     }`}
                >
                   (в днях)
                </span>
             </div>
 
             <div
-               className={`border-2 flex items-center md:gap-x-4 justify-between md:justify-start rounded-xl p-2 ${
-                  form.errors.price ? "border-red-500" : "border-main-gray"
-               }`}
+               className={`border-2 flex items-center md:gap-x-4 justify-between md:justify-start rounded-xl p-2 ${form.errors.price ? "border-red-500" : "border-main-gray"
+                  }`}
             >
                <span
-                  className={`font-semibold md:text-lg text-sm ${
-                     form.errors.price ? "text-red-500" : "text-main-gray"
-                  }`}
+                  className={`font-semibold md:text-lg text-sm ${form.errors.price ? "text-red-500" : "text-main-gray"
+                     }`}
                >
                   Стоимость
                </span>
                <input
                   type="text"
-                  className={`outline-none w-20 text-main-gray font-medium rounded-md text-center ${
-                     form.errors.price
+                  className={`outline-none w-20 text-main-gray font-medium rounded-md text-center ${form.errors.price
                         ? "placeholder:text-red-500 bg-red-500/10"
                         : "placeholder:text-main-gray bg-main-gray/10"
-                  }`}
+                     }`}
                   placeholder={form.errors.price ? form.errors.price : ""}
                   value={form.values.price ?? ""}
                   onChange={(e) => {
@@ -970,12 +911,11 @@ const EditProductModal: FC<EditProductModalProps> = ({
                         handleChange("price", formattedValue);
                      }
                   }}
-            
+
                />
                <span
-                  className={`text-main-gray font-semibold md:text-lg text-sm ${
-                     form.errors.price ? "text-red-500" : "text-main-gray"
-                  }`}
+                  className={`text-main-gray font-semibold md:text-lg text-sm ${form.errors.price ? "text-red-500" : "text-main-gray"
+                     }`}
                >
                   р.
                </span>
@@ -1019,9 +959,8 @@ const EditProductModal: FC<EditProductModalProps> = ({
 
             <button
                onClick={handleSubmit}
-               className={`bg-main-green text-white py-2 px-4 rounded-full font-medium shadow-md/40 hover:scale-110 transition-all duration-100 md:w-fit w-full ${
-                  statusMessage ? "bg-main-gray" : ""
-               }`}
+               className={`bg-main-green text-white py-2 px-4 rounded-full font-medium shadow-md/40 hover:scale-110 transition-all duration-100 md:w-fit w-full ${statusMessage ? "bg-main-gray" : ""
+                  }`}
             >
                {statusMessage ? statusMessage : "СОХРАНИТЬ"}
             </button>
